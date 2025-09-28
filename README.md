@@ -7,10 +7,14 @@
 
 # 由 [uni-helper](https://uni-helper.js.org) 封装的uni命令
 
+<pre align="center">
+🏗 正在开发中
+</pre>
+
 ## 安装
 
 ```bash
-pnpm i -D @uni-helper/uni
+pnpm i -D @uni-helper/unh
 ```
 
 ## 使用
@@ -33,7 +37,7 @@ pnpm dev wx
 ```
 
 ```ts
-// uni.config.ts
+// unh.config.ts
 import { defineConfig } from '@uni-helper/uni'
 
 export default defineConfig({
@@ -60,5 +64,8 @@ export default defineConfig({
   autoGenerate: {
     pages: true,
   },
+  ui: {
+    enable: true,
+  }
 })
 ```

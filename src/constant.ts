@@ -31,4 +31,5 @@ export const PLATFORM = [
   'quickapp-webview-union',
 ] as const
 
+export type Platforms = typeof PLATFORM
 export type Platform = (typeof PLATFORM)[number]

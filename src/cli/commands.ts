@@ -1,7 +1,8 @@
 import type { UniHelperConfig } from '../config/types'
-import type { Platform } from '../constant'
+import type { Platform, Platforms } from '../constant'
 import type { BuildPhase, CommandType } from './types'
 import process from 'node:process'
+import { PLATFORM } from '../constant'
 import { UniHelperTerminalUi } from '../ui'
 import { generateJsonFile } from '../utils/files'
 import { resolvePlatformAlias } from '../utils/platform'
@@ -91,11 +92,22 @@ async function executeUniCommand(
 }
 
 /**
+ * 组装终端UI平台列表
+ * 1. 从配置文件中获取默认平台，默认值为'h5'
+ * 2. 从配置文件中获取UI平台列表，默认值为所有平台
+ * 3. 合并默认平台和UI平台列表，去重
+ */
+function assemblePlatforms(config: UniHelperConfig): Platforms {
+  const defaultPlatform = config.platform?.default || 'h5'
+  const uiPlatforms = config.ui?.platforms || PLATFORM
+  return [...new Set([defaultPlatform, ...uiPlatforms])] as unknown as Platforms
+}
+
+/**
  * 启动终端UI
  */
-async function startTerminalUI(platform: Platform): Promise<void> {
-  const terminalUi = new UniHelperTerminalUi()
-  // const index = PLATFORM.findIndex(platform)
+async function startTerminalUI(platform: Platform, config: UniHelperConfig): Promise<void> {
+  const terminalUi = new UniHelperTerminalUi(assemblePlatforms(config))
   terminalUi.render()
   terminalUi.startPlatform(platform)
   terminalUi.selectPlatform(platform)
@@ -151,8 +163,8 @@ export async function handleDevCommand(
   await executeCustomHooks(config, 'dev', platform)
 
   // 执行uni命令
-  if (config.ui) {
-    await startTerminalUI(platform as Platform)
+  if (config.ui?.enabled) {
+    await startTerminalUI(platform as Platform, config)
   }
   else {
     await executeUniCommand('dev', platform)

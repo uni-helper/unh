@@ -14,7 +14,9 @@ const DEFAULT_CONFIG: UniHelperConfig = {
     pages: false,
     manifest: false,
   },
-  ui: true,
+  ui: {
+    enabled: true,
+  },
 }
 
 /**
@@ -24,13 +26,12 @@ export async function loadCliConfig(): Promise<UniHelperConfig> {
   const { config } = await loadConfig<UniHelperConfig>({
     sources: [
       {
-        files: 'uni.config',
+        files: 'unh.config',
         extensions: ['ts', 'mts', 'cts', 'js', 'mjs', 'cjs', 'json', ''],
       },
     ],
     defaults: DEFAULT_CONFIG,
     merge: false,
   })
-
   return config
 }

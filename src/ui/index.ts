@@ -1,10 +1,12 @@
 import type { ChildProcess } from 'node:child_process'
+import type { Platforms } from '../constant'
 import process from 'node:process'
 import blessed from 'blessed'
 import spawn from 'cross-spawn'
-import { PLATFORM } from '../constant'
+import { green } from 'kolorist'
 
 export class UniHelperTerminalUi {
+  private platforms: Platforms
   private screen: blessed.Widgets.Screen
   private platformBox!: blessed.Widgets.ListElement
   private terminalBox!: blessed.Widgets.Log
@@ -13,6 +15,7 @@ export class UniHelperTerminalUi {
   private currentProcess: ChildProcess | undefined
   private currentPlatform: string | undefined
   private platformOutputMap: Map<string, string[]> = new Map() // 存储每个平台的输出历史
+  private platformStatusMap: Map<string, 'running' | 'stopped'> = new Map() // 存储每个平台的状态
 
   private padding = {
     left: 2,
@@ -21,12 +24,13 @@ export class UniHelperTerminalUi {
     bottom: 1,
   }
 
-  constructor() {
+  constructor(platforms: Platforms) {
     this.screen = blessed.screen({
       // smartCSR: true,
       fullUnicode: true,
     })
 
+    this.platforms = platforms
     this.setupUI()
     this.setupKeyHandlers()
   }
@@ -55,7 +59,7 @@ export class UniHelperTerminalUi {
       keys: true,
       vi: true,
       mouse: true,
-      items: PLATFORM as unknown as string[],
+      items: this.getPlatformItemsWithStatus(),
       scrollable: true,
       alwaysScroll: true,
     })
@@ -101,7 +105,7 @@ export class UniHelperTerminalUi {
       left: 0,
       width: '100%',
       height: '30%',
-      content: '{green-fg}UniApp Terminal Launcher Ready{/green-fg}\n\n{cyan-fg}Features:{/cyan-fg}\n• Full ANSI color support enabled\n• Real-time terminal output\n• Process management\n\n{yellow-fg}Controls:{/yellow-fg}\n• Arrow keys: Navigate platform list\n• Enter: Start selected platform\n• Number keys 1-8: Quick selection\n• q or Esc: Exit application',
+      content: '{green-fg}UniApp Terminal Launcher Ready{/green-fg}\n\n{cyan-fg}Features:{/cyan-fg}\n• Full ANSI color support enabled\n• Real-time terminal output\n• Process management\n• Platform status indicators\n\n{yellow-fg}Controls:{/yellow-fg}\n• Arrow keys: Navigate platform list\n• Enter: Start selected platform\n• Number keys 1-8: Quick selection\n• q or Esc: Stop current platform\n• Ctrl+C: Exit application\n\n{cyan-fg}Status Icons:{/cyan-fg}\n{green-fg}▶{/green-fg} Running  {gray-fg}■{/gray-fg} Stopped  {red-fg}✖{/red-fg} Error',
     })
   }
 
@@ -117,6 +121,8 @@ export class UniHelperTerminalUi {
       if (this.processMap.has(this.currentPlatform)) {
         this.processMap.get(this.currentPlatform)?.kill('SIGKILL')
         this.processMap.delete(this.currentPlatform)
+        this.platformStatusMap.set(this.currentPlatform, 'stopped')
+        this.updatePlatformList()
       }
       if (this.platformOutputMap.has(this.currentPlatform)) {
         this.platformOutputMap.delete(this.currentPlatform)
@@ -124,7 +130,7 @@ export class UniHelperTerminalUi {
     })
 
     this.platformBox.on('select', (item) => {
-      const platform = item.content
+      const platform = this.extractPlatformName(item.content)
       this.currentPlatform = platform
       this.startPlatform(platform)
     })
@@ -163,6 +169,10 @@ export class UniHelperTerminalUi {
         this.platformOutputMap.set(platform, [])
       }
     }
+
+    // 更新平台状态为运行中
+    this.platformStatusMap.set(platform, 'running')
+    this.updatePlatformList()
 
     // 恢复该平台的输出历史，而不是清空
     this.restorePlatformOutput(platform)
@@ -229,6 +239,10 @@ export class UniHelperTerminalUi {
       history.push(separator)
       this.platformOutputMap.set(platform, history)
 
+      // 更新平台状态
+      this.platformStatusMap.set(platform, code === 0 ? 'stopped' : 'running')
+      this.updatePlatformList()
+
       this.screen.render()
       this.currentProcess = undefined
     })
@@ -241,6 +255,10 @@ export class UniHelperTerminalUi {
       const history = this.platformOutputMap.get(platform) || []
       history.push(errorMessage)
       this.platformOutputMap.set(platform, history)
+
+      // 更新平台状态为运行中
+      this.platformStatusMap.set(platform, 'running')
+      this.updatePlatformList()
 
       this.screen.render()
       this.currentProcess = undefined
@@ -258,7 +276,7 @@ export class UniHelperTerminalUi {
   }
 
   selectPlatform(platform: string) {
-    const index = PLATFORM.findIndex(item => item === platform)
+    const index = this.platforms.findIndex(item => item === platform)
     if (index !== -1) {
       this.platformBox.select(index)
     }
@@ -266,5 +284,48 @@ export class UniHelperTerminalUi {
 
   render() {
     this.screen.render()
+  }
+
+  // 获取带状态的平台项目列表
+  private getPlatformItemsWithStatus(): string[] {
+    return this.platforms.map((platform) => {
+      const status = this.platformStatusMap.get(platform) || 'stopped'
+      const statusIcon = this.getStatusIcon(status)
+      return `${statusIcon} ${platform}`
+    })
+  }
+
+  // 获取状态图标
+  private getStatusIcon(status: 'running' | 'stopped'): string {
+    switch (status) {
+      case 'running':
+        return green('▶')
+      case 'stopped':
+        return ' '
+      default:
+        return ' '
+    }
+  }
+
+  // 更新平台列表显示
+  private updatePlatformList(): void {
+    this.platformBox.setItems(this.getPlatformItemsWithStatus())
+    this.screen.render()
+  }
+
+  // 从显示文本中提取平台名称
+  private extractPlatformName(displayText: string): string {
+    // 按长度降序排序，优先匹配更长的平台名称
+    // 这样可以避免 'app-plus' 被错误匹配为 'app'
+    const sortedPlatforms = [...this.platforms].sort((a, b) => b.length - a.length)
+
+    // 从所有平台中查找匹配的平台名称
+    for (const platform of sortedPlatforms) {
+      if (displayText.includes(platform)) {
+        return platform
+      }
+    }
+    // 如果没有找到匹配的平台，返回原始文本去除前后空格
+    return displayText.trim()
   }
 }

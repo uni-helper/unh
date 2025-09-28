@@ -1,4 +1,4 @@
-import type { Platform } from '../../constant'
+import type { Platform, Platforms } from '../../constant'
 
 type CommandType = 'dev' | 'build' | 'install'
 export type PlatformAlias = Partial<Record<Platform, string[] | string>>
@@ -50,8 +50,17 @@ export interface UniHelperConfig {
     manifest?: boolean | CommandType
   }
   /**
-   * 是否启用终端UI
-   * @default true
+   * 终端UI配置
    */
-  ui?: boolean
+  ui?: {
+    /**
+     * 是否启用终端UI
+     * @default true
+     */
+    enabled?: boolean
+    /**
+     * 用于指定终端UI显示的平台
+     */
+    platforms?: Platforms
+  }
 }

@@ -413,7 +413,7 @@
     text-anchor="middle" dominant-baseline="middle"
     font-family="Consolas, Monaco, monospace" 
   >
-    <tspan x="640" y="320" font-size="96" font-weight="900" fill="#F0F0F0">@uni-helper/uni</tspan>
+    <tspan x="640" y="320" font-size="96" font-weight="900" fill="#F0F0F0">@uni-helper/unh</tspan>
     <tspan x="1180" y="600" font-size="24" font-weight="400" fill="#B8B8B8">@uni-helper</tspan>
   </text>
 </svg>
