@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
-import type { UniHelperConfig } from '../config/types'
-import type { CommandType } from './types'
 import process from 'node:process'
+import { cac } from 'cac'
+import { version } from '../../package.json'
 import { handleBuildCommand, handleDevCommand, handlePrepareCommand } from './commands'
+import { customHelp, handleInfoCommand } from './commands/index'
 import { loadCliConfig } from './config'
-import { parseCommandLineArgs } from './parser'
 
 /**
  * CLI入口函数
@@ -14,9 +14,47 @@ import { parseCommandLineArgs } from './parser'
 async function main(): Promise<void> {
   try {
     const config = await loadCliConfig()
-    const { command, argument } = parseCommandLineArgs()
+    const defaultPlatform = config.platform?.default || 'h5'
+    const cli = cac('unh')
 
-    await executeCommand(command, argument, config)
+    // 版本信息
+    cli.version(version)
+
+    // prepare 命令
+    cli
+      .command('prepare', '准备项目环境')
+      .action(async () => {
+        await handlePrepareCommand(config)
+      })
+
+    // dev 命令
+    cli
+      .command('dev [platform]', '启动开发服务器')
+      .action(async (platform) => {
+        const targetPlatform = platform || defaultPlatform
+        await handleDevCommand(targetPlatform, config)
+      })
+
+    // build 命令
+    cli
+      .command('build [platform]', '构建项目')
+      .action(async (platform) => {
+        const targetPlatform = platform || defaultPlatform
+        await handleBuildCommand(targetPlatform, config)
+      })
+
+    // 信息
+    cli
+      .command('info', '显示项目信息')
+      .action(async () => {
+        await handleInfoCommand()
+      })
+
+    // 全局帮助选项 - 使用独立的中文帮助模块
+    cli.help(customHelp)
+
+    // 解析命令行参数
+    cli.parse()
   }
   catch (error) {
     console.error('Fatal error:', error instanceof Error ? error.message : error)
@@ -24,35 +62,5 @@ async function main(): Promise<void> {
   }
 }
 
-/**
- * 根据命令类型执行相应的处理
- */
-async function executeCommand(
-  command: CommandType,
-  argument: string | undefined,
-  config: UniHelperConfig,
-): Promise<void> {
-  switch (command) {
-    case 'prepare':
-      await handlePrepareCommand(config)
-      break
-
-    case 'dev':
-      await handleDevCommand(argument, config)
-      break
-
-    case 'build':
-      await handleBuildCommand(argument, config)
-      break
-
-    default:
-      // 这种情况理论上不会发生，因为parser已经验证过了
-      throw new Error(`Unsupported command: ${command}`)
-  }
-}
-
 // 启动CLI应用程序
-main().catch((error) => {
-  console.error('Unhandled error:', error)
-  process.exit(1)
-})
+main()

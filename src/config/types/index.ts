@@ -54,8 +54,8 @@ export interface UniHelperConfig {
    */
   ui?: {
     /**
-     * 是否启用终端UI
-     * @default true
+     * 是否启用终端UI, 测试功能，谨慎使用
+     * @default false
      */
     enabled?: boolean
     /**

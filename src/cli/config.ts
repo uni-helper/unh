@@ -15,7 +15,7 @@ const DEFAULT_CONFIG: UniHelperConfig = {
     manifest: false,
   },
   ui: {
-    enabled: true,
+    enabled: false,
   },
 }
 

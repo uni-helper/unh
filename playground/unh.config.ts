@@ -24,7 +24,7 @@ export default defineConfig({
     manifest: true,
   },
   ui: {
-    enabled: true,
+    enabled: false,
     platforms: ['h5', 'mp-weixin'],
   }
 })

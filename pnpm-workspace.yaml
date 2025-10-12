@@ -5,6 +5,7 @@ packages:
   - examples/*
 catalog:
   blessed: ^0.1.81
+  cac: ^6.7.14
   cross-spawn: ^7.0.6
   kolorist: ^1.8.0
   unconfig: ^7.3.3

@@ -1,5 +1,5 @@
 {
-  "name": "@uni-helper/uni",
+  "name": "@uni-helper/unh",
   "type": "module",
   "version": "0.1.0",
   "packageManager": "pnpm@10.6.2",
@@ -7,12 +7,12 @@
   "author": "FliPPeDround <flippedround@qq.com>",
   "license": "MIT",
   "funding": "https://afdian.com/a/flippedround",
-  "homepage": "https://github.com/uni-helper/uni#readme",
+  "homepage": "https://github.com/uni-helper/unh#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/uni-helper/uni.git"
+    "url": "git+https://github.com/uni-helper/unh.git"
   },
-  "bugs": "https://github.com/uni-helper/uni/issues",
+  "bugs": "https://github.com/uni-helper/unh/issues",
   "keywords": [
     "uni",
     "uni-app",
@@ -48,6 +48,7 @@
   },
   "dependencies": {
     "blessed": "catalog:",
+    "cac": "catalog:",
     "cross-spawn": "catalog:",
     "kolorist": "catalog:",
     "unconfig": "catalog:"
