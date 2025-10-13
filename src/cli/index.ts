@@ -3,8 +3,7 @@
 import process from 'node:process'
 import { cac } from 'cac'
 import { version } from '../../package.json'
-import { handleBuildCommand, handleDevCommand, handlePrepareCommand } from './commands'
-import { customHelp, handleInfoCommand } from './commands/index'
+import { customHelp, handleBuildCommand, handleDevCommand, handleInfoCommand, handlePlatformCommand, handlePrepareCommand } from './commands'
 import { loadCliConfig } from './config'
 
 /**
@@ -48,6 +47,12 @@ async function main(): Promise<void> {
       .command('info', '显示项目信息')
       .action(async () => {
         await handleInfoCommand()
+      })
+
+    cli
+      .command('platform', '显示可编译平台')
+      .action(async () => {
+        await handlePlatformCommand()
       })
 
     // 全局帮助选项 - 使用独立的中文帮助模块

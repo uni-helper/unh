@@ -1,16 +1,16 @@
-import type { UniHelperConfig } from '../config/types'
-import type { Platform, Platforms } from '../constant'
-import type { BuildPhase, CommandType } from './types'
+import type { BuildPhase, CommandType } from '../types'
+import type { UniHelperConfig } from '@/config/types'
+import type { Platform, Platforms } from '@/constant'
 import process from 'node:process'
-import { PLATFORM } from '../constant'
-import { UniHelperTerminalUi } from '../ui'
-import { generateJsonFile } from '../utils/files'
-import { resolvePlatformAlias } from '../utils/platform'
+import { PLATFORM } from '@/constant'
+import { UniHelperTerminalUi } from '@/ui'
+import { generateJsonFile } from '@/utils/files'
+import { resolvePlatformAlias } from '@/utils/platform'
 
 /**
  * 生成配置文件
  */
-async function generateConfigFiles(
+export async function generateConfigFiles(
   config: UniHelperConfig,
   phase: BuildPhase,
 ): Promise<void> {
@@ -31,7 +31,7 @@ async function generateConfigFiles(
 /**
  * 解析目标平台
  */
-function resolveTargetPlatform(
+export function resolveTargetPlatform(
   argument: string | undefined,
   config: UniHelperConfig,
 ): string {
@@ -42,7 +42,7 @@ function resolveTargetPlatform(
 /**
  * 判断是否应该在当前阶段自动生成文件
  */
-function shouldAutoGenerate(
+export function shouldAutoGenerate(
   configValue: boolean | string | undefined,
   phase: BuildPhase,
 ): boolean {
@@ -52,7 +52,7 @@ function shouldAutoGenerate(
 /**
  * 执行自定义钩子
  */
-async function executeCustomHooks(
+export async function executeCustomHooks(
   config: UniHelperConfig,
   command: CommandType,
   platform: string,
@@ -73,7 +73,7 @@ async function executeCustomHooks(
 /**
  * 执行uni命令
  */
-async function executeUniCommand(
+export async function executeUniCommand(
   command: 'dev' | 'build',
   platform: string,
 ): Promise<void> {
@@ -97,7 +97,7 @@ async function executeUniCommand(
  * 2. 从配置文件中获取UI平台列表，默认值为所有平台
  * 3. 合并默认平台和UI平台列表，去重
  */
-function assemblePlatforms(config: UniHelperConfig): Platforms {
+export function assemblePlatforms(config: UniHelperConfig): Platforms {
   const defaultPlatform = config.platform?.default || 'h5'
   const uiPlatforms = config.ui?.platforms || PLATFORM
   return [...new Set([defaultPlatform, ...uiPlatforms])] as unknown as Platforms
@@ -106,7 +106,7 @@ function assemblePlatforms(config: UniHelperConfig): Platforms {
 /**
  * 启动终端UI
  */
-async function startTerminalUI(platform: Platform, config: UniHelperConfig): Promise<void> {
+export async function startTerminalUI(platform: Platform, config: UniHelperConfig): Promise<void> {
   const terminalUi = new UniHelperTerminalUi(assemblePlatforms(config))
   terminalUi.render()
   terminalUi.startPlatform(platform)
@@ -115,58 +115,4 @@ async function startTerminalUI(platform: Platform, config: UniHelperConfig): Pro
     terminalUi.cleanup()
     process.exit(0)
   })
-}
-
-/**
- * 处理prepare命令
- */
-export async function handlePrepareCommand(config: UniHelperConfig): Promise<void> {
-  // 生成配置文件
-  await generateConfigFiles(config, 'install')
-
-  // 执行自定义安装钩子
-  await executeCustomHooks(config, 'prepare', '')
-}
-
-/**
- * 处理构建/开发命令
- */
-export async function handleBuildCommand(
-  argument: string | undefined,
-  config: UniHelperConfig,
-): Promise<void> {
-  const platform = resolveTargetPlatform(argument, config)
-
-  // 生成配置文件
-  await generateConfigFiles(config, 'build')
-
-  // 执行自定义钩子
-  await executeCustomHooks(config, 'build', platform)
-
-  // 执行uni命令
-  await executeUniCommand('build', platform)
-}
-
-/**
- * 处理开发命令
- */
-export async function handleDevCommand(
-  argument: string | undefined,
-  config: UniHelperConfig,
-): Promise<void> {
-  const platform = resolveTargetPlatform(argument, config)
-
-  // 生成配置文件
-  await generateConfigFiles(config, 'dev')
-
-  // 执行自定义钩子
-  await executeCustomHooks(config, 'dev', platform)
-
-  // 执行uni命令
-  if (config.ui?.enabled) {
-    await startTerminalUI(platform as Platform, config)
-  }
-  else {
-    await executeUniCommand('dev', platform)
-  }
 }
