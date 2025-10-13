@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "unh dev",
     "build": "unh build",
+    "dev:mode": "unh dev --mode dev",
     "about": "unh info",
     "platform": "unh platform",
     "type-check": "vue-tsc --noEmit"

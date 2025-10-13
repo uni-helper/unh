@@ -76,10 +76,19 @@ export async function executeCustomHooks(
 export async function executeUniCommand(
   command: 'dev' | 'build',
   platform: string,
+  options: Record<string, any>,
 ): Promise<void> {
   try {
     const { execSync } = await import('node:child_process')
-    const uniCommand = `uni ${command} -p ${platform}`
+
+    // 过滤掉 -- 属性（命令行解析器添加的特殊属性）
+    const filteredOptions = Object.entries(options)
+      .filter(([key]) => key !== '--')
+      .map(([key, value]) => `--${key} ${value}`)
+      .join(' ')
+
+    const uniCommand = `uni ${command} -p ${platform} ${filteredOptions}`.trim()
+    console.log(`Executing uni command: ${uniCommand}`)
 
     execSync(uniCommand, {
       stdio: 'inherit',

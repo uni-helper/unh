@@ -7,6 +7,7 @@ import { executeCustomHooks, executeUniCommand, generateConfigFiles, resolveTarg
 export async function handleBuildCommand(
   argument: string | undefined,
   config: UniHelperConfig,
+  options: Record<string, any>,
 ): Promise<void> {
   const platform = resolveTargetPlatform(argument, config)
 
@@ -17,5 +18,5 @@ export async function handleBuildCommand(
   await executeCustomHooks(config, 'build', platform)
 
   // 执行uni命令
-  await executeUniCommand('build', platform)
+  await executeUniCommand('build', platform, options)
 }

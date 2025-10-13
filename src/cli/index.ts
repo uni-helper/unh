@@ -29,17 +29,19 @@ async function main(): Promise<void> {
     // dev 命令
     cli
       .command('dev [platform]', '启动开发服务器')
-      .action(async (platform) => {
+      .option('--mode <mode>', '构建模式')
+      .action(async (platform, options) => {
         const targetPlatform = platform || defaultPlatform
-        await handleDevCommand(targetPlatform, config)
+        await handleDevCommand(targetPlatform, config, options)
       })
 
     // build 命令
     cli
       .command('build [platform]', '构建项目')
-      .action(async (platform) => {
+      .option('--mode <mode>', '构建模式')
+      .action(async (platform, options) => {
         const targetPlatform = platform || defaultPlatform
-        await handleBuildCommand(targetPlatform, config)
+        await handleBuildCommand(targetPlatform, config, options)
       })
 
     // 信息
@@ -52,7 +54,7 @@ async function main(): Promise<void> {
     cli
       .command('platform', '显示可编译平台')
       .action(async () => {
-        await handlePlatformCommand()
+        handlePlatformCommand()
       })
 
     // 全局帮助选项 - 使用独立的中文帮助模块

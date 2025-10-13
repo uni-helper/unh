@@ -8,6 +8,7 @@ import { executeCustomHooks, executeUniCommand, generateConfigFiles, resolveTarg
 export async function handleDevCommand(
   argument: string | undefined,
   config: UniHelperConfig,
+  options: Record<string, any>,
 ): Promise<void> {
   const platform = resolveTargetPlatform(argument, config)
 
@@ -22,6 +23,6 @@ export async function handleDevCommand(
     await startTerminalUI(platform as Platform, config)
   }
   else {
-    await executeUniCommand('dev', platform)
+    await executeUniCommand('dev', platform, options)
   }
 }
