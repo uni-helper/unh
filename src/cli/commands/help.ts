@@ -1,4 +1,5 @@
 import type { Command } from 'cac'
+import { link } from 'kolorist'
 
 /**
  * 自定义帮助信息为中文
@@ -14,7 +15,7 @@ export const customHelp: Command['helpCallback'] = (sections) => {
     if (section.title === 'Usage') {
       return {
         title: '用法',
-        body: section.body,
+        body: `${section.body}\n  详情请查看${link('文档', 'https://uni-helper.js.org/unh/')}`,
       }
     }
     if (section.title === 'Commands') {
