@@ -29,7 +29,7 @@ async function main(): Promise<void> {
     // dev 命令
     cli
       .command('dev [platform]', '启动开发服务器')
-      .option('--mode <mode>', '构建模式')
+      .allowUnknownOptions()
       .action(async (platform, options) => {
         const targetPlatform = platform || defaultPlatform
         await handleDevCommand(targetPlatform, config, options)
@@ -38,7 +38,7 @@ async function main(): Promise<void> {
     // build 命令
     cli
       .command('build [platform]', '构建项目')
-      .option('--mode <mode>', '构建模式')
+      .allowUnknownOptions()
       .action(async (platform, options) => {
         const targetPlatform = platform || defaultPlatform
         await handleBuildCommand(targetPlatform, config, options)
