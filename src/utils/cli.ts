@@ -1,32 +1,10 @@
-import type { BuildPhase, CommandType } from '../types'
+import type { CommandType } from '@/cli/types'
 import type { UniHelperConfig } from '@/config/types'
 import type { Platform, Platforms } from '@/constant'
 import process from 'node:process'
 import { PLATFORM } from '@/constant'
 import { UniHelperTerminalUi } from '@/ui'
-import { generateJsonFile } from '@/utils/files'
-import { resolvePlatformAlias } from '@/utils/platform'
-
-/**
- * 生成配置文件
- */
-export async function generateConfigFiles(
-  config: UniHelperConfig,
-  phase: BuildPhase,
-): Promise<void> {
-  const outDir = config.autoGenerate?.outDir || 'src'
-
-  const shouldGeneratePages = shouldAutoGenerate(config.autoGenerate?.pages, phase)
-  const shouldGenerateManifest = shouldAutoGenerate(config.autoGenerate?.manifest, phase)
-
-  if (shouldGeneratePages) {
-    generateJsonFile(outDir, 'pages')
-  }
-
-  if (shouldGenerateManifest) {
-    generateJsonFile(outDir, 'manifest')
-  }
-}
+import { resolvePlatformAlias } from './platform'
 
 /**
  * 解析目标平台
@@ -40,16 +18,6 @@ export function resolveTargetPlatform(
 }
 
 /**
- * 判断是否应该在当前阶段自动生成文件
- */
-export function shouldAutoGenerate(
-  configValue: boolean | string | undefined,
-  phase: BuildPhase,
-): boolean {
-  return configValue === true || configValue === phase
-}
-
-/**
  * 执行自定义钩子
  */
 export async function executeCustomHooks(
@@ -57,16 +25,16 @@ export async function executeCustomHooks(
   command: CommandType,
   platform: string,
 ): Promise<void> {
-  if (command === 'dev' && config.prepare?.dev) {
-    await config.prepare.dev(platform)
+  if (command === 'dev' && config.hooks?.dev) {
+    await config.hooks.dev(platform)
   }
 
-  if (command === 'build' && config.prepare?.build) {
-    await config.prepare.build(platform)
+  if (command === 'build' && config.hooks?.build) {
+    await config.hooks.build(platform)
   }
 
-  if (command === 'prepare' && config.prepare?.install) {
-    await config.prepare.install()
+  if (command === 'prepare' && config.hooks?.prepare) {
+    await config.hooks.prepare()
   }
 }
 
@@ -88,7 +56,6 @@ export async function executeUniCommand(
       .join(' ')
 
     const uniCommand = `uni ${command} -p ${platform} ${filteredOptions}`.trim()
-    console.log(`Executing uni command: ${uniCommand}`)
 
     execSync(uniCommand, {
       stdio: 'inherit',
@@ -109,7 +76,7 @@ export async function executeUniCommand(
 export function assemblePlatforms(config: UniHelperConfig): Platforms {
   const defaultPlatform = config.platform?.default || 'h5'
   const uiPlatforms = config.ui?.platforms || PLATFORM
-  return [...new Set([defaultPlatform, ...uiPlatforms])] as unknown as Platforms
+  return [...new Set([defaultPlatform, ...uiPlatforms])] as Platforms
 }
 
 /**

@@ -1,7 +1,20 @@
 import type { Platform, Platforms } from '../../constant'
+import type { BuildPhase } from '@/cli/types'
 
-type CommandType = 'dev' | 'build' | 'install'
 export type PlatformAlias = Partial<Record<Platform, string[] | string>>
+
+export interface ManifestOptions {
+  /**
+   * minify the `manifest.json`
+   * @default false
+   */
+  minify?: boolean
+  /**
+   * insert newline at the end of the `manifest.json`
+   * @default false
+   */
+  insertFinalNewline?: boolean
+}
 
 /**
  * uni 助手配置
@@ -24,9 +37,9 @@ export interface UniHelperConfig {
      */
     alias?: PlatformAlias
   }
-  prepare?: {
+  hooks?: {
     /** 安装依赖时执行 */
-    install?: () => void | Promise<void>
+    prepare?: () => void | Promise<void>
     /** 构建前执行 */
     build?: (inputPlatform: string) => void | Promise<void>
     /** 开发前执行 */
@@ -42,12 +55,14 @@ export interface UniHelperConfig {
      * 是否自动生成pages.json
      * @default false
      */
-    pages?: boolean | CommandType
+    pages?: boolean | BuildPhase[]
     /**
      * 是否自动生成manifest.json
      * @default false
      */
-    manifest?: boolean | CommandType
+    manifest?: boolean | ManifestOptions & {
+      commands?: BuildPhase[]
+    }
   }
   /**
    * 终端UI配置

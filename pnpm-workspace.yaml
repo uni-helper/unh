@@ -8,6 +8,7 @@ catalog:
   cac: ^6.7.14
   cross-spawn: ^7.0.6
   kolorist: ^1.8.0
+  local-pkg: ^1.1.2
   unconfig: ^7.3.3
 catalogs:
   cli:

@@ -67,20 +67,6 @@ describe('cLI Commands', () => {
     })
   })
 
-  describe('auto Generation Logic', () => {
-    it('应该根据阶段判断是否生成文件', () => {
-      const shouldGenerate = (configValue: boolean | string | undefined, phase: string): boolean => {
-        return configValue === true || configValue === phase
-      }
-
-      expect(shouldGenerate(true, 'dev')).toBe(true)
-      expect(shouldGenerate('dev', 'dev')).toBe(true)
-      expect(shouldGenerate('build', 'dev')).toBe(false)
-      expect(shouldGenerate(false, 'dev')).toBe(false)
-      expect(shouldGenerate(undefined, 'dev')).toBe(false)
-    })
-  })
-
   describe('hook Configuration', () => {
     it('应该支持自定义钩子配置', () => {
       const mockHooks = {

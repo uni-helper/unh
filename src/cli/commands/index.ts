@@ -1,5 +1,4 @@
 export * from './build'
-export * from './common'
 export * from './dev'
 export * from './help'
 export * from './info'
