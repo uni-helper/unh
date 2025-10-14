@@ -99,11 +99,15 @@ export function shouldAutoGenerate(
     return configValue
   }
 
-  const commands = Array.isArray(configValue)
-    ? configValue
-    : (configValue.commands || [])
+  if (Array.isArray(configValue)) {
+    return configValue.includes(phase)
+  }
 
-  return commands.includes(phase)
+  if (configValue.commands == null) {
+    return true
+  }
+
+  return configValue.commands.includes(phase)
 }
 
 /**
