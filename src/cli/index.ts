@@ -3,7 +3,7 @@
 import process from 'node:process'
 import { cac } from 'cac'
 import { version } from '../../package.json'
-import { customHelp, handleBuildCommand, handleDevCommand, handleInfoCommand, handlePlatformCommand, handlePrepareCommand } from './commands'
+import { customHelp, handleBuildCommand, handleDevCommand, handleInfoCommand, handlePlatformCommand, handlePrepareCommand, handleUpdateCommand } from './commands'
 import { loadCliConfig } from './config'
 
 /**
@@ -55,6 +55,11 @@ async function main(): Promise<void> {
       .command('platform', '显示可编译平台')
       .action(async () => {
         handlePlatformCommand()
+      })
+
+    cli.command('update [version]', '更新依赖版本')
+      .action(async (version) => {
+        handleUpdateCommand(version)
       })
 
     // 全局帮助选项 - 使用独立的中文帮助模块

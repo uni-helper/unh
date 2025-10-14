@@ -31,6 +31,8 @@ export const PLATFORM_DESCRIPTIONS = {
   'quickapp-webview-union': '快应用联盟',
 } as const
 
+export const UNI_APP_DEPENDENCIES = ['@dcloudio/uni-app', '@dcloudio/uni-app-plus', '@dcloudio/uni-app-harmony', '@dcloudio/uni-h5', '@dcloudio/uni-mp-alipay', '@dcloudio/uni-mp-baidu', '@dcloudio/uni-mp-harmony', '@dcloudio/uni-mp-jd', '@dcloudio/uni-mp-kuaishou', '@dcloudio/uni-mp-lark', '@dcloudio/uni-mp-qq', '@dcloudio/uni-mp-toutiao', '@dcloudio/uni-mp-weixin', '@dcloudio/uni-mp-xhs', '@dcloudio/uni-quickapp-webview']
+
 export const PLATFORM = Object.keys(PLATFORM_DESCRIPTIONS) as readonly (keyof typeof PLATFORM_DESCRIPTIONS)[]
 
 export type Platforms = typeof PLATFORM

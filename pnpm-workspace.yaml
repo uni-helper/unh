@@ -7,9 +7,11 @@ catalog:
   blessed: ^0.1.81
   cac: ^6.7.14
   cross-spawn: ^7.0.6
+  globby: ^15.0.0
   kolorist: ^1.8.0
   local-pkg: ^1.1.2
   unconfig: ^7.3.3
+  yaml: ^2.8.1
 catalogs:
   cli:
     '@antfu/eslint-config': ^4.10.1
