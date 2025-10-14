@@ -11,12 +11,4 @@ export type GenerateFileType = 'pages' | 'manifest'
 /**
  * 构建或开发阶段
  */
-export type BuildPhase = 'install' | 'dev' | 'build'
-
-/**
- * 解析后的命令行参数
- */
-export interface ParsedCommand {
-  command: CommandType
-  argument?: string
-}
+export type BuildPhase = 'dev' | 'build'

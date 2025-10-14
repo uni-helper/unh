@@ -1,5 +1,5 @@
 import type { UniHelperConfig } from '@/config/types'
-import { executeCustomHooks, executeUniCommand, generateConfigFiles, resolveTargetPlatform } from './common'
+import { executeCustomHooks, executeUniCommand, generateConfigFiles, resolveTargetPlatform } from '@/utils'
 
 /**
  * 处理构建/开发命令

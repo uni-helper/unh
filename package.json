@@ -51,6 +51,7 @@
     "cac": "catalog:",
     "cross-spawn": "catalog:",
     "kolorist": "catalog:",
+    "local-pkg": "catalog:",
     "unconfig": "catalog:"
   },
   "devDependencies": {

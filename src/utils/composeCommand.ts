@@ -1,4 +1,5 @@
 import process from 'node:process'
+import { sync } from 'cross-spawn'
 
 function pkgFromUserAgent(userAgent: string | undefined) {
   if (!userAgent)
@@ -27,4 +28,15 @@ export function composeCommand(
     pkgManager = 'bun x'
 
   return `${pkgManager} ${command}${isYarn1 ? '' : '@latest'}`
+}
+
+export function runPkg(name: string) {
+  const fullCustomCommand = composeCommand(name)
+  const [command, ..._args] = fullCustomCommand.split(' ')
+  const { error } = sync(command, [..._args], {
+    stdio: 'inherit',
+  })
+
+  if (error)
+    throw new Error(`Error executing command: ${error.message}`)
 }

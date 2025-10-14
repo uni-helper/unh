@@ -24,14 +24,8 @@ const DEFAULT_CONFIG: UniHelperConfig = {
  */
 export async function loadCliConfig(): Promise<UniHelperConfig> {
   const { config } = await loadConfig<UniHelperConfig>({
-    sources: [
-      {
-        files: 'unh.config',
-        extensions: ['ts', 'mts', 'cts', 'js', 'mjs', 'cjs', 'json', ''],
-      },
-    ],
+    sources: [{ files: 'unh.config' }],
     defaults: DEFAULT_CONFIG,
-    merge: false,
   })
   return config
 }

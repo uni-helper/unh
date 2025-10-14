@@ -1,6 +1,6 @@
 import type { UniHelperConfig } from '../../config/types'
 import type { Platform } from '../../constant'
-import { executeCustomHooks, executeUniCommand, generateConfigFiles, resolveTargetPlatform, startTerminalUI } from './common'
+import { executeCustomHooks, executeUniCommand, generateConfigFiles, resolveTargetPlatform, startTerminalUI } from '@/utils'
 
 /**
  * 处理开发命令

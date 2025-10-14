@@ -8,8 +8,8 @@ export default defineConfig({
       'mp-weixin': ['wx'],
     },
   },
-  prepare: {
-    install() {
+  hooks: {
+    prepare() {
       console.log('install')
     },
     build() {
@@ -21,7 +21,10 @@ export default defineConfig({
   },
   autoGenerate: {
     pages: true,
-    manifest: true,
+    manifest: {
+      commands: ['build'],
+      minify: true,
+    },
   },
   ui: {
     enabled: false,
