@@ -1,8 +1,8 @@
 <a href="https://uni-helper.js.org/uni"><img src="./banner.svg" alt="banner" width="100%"/></a>
 
 <a href="https://github.com/uni-helper/uni/stargazers"><img src="https://img.shields.io/github/stars/uni-helper/uni?colorA=005947&colorB=eee&style=for-the-badge"></a>
-<a href="https://www.npmjs.com/package/@uni-helper/uni"><img src="https://img.shields.io/npm/dm/@uni-helper/uni?colorA=005947&colorB=eee&style=for-the-badge"></a>
-<a href="https://www.npmjs.com/package/@uni-helper/uni"><img src="https://img.shields.io/npm/v/@uni-helper/uni?colorA=005947&colorB=eee&style=for-the-badge"></a>
+<a href="https://www.npmjs.com/package/@uni-helper/unh"><img src="https://img.shields.io/npm/dm/@uni-helper/unh?colorA=005947&colorB=eee&style=for-the-badge"></a>
+<a href="https://www.npmjs.com/package/@uni-helper/unh"><img src="https://img.shields.io/npm/v/@uni-helper/unh?colorA=005947&colorB=eee&style=for-the-badge"></a>
 <br/>
 
 # 由 [uni-helper](https://uni-helper.js.org) 封装的uni命令
