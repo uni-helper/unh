@@ -50,8 +50,8 @@ export default defineConfig({
       'mp-weixin': ['wx'],
     },
   },
-  prepare: {
-    install() {
+  hooks: {
+    prepare() {
       console.log('install')
     },
     build(platform: string) {
@@ -63,9 +63,6 @@ export default defineConfig({
   },
   autoGenerate: {
     pages: true,
-  },
-  ui: {
-    enable: true,
   }
 })
 ```
