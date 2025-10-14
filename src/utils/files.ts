@@ -86,27 +86,33 @@ export function shouldAutoGenerate(
   phase: BuildPhase,
   type: 'pages' | 'manifest',
 ): boolean {
+  // 未配置时默认不生成
   if (configValue == null) {
     return false
   }
 
+  // 插件未安装时默认不生成
   if (!isPackageExists(`@uni-helper/vite-plugin-uni-${type}`)) {
     console.warn(`${yellow('警告')}: @uni-helper/vite-plugin-uni-${type} 未安装，无法自动生成 ${type}.json 文件`)
     return false
   }
 
+  // 配置为 true 时默认生成
   if (typeof configValue === 'boolean') {
     return configValue
   }
 
+  // 配置为数组时，包含当前阶段时默认生成
   if (Array.isArray(configValue)) {
     return configValue.includes(phase)
   }
 
-  if (configValue.commands == null) {
+  // 配置为对象时，未指定 commands 时默认生成
+  if (configValue.commands === undefined) {
     return true
   }
 
+  // 配置为对象时，指定 commands 时，包含当前阶段时默认生成
   return configValue.commands.includes(phase)
 }
 
