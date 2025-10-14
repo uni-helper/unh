@@ -7,10 +7,6 @@
 
 # 由 [uni-helper](https://uni-helper.js.org) 封装的uni命令
 
-<pre align="center">
-🏗 正在开发中
-</pre>
-
 ## 安装
 
 ```bash
