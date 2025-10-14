@@ -1,7 +1,8 @@
 import type { BuildPhase, CommandType } from '../types'
-import type { UniHelperConfig } from '@/config/types'
+import type { ManifestOptions, UniHelperConfig } from '@/config/types'
 import type { Platform, Platforms } from '@/constant'
 import process from 'node:process'
+import { loadConfig } from 'unconfig'
 import { PLATFORM } from '@/constant'
 import { UniHelperTerminalUi } from '@/ui'
 import { generateJsonFile } from '@/utils/files'
@@ -20,11 +21,42 @@ export async function generateConfigFiles(
   const shouldGenerateManifest = shouldAutoGenerate(config.autoGenerate?.manifest, phase)
 
   if (shouldGeneratePages) {
-    generateJsonFile(outDir, 'pages')
+    const json = JSON.stringify(
+      { pages: [{ path: '' }] },
+      null,
+      2,
+    )
+
+    generateJsonFile({
+      outDir,
+      name: 'pages',
+      json,
+      force: false,
+    })
   }
 
   if (shouldGenerateManifest) {
-    generateJsonFile(outDir, 'manifest')
+    const { config: manifestConfig } = await loadConfig({
+      sources: [
+        {
+          files: 'manifest.config',
+          extensions: ['ts', 'mts', 'cts', 'js', 'mjs', 'cjs', 'json', ''],
+        },
+      ],
+      merge: false,
+    })
+
+    const opts = resolveManifestOptions(config.autoGenerate?.manifest)
+
+    const json = JSON.stringify(manifestConfig || {}, null, opts.minify ? 0 : 2)
+      + (opts.insertFinalNewline ? '\n' : '')
+
+    generateJsonFile({
+      outDir,
+      name: 'manifest',
+      json,
+      force: manifestConfig != null,
+    })
   }
 }
 
@@ -43,10 +75,41 @@ export function resolveTargetPlatform(
  * 判断是否应该在当前阶段自动生成文件
  */
 export function shouldAutoGenerate(
-  configValue: boolean | string | undefined,
+  configValue: boolean | string[] | { commands?: string[] } | undefined,
   phase: BuildPhase,
 ): boolean {
-  return configValue === true || configValue === phase
+  if (configValue == null) {
+    return false
+  }
+
+  if (typeof configValue === 'boolean') {
+    return configValue
+  }
+
+  const commands = Array.isArray(configValue)
+    ? configValue
+    : (configValue.commands || [])
+
+  return commands.includes(phase)
+}
+
+/**
+ * 合并 manifest 配置
+ */
+export function resolveManifestOptions(options: boolean | ManifestOptions | undefined): Required<ManifestOptions> {
+  const defaultOptions = {
+    minify: false,
+    insertFinalNewline: false,
+  }
+
+  if (typeof options === 'boolean') {
+    return defaultOptions
+  }
+
+  return {
+    ...defaultOptions,
+    ...options,
+  }
 }
 
 /**

@@ -1,4 +1,4 @@
-import {defineConfig} from '@uni-helper/uni'
+import {defineConfig} from '@uni-helper/unh'
 
 export default defineConfig({
   platform: {

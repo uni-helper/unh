@@ -6,13 +6,19 @@ export function writeFileSync(path: string, content: string) {
   fs.writeFileSync(path, content, { encoding: 'utf-8' })
 }
 
-export function generateJsonFile(outDir: string, name: string) {
-  const resolvedJSONPath = path.join(process.cwd(), outDir, `${name}.json`)
-  if (!fs.existsSync(resolvedJSONPath)) {
-    let data = {}
-    if (name === 'pages') {
-      data = { pages: [{ path: '' }] }
-    }
-    writeFileSync(resolvedJSONPath, JSON.stringify(data, null, 2))
+export interface GenerateJsonFileOptions {
+  outDir: string
+  name: string
+  json: string
+  force: boolean
+}
+
+export function generateJsonFile(options: GenerateJsonFileOptions) {
+  const resolvedJSONPath = path.join(process.cwd(), options.outDir, `${options.name}.json`)
+
+  if (!options.force && fs.existsSync(resolvedJSONPath)) {
+    return
   }
+
+  writeFileSync(resolvedJSONPath, options.json)
 }

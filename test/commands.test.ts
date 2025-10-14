@@ -1,3 +1,4 @@
+import type { BuildPhase } from '../src/cli/types'
 import type { UniHelperConfig } from '../src/config/types'
 import { describe, expect, it, vi } from 'vitest'
 
@@ -69,13 +70,30 @@ describe('cLI Commands', () => {
 
   describe('auto Generation Logic', () => {
     it('应该根据阶段判断是否生成文件', () => {
-      const shouldGenerate = (configValue: boolean | string | undefined, phase: string): boolean => {
-        return configValue === true || configValue === phase
+      const shouldGenerate = (
+        configValue: boolean | string[] | { commands?: string[] } | undefined,
+        phase: BuildPhase,
+      ): boolean => {
+        if (configValue == null) {
+          return false
+        }
+
+        if (typeof configValue === 'boolean') {
+          return configValue
+        }
+
+        const commands = Array.isArray(configValue)
+          ? configValue
+          : (configValue.commands || [])
+
+        return commands.includes(phase)
       }
 
       expect(shouldGenerate(true, 'dev')).toBe(true)
-      expect(shouldGenerate('dev', 'dev')).toBe(true)
-      expect(shouldGenerate('build', 'dev')).toBe(false)
+      expect(shouldGenerate(['dev'], 'dev')).toBe(true)
+      expect(shouldGenerate(['build'], 'dev')).toBe(false)
+      expect(shouldGenerate({ commands: ['dev'] }, 'dev')).toBe(true)
+      expect(shouldGenerate({ commands: ['build'] }, 'dev')).toBe(false)
       expect(shouldGenerate(false, 'dev')).toBe(false)
       expect(shouldGenerate(undefined, 'dev')).toBe(false)
     })
