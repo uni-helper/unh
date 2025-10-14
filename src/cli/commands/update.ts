@@ -10,7 +10,7 @@ type Tag = 'latest' | 'alpha'
 
 function updateVersion(dependencies: Record<string, string>, versionMap: Record<string, string>, version: Tag | string) {
   for (const name in dependencies) {
-    if (!UNI_APP_DEPENDENCIES.includes(name) || dependencies[name] === 'catalog:') {
+    if (!UNI_APP_DEPENDENCIES.includes(name) || dependencies[name].startsWith('catalog')) {
       continue
     }
     dependencies[name] = version.startsWith('3') || version.startsWith('2') ? version : getUniAppVersion(dependencies[name], versionMap, version as Tag)
