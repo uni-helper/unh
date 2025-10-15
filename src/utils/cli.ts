@@ -2,6 +2,7 @@ import type { CommandType } from '@/cli/types'
 import type { UniHelperConfig } from '@/config/types'
 import type { Platform, Platforms } from '@/constant'
 import process from 'node:process'
+import { sync } from 'cross-spawn'
 import { PLATFORM } from '@/constant'
 import { UniHelperTerminalUi } from '@/ui'
 import { resolvePlatformAlias } from './platform'
@@ -46,25 +47,22 @@ export async function executeUniCommand(
   platform: string,
   options: Record<string, any>,
 ): Promise<void> {
-  try {
-    const { execSync } = await import('node:child_process')
+  // 过滤掉 -- 属性（命令行解析器添加的特殊属性）
+  const filteredOptions = Object.entries(options)
+    .filter(([key]) => key !== '--')
+    .map(([key, value]) => `--${key} ${value}`)
+    .join(' ')
 
-    // 过滤掉 -- 属性（命令行解析器添加的特殊属性）
-    const filteredOptions = Object.entries(options)
-      .filter(([key]) => key !== '--')
-      .map(([key, value]) => `--${key} ${value}`)
-      .join(' ')
+  const fullCustomCommand = `uni ${command} -p ${platform} ${filteredOptions}`.trim()
+  const [uniCommand, ..._args] = fullCustomCommand.split(' ')
 
-    const uniCommand = `uni ${command} -p ${platform} ${filteredOptions}`.trim()
+  const { error } = sync(uniCommand, [..._args], {
+    stdio: 'inherit',
+    cwd: process.cwd(),
+  })
 
-    execSync(uniCommand, {
-      stdio: 'inherit',
-      cwd: process.cwd(),
-    })
-  }
-  catch (error) {
-    throw new Error(`Failed to execute uni command: ${error}`)
-  }
+  if (error)
+    throw new Error(`Error executing command: ${error.message}`)
 }
 
 /**
