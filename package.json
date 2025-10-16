@@ -50,9 +50,12 @@
     "blessed": "catalog:",
     "cac": "catalog:",
     "cross-spawn": "catalog:",
+    "globby": "catalog:",
     "kolorist": "catalog:",
     "local-pkg": "catalog:",
-    "unconfig": "catalog:"
+    "tinyexec": "catalog:utils",
+    "unconfig": "catalog:",
+    "yaml": "catalog:"
   },
   "devDependencies": {
     "@antfu/eslint-config": "catalog:cli",
@@ -63,7 +66,6 @@
     "eslint": "catalog:cli",
     "lint-staged": "catalog:cli",
     "simple-git-hooks": "catalog:cli",
-    "tinyexec": "catalog:utils",
     "tsdown": "catalog:cli",
     "typescript": "catalog:cli",
     "vitest": "catalog:testing",
