@@ -4,11 +4,13 @@ packages:
   - packages/*
   - examples/*
 catalog:
-  blessed: ^0.1.81
+  '@types/react': ^19.2.2
   cac: ^6.7.14
   cross-spawn: ^7.0.6
+  ink: ^6.3.1
   kolorist: ^1.8.0
   local-pkg: ^1.1.2
+  react: ^19.2.0
   unconfig: ^7.3.3
 catalogs:
   cli:
@@ -23,7 +25,6 @@ catalogs:
     vitest: ^3.0.8
     vitest-package-exports: ^0.1.1
   types:
-    '@types/blessed': ^0.1.25
     '@types/cross-spawn': ^6.0.6
     '@types/node': ^22.13.10
   utils:

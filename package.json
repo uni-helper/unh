@@ -47,16 +47,17 @@
     "prepare": "simple-git-hooks"
   },
   "dependencies": {
-    "blessed": "catalog:",
+    "@types/react": "catalog:",
     "cac": "catalog:",
     "cross-spawn": "catalog:",
+    "ink": "catalog:",
     "kolorist": "catalog:",
     "local-pkg": "catalog:",
+    "react": "catalog:",
     "unconfig": "catalog:"
   },
   "devDependencies": {
     "@antfu/eslint-config": "catalog:cli",
-    "@types/blessed": "catalog:types",
     "@types/cross-spawn": "catalog:types",
     "@types/node": "catalog:types",
     "bumpp": "catalog:cli",
