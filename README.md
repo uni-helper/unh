@@ -33,6 +33,7 @@ pnpm dev wx
 ```
 
 ```ts
+import { join } from 'node:path'
 // unh.config.ts
 import { defineConfig } from '@uni-helper/unh'
 
@@ -50,11 +51,15 @@ export default defineConfig({
     prepare() {
       console.log('install')
     },
-    build(platform: string) {
-      console.log('build:', platform)
+    build(platform: string, options: Record<string, any>) {
+      console.log('build:', platform, options)
+      if (options) {
+        // 所有命令行参数，可以做更多事情，也可以修改或追加一些`uni`命令行参数
+        options.outDir = join('dist', options.m || options.mode || 'build', plaform)
+      }
     },
-    dev(platform: string) {
-      console.log('dev:', platform)
+    dev(platform: string, options: Record<string, any>) {
+      console.log('dev:', platform, options)
     },
   },
   autoGenerate: {
