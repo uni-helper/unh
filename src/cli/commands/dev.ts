@@ -16,7 +16,7 @@ export async function handleDevCommand(
   await generateConfigFiles(config, 'dev')
 
   // 执行自定义钩子
-  await executeCustomHooks(config, 'dev', platform)
+  await executeCustomHooks(config, 'dev', platform, options)
 
   // 执行uni命令
   if (config.ui?.enabled) {

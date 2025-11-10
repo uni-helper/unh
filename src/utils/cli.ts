@@ -3,7 +3,7 @@ import type { UniHelperConfig } from '@/config/types'
 import type { Platform, Platforms } from '@/constant'
 import process from 'node:process'
 import { sync } from 'cross-spawn'
-import { PLATFORM } from '@/constant'
+import { PLATFORM, UNI_COMMAND_OPTIONS } from '@/constant'
 import { UniHelperTerminalUi } from '@/ui'
 import { resolvePlatformAlias } from './platform'
 
@@ -25,13 +25,14 @@ export async function executeCustomHooks(
   config: UniHelperConfig,
   command: CommandType,
   platform: string,
+  options?: Record<string, any>,
 ): Promise<void> {
   if (command === 'dev' && config.hooks?.dev) {
-    await config.hooks.dev(platform)
+    await config.hooks.dev(platform, options)
   }
 
   if (command === 'build' && config.hooks?.build) {
-    await config.hooks.build(platform)
+    await config.hooks.build(platform, options)
   }
 
   if (command === 'prepare' && config.hooks?.prepare) {
@@ -49,7 +50,7 @@ export async function executeUniCommand(
 ): Promise<void> {
   // 过滤掉 -- 属性（命令行解析器添加的特殊属性）
   const filteredOptions = Object.entries(options)
-    .filter(([key]) => key !== '--')
+    .filter(([key]) => UNI_COMMAND_OPTIONS.normal.includes(key) || UNI_COMMAND_OPTIONS[command].includes(key))
     .map(([key, value]) => `--${key} ${value}`)
     .join(' ')
 

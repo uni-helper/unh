@@ -1,3 +1,10 @@
+// UniApp CLI 合法参数名称集
+export const UNI_COMMAND_OPTIONS = {
+  normal: ['c', 'config', 'p', 'platform', 'base', 'ssr', 'l', 'logLevel', 'clearScreen', 'd', 'debug', 'f', 'filter', 'm', 'mode', 'minify', 'autoHost', 'autoPort', 'devtools', 'devtoolsHost', 'devtoolsPort', 'subpackage', 'plugin'],
+  dev: ['host', 'port', 'https', 'open', 'cors', 'strictPort', 'force'],
+  build: ['outDir', 'assetsInlineLimit', 'sourcemap', 'manifest', 'ssrManifest', 'emptyOutDir', 'w', 'watch'],
+}
+
 export const PLATFORM_DESCRIPTIONS = {
   // 应用
   'app': '通用应用平台',

@@ -15,7 +15,7 @@ export async function handleBuildCommand(
   await generateConfigFiles(config, 'build')
 
   // 执行自定义钩子
-  await executeCustomHooks(config, 'build', platform)
+  await executeCustomHooks(config, 'build', platform, options)
 
   // 执行uni命令
   await executeUniCommand('build', platform, options)
