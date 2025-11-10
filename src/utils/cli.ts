@@ -3,7 +3,7 @@ import type { UniHelperConfig } from '@/config/types'
 import type { Platform, Platforms } from '@/constant'
 import process from 'node:process'
 import { sync } from 'cross-spawn'
-import { PLATFORM, UNI_COMMAND_OPTIONS } from '@/constant'
+import { PLATFORM } from '@/constant'
 import { UniHelperTerminalUi } from '@/ui'
 import { resolvePlatformAlias } from './platform'
 
@@ -50,7 +50,7 @@ export async function executeUniCommand(
 ): Promise<void> {
   // 过滤掉 -- 属性（命令行解析器添加的特殊属性）
   const filteredOptions = Object.entries(options)
-    .filter(([key]) => UNI_COMMAND_OPTIONS.normal.includes(key) || UNI_COMMAND_OPTIONS[command].includes(key))
+    .filter(([key]) => key !== '--')
     .map(([key, value]) => `--${key} ${value}`)
     .join(' ')
 
