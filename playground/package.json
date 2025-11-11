@@ -8,6 +8,7 @@
     "build": "unh build",
     "dev:mode": "unh dev --mode dev",
     "about": "unh info",
+		"ui": "unh tui",
     "platform": "unh platform",
     "type-check": "vue-tsc --noEmit"
   },

@@ -1,10 +1,9 @@
 import type { CommandType } from '@/cli/types'
 import type { UniHelperConfig } from '@/config/types'
-import type { Platform, Platforms } from '@/constant'
+import type { Platforms } from '@/constant'
 import process from 'node:process'
 import { sync } from 'cross-spawn'
 import { PLATFORM } from '@/constant'
-import { UniHelperTerminalUi } from '@/ui'
 import { resolvePlatformAlias } from './platform'
 
 /**
@@ -75,18 +74,4 @@ export function assemblePlatforms(config: UniHelperConfig): Platforms {
   const defaultPlatform = config.platform?.default || 'h5'
   const uiPlatforms = config.ui?.platforms || PLATFORM
   return [...new Set([defaultPlatform, ...uiPlatforms])] as Platforms
-}
-
-/**
- * 启动终端UI
- */
-export async function startTerminalUI(platform: Platform, config: UniHelperConfig): Promise<void> {
-  const terminalUi = new UniHelperTerminalUi(assemblePlatforms(config))
-  terminalUi.render()
-  terminalUi.startPlatform(platform)
-  terminalUi.selectPlatform(platform)
-  process.on('SIGTERM', () => {
-    terminalUi.cleanup()
-    process.exit(0)
-  })
 }

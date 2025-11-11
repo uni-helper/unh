@@ -1,5 +1,5 @@
 import type { ChildProcess } from 'node:child_process'
-import type { Platforms } from '../constant'
+import type { Platforms } from '@/constant'
 import spawn from 'cross-spawn'
 import { Box, render, Text, useApp, useInput } from 'ink'
 import { green, red } from 'kolorist'

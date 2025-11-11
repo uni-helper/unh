@@ -65,14 +65,9 @@ export interface UniHelperConfig {
     }
   }
   /**
-   * 终端UI配置
+   * 终端UI配置, 测试功能，谨慎使用
    */
   ui?: {
-    /**
-     * 是否启用终端UI, 测试功能，谨慎使用
-     * @default false
-     */
-    enabled?: boolean
     /**
      * 用于指定终端UI显示的平台
      */

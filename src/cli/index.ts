@@ -3,7 +3,14 @@
 import process from 'node:process'
 import { cac } from 'cac'
 import { version } from '../../package.json'
-import { customHelp, handleBuildCommand, handleDevCommand, handleInfoCommand, handlePlatformCommand, handlePrepareCommand } from './commands'
+import { customHelp,
+  handleBuildCommand,
+  handleDevCommand,
+  handleInfoCommand,
+  handlePlatformCommand,
+  handlePrepareCommand,
+  handleTuiCommand,
+} from './commands'
 import { loadCliConfig } from './config'
 
 /**
@@ -51,10 +58,18 @@ async function main(): Promise<void> {
         await handleInfoCommand()
       })
 
+    // platform 命令
     cli
       .command('platform', '显示可编译平台')
       .action(async () => {
         handlePlatformCommand()
+      })
+
+    // tui 命令
+    cli
+      .command('tui', '启动终端UI')
+      .action(async () => {
+        handleTuiCommand(config.ui?.platforms)
       })
 
     // 全局帮助选项 - 使用独立的中文帮助模块

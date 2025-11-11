@@ -1,6 +1,5 @@
 import type { UniHelperConfig } from '../../config/types'
-import type { Platform } from '../../constant'
-import { executeCustomHooks, executeUniCommand, generateConfigFiles, resolveTargetPlatform, startTerminalUI } from '@/utils'
+import { executeCustomHooks, executeUniCommand, generateConfigFiles, resolveTargetPlatform } from '@/utils'
 
 /**
  * 处理开发命令
@@ -19,10 +18,5 @@ export async function handleDevCommand(
   await executeCustomHooks(config, 'dev', platform)
 
   // 执行uni命令
-  if (config.ui?.enabled) {
-    await startTerminalUI(platform as Platform, config)
-  }
-  else {
-    await executeUniCommand('dev', platform, options)
-  }
+  await executeUniCommand('dev', platform, options)
 }

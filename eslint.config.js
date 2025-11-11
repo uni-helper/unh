@@ -8,6 +8,7 @@ export default antfu(
     ignores: ['playground'],
     rules: {
       'ts/explicit-function-return-type': 'off',
+      'antfu/consistent-list-newline': 'off',
     },
   },
 )
