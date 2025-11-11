@@ -51,16 +51,19 @@ export default defineConfig({
     prepare() {
       console.log('install')
     },
+    dev(platform: string, options: Record<string, any>) {
+      console.log('dev:', platform, options)
+    },
     build(platform: string, options: Record<string, any>) {
       console.log('build:', platform, options)
       if (options) {
         // 所有命令行参数，可以做更多事情，也可以修改或追加一些`uni`命令行参数
-        options.outDir = join('dist', options.m || options.mode || 'build', plaform)
+        options.outDir = join('dist', options.m || options.mode || 'build', platform)
       }
     },
-    dev(platform: string, options: Record<string, any>) {
-      console.log('dev:', platform, options)
-    },
+    onBuildAfter(platform: string, options: Record<string, any>) {
+      console.log('onBuildAfter', platform, options)
+    }
   },
   autoGenerate: {
     pages: true,

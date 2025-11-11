@@ -44,6 +44,8 @@ export interface UniHelperConfig {
     build?: (inputPlatform: string, options?: Record<string, any>) => void | Promise<void>
     /** 开发前执行 */
     dev?: (inputPlatform: string, options?: Record<string, any>) => void | Promise<void>
+    /** 构建后执行 */
+    onBuildAfter?: (inputPlatform: string, options?: Record<string, any>) => void | Promise<void>
   }
   autoGenerate?: {
     /**

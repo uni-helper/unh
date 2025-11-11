@@ -18,6 +18,9 @@ export default defineConfig({
     dev(param: string) {
       console.log('-----dev-----', param)
     },
+		onBuildAfter(platform, options) {
+      console.log('onBuildAfter', platform, options)
+    }
   },
   autoGenerate: {
     pages: true,
@@ -27,7 +30,6 @@ export default defineConfig({
     },
   },
   ui: {
-    enabled: false,
     platforms: ['h5', 'mp-weixin'],
   }
 })

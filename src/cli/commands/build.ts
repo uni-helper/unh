@@ -1,5 +1,5 @@
 import type { UniHelperConfig } from '@/config/types'
-import { executeCustomHooks, executeUniCommand, generateConfigFiles, resolveTargetPlatform } from '@/utils'
+import { executeAfterHooks, executeBeforeHooks, executeUniCommand, generateConfigFiles, resolveTargetPlatform } from '@/utils'
 
 /**
  * 处理构建/开发命令
@@ -14,9 +14,12 @@ export async function handleBuildCommand(
   // 生成配置文件
   await generateConfigFiles(config, 'build')
 
-  // 执行自定义钩子
-  await executeCustomHooks(config, 'build', platform, options)
+  // 执行自定义前置钩子
+  await executeBeforeHooks(config, 'build', platform, options)
 
   // 执行uni命令
   await executeUniCommand('build', platform, options)
+
+  // 执行自定义后置钩子
+  await executeAfterHooks(config, platform, options)
 }

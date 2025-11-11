@@ -18,9 +18,9 @@ export function resolveTargetPlatform(
 }
 
 /**
- * 执行自定义钩子
+ * 执行自定义前置钩子
  */
-export async function executeCustomHooks(
+export async function executeBeforeHooks(
   config: UniHelperConfig,
   command: CommandType,
   platform: string,
@@ -36,6 +36,19 @@ export async function executeCustomHooks(
 
   if (command === 'prepare' && config.hooks?.prepare) {
     await config.hooks.prepare()
+  }
+}
+
+/**
+ * 执行自定义后置钩子
+ */
+export async function executeAfterHooks(
+  config: UniHelperConfig,
+  platform: string,
+  options?: Record<string, any>,
+): Promise<void> {
+  if (config.hooks?.onBuildAfter) {
+    await config.hooks.onBuildAfter(platform, options)
   }
 }
 
