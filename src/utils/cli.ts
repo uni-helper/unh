@@ -24,13 +24,14 @@ export async function executeCustomHooks(
   config: UniHelperConfig,
   command: CommandType,
   platform: string,
+  options?: Record<string, any>,
 ): Promise<void> {
   if (command === 'dev' && config.hooks?.dev) {
-    await config.hooks.dev(platform)
+    await config.hooks.dev(platform, options)
   }
 
   if (command === 'build' && config.hooks?.build) {
-    await config.hooks.build(platform)
+    await config.hooks.build(platform, options)
   }
 
   if (command === 'prepare' && config.hooks?.prepare) {

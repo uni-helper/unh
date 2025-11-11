@@ -41,9 +41,9 @@ export interface UniHelperConfig {
     /** 安装依赖时执行 */
     prepare?: () => void | Promise<void>
     /** 构建前执行 */
-    build?: (inputPlatform: string) => void | Promise<void>
+    build?: (inputPlatform: string, options?: Record<string, any>) => void | Promise<void>
     /** 开发前执行 */
-    dev?: (inputPlatform: string) => void | Promise<void>
+    dev?: (inputPlatform: string, options?: Record<string, any>) => void | Promise<void>
   }
   autoGenerate?: {
     /**
