@@ -37,8 +37,8 @@ export async function generateConfigFiles(
 ): Promise<void> {
   const outDir = config.autoGenerate?.outDir || 'src'
 
-  const shouldGeneratePages = shouldAutoGenerate(config.autoGenerate!.pages!, phase, 'pages')
-  const shouldGenerateManifest = shouldAutoGenerate(config.autoGenerate!.manifest!, phase, 'manifest')
+  const shouldGeneratePages = shouldAutoGenerate(config.autoGenerate?.pages, phase, 'pages')
+  const shouldGenerateManifest = shouldAutoGenerate(config.autoGenerate?.manifest, phase, 'manifest')
   if (shouldGeneratePages) {
     const json = JSON.stringify(
       { pages: [{ path: '' }] },
@@ -82,12 +82,12 @@ export async function generateConfigFiles(
  * 判断是否应该在当前阶段自动生成文件
  */
 export function shouldAutoGenerate(
-  configValue: boolean | string[] | { commands?: string[] },
+  configValue: boolean | BuildPhase[] | ManifestOptions & { commands?: BuildPhase[] } | undefined,
   phase: BuildPhase,
   type: 'pages' | 'manifest',
 ): boolean {
   // 未配置或为false不生成
-  if (configValue === false) {
+  if (configValue === false || configValue === undefined) {
     return false
   }
 
