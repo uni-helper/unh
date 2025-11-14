@@ -50,6 +50,8 @@
     "@types/react": "catalog:",
     "cac": "catalog:",
     "cross-spawn": "catalog:",
+    "dotenv": "catalog:",
+    "dotenv-expand": "catalog:",
     "ink": "catalog:",
     "kolorist": "catalog:",
     "local-pkg": "catalog:",

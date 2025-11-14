@@ -5,10 +5,12 @@
   "private": true,
   "scripts": {
     "dev": "unh dev",
-    "build": "unh build",
     "dev:mode": "unh dev --mode dev",
+    "build": "unh build",
+    "build:mode": "unh build --mode uat",
+    "build:mode-invalid": "unh build --mode local",
     "about": "unh info",
-		"ui": "unh tui",
+    "ui": "unh tui",
     "platform": "unh platform",
     "type-check": "vue-tsc --noEmit"
   },
