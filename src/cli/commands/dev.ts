@@ -1,5 +1,5 @@
-import type { UniHelperConfig } from '../../config/types'
-import { executeBeforeHooks, executeUniCommand, generateConfigFiles, resolveTargetPlatform } from '@/utils'
+import type { UniHelperConfig } from '@/config/types'
+import { executeBeforeHooks, executeUniCommand, generateConfigFiles, loadEnv, resolveTargetPlatform } from '@/utils'
 
 /**
  * 处理开发命令
@@ -10,6 +10,15 @@ export async function handleDevCommand(
   options: Record<string, any>,
 ): Promise<void> {
   const platform = resolveTargetPlatform(argument, config)
+  const mode = options.m || options.mode || 'development'
+
+  // 加载环境变量
+  if (config.env) {
+    const envData = await loadEnv(platform, mode, config.env)
+    if (config.hooks?.onEnvLoaded) {
+      await config.hooks.onEnvLoaded(platform, options, envData)
+    }
+  }
 
   // 生成配置文件
   await generateConfigFiles(config, 'dev')

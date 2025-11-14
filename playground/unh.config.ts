@@ -1,4 +1,4 @@
-import {defineConfig} from '@uni-helper/unh'
+import { defineConfig } from '@uni-helper/unh'
 
 export default defineConfig({
   platform: {
@@ -18,8 +18,12 @@ export default defineConfig({
     dev(param: string) {
       console.log('-----dev-----', param)
     },
-		onBuildAfter(platform, options) {
+    onBuildAfter(platform, options) {
       console.log('onBuildAfter', platform, options)
+    },
+    onEnvLoaded(platform, options, envData) {
+      console.log('onEnvLoaded', platform, options);
+      console.table(envData);
     }
   },
   autoGenerate: {
@@ -31,5 +35,8 @@ export default defineConfig({
   },
   ui: {
     platforms: ['h5', 'mp-weixin'],
+  },
+  env: {
+    root: 'envs'
   }
 })

@@ -38,6 +38,14 @@ export interface UniHelperConfig {
     alias?: PlatformAlias
   }
   hooks?: {
+    /**
+     * 环境变量加载完毕时执行（需开启`env`环境变量加载配置）
+     * @param inputPlatform 当前编译平台
+     * @param options 当前编译命令参数
+     * @param envData 当前已加载环境变量
+     * @returns void
+     */
+    onEnvLoaded?: (inputPlatform: string, options?: Record<string, any>, envData?: Record<string, string>) => void | Promise<void>
     /** 安装依赖时执行 */
     prepare?: () => void | Promise<void>
     /** 构建前执行 */
@@ -74,5 +82,33 @@ export interface UniHelperConfig {
      * 用于指定终端UI显示的平台
      */
     platforms?: Platforms
+  }
+  /**
+   * 加载环境变量配置
+   * [旨在根据当前编译平台及模式提前加载对应的环境变量并生成类型声明文件]
+   * 默认不开启
+   */
+  env?: true | {
+    /**
+     * 环境变量文件根目录，默认项目根目录
+     */
+    root?: string
+    /**
+     * 是否使用平台名称当作子目录，默认为 `false`
+     * 假设`root`为`envs`，开启该参数后，则环境变量文件路径：`envs/mp-weixin/.env` 、`envs/h5/.env`...
+     */
+    usePlatformDir?: boolean
+    /**
+     * 筛选需加载的环境变量名前缀，默认为 `['VITE_', 'UNI_']`
+     */
+    prefixes?: string[]
+    /**
+     * 是否将加载的环境变量合并至`process.env`中，默认为 `true`
+     */
+    intoProcess?: boolean
+    /**
+     * 是否生成类型声明文件，默认为 `unh-env.d.ts`
+     */
+    dts?: false | string
   }
 }

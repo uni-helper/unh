@@ -63,8 +63,13 @@ export default defineConfig({
     },
     onBuildAfter(platform: string, options: Record<string, any>) {
       console.log('onBuildAfter', platform, options)
+    },
+    onEnvLoaded(platform: string, options: Record<string, any>, envData: Record<string, string>) {
+      console.log('onEnvLoaded', platform, options)
+      console.table(envData)
     }
   },
+  env: true,
   autoGenerate: {
     pages: true,
   }
