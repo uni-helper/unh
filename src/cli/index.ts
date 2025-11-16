@@ -3,7 +3,8 @@
 import process from 'node:process'
 import { cac } from 'cac'
 import { version } from '../../package.json'
-import { customHelp,
+import {
+  customHelp,
   handleBuildCommand,
   handleDevCommand,
   handleInfoCommand,
@@ -29,8 +30,8 @@ async function main(): Promise<void> {
     // prepare 命令
     cli
       .command('prepare', '准备项目环境')
-      .action(async () => {
-        await handlePrepareCommand(config)
+      .action(async (options) => {
+        await handlePrepareCommand(config, options)
       })
 
     // dev 命令

@@ -6,4 +6,6 @@ interface ImportMetaEnv {
   readonly VITE_APP_ID: string;
   /** 环境变量 */
   readonly VITE_NICK: string;
+  /** 环境变量 */
+  readonly VITE_GREETING: string;
 }

@@ -1,3 +1,4 @@
+import { join } from 'node:path'
 import { defineConfig } from '@uni-helper/unh'
 
 export default defineConfig({
@@ -9,22 +10,31 @@ export default defineConfig({
     },
   },
   hooks: {
-    prepare() {
-      console.log('install')
+    prepare({ cliOptions }) {
+      console.log('prepare:')
+      console.table(cliOptions)
     },
-    build() {
-      console.log('build')
+    dev({ cliOptions, platform, mode, envData }) {
+      console.log('dev:', platform, mode)
+      console.table(cliOptions)
+      console.table(envData)
     },
-    dev(param: string) {
-      console.log('-----dev-----', param)
+    build({ cliOptions, platform, mode, envData }) {
+      console.log('build:', platform, mode)
+      console.table(cliOptions)
+      console.table(envData)
+      // 所有命令行参数，可以做更多事情，也可以修改或追加一些`uni`命令行参数
+      if (cliOptions) {
+        if (!cliOptions.outDir) {
+          cliOptions.outDir = join('dist', mode || 'build', platform ?? '')
+        }
+      }
     },
-    onBuildAfter(platform, options) {
-      console.log('onBuildAfter', platform, options)
+    onBuildAfter({ cliOptions, platform, mode, envData }) {
+      console.log('onBuildAfter:', platform, mode)
+      console.table(cliOptions)
+      console.table(envData)
     },
-    onEnvLoaded(platform, options, envData) {
-      console.log('onEnvLoaded', platform, options);
-      console.table(envData);
-    }
   },
   autoGenerate: {
     pages: true,

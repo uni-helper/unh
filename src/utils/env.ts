@@ -14,7 +14,7 @@ const defaultEnvConfig: Required<Exclude<EnvConfig, true>> = {
   usePlatformDir: false,
   prefixes: ['VITE_', 'UNI_'],
   intoProcess: true,
-  dts: 'unh-env.d.ts',
+  dts: 'uni-env.d.ts',
 }
 /**
  * 检查指定路径的文件是否存在且是一个文件（而不是目录）

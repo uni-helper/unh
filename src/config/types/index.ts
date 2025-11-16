@@ -16,6 +16,25 @@ export interface ManifestOptions {
   insertFinalNewline?: boolean
 }
 
+export interface HookOptions {
+  /**
+   * 编译命令行参数
+   */
+  cliOptions: Record<string, any>
+  /**
+   * 当前编译平台
+   */
+  platform?: Platform
+  /**
+   * 当前编译模式
+   */
+  mode?: string
+  /**
+   * 当前编译环境变量，需要开启`env`配置才有该数据
+   */
+  envData?: Record<string, string>
+}
+
 /**
  * uni 助手配置
  */
@@ -38,22 +57,14 @@ export interface UniHelperConfig {
     alias?: PlatformAlias
   }
   hooks?: {
-    /**
-     * 环境变量加载完毕时执行（需开启`env`环境变量加载配置）
-     * @param inputPlatform 当前编译平台
-     * @param options 当前编译命令参数
-     * @param envData 当前已加载环境变量
-     * @returns void
-     */
-    onEnvLoaded?: (inputPlatform: string, options?: Record<string, any>, envData?: Record<string, string>) => void | Promise<void>
     /** 安装依赖时执行 */
-    prepare?: () => void | Promise<void>
-    /** 构建前执行 */
-    build?: (inputPlatform: string, options?: Record<string, any>) => void | Promise<void>
+    prepare?: (options: HookOptions) => void | Promise<void>
     /** 开发前执行 */
-    dev?: (inputPlatform: string, options?: Record<string, any>) => void | Promise<void>
+    dev?: (options: HookOptions) => void | Promise<void>
+    /** 构建前执行 */
+    build?: (options: HookOptions) => void | Promise<void>
     /** 构建后执行 */
-    onBuildAfter?: (inputPlatform: string, options?: Record<string, any>) => void | Promise<void>
+    onBuildAfter?: (options: HookOptions) => void | Promise<void>
   }
   autoGenerate?: {
     /**
@@ -107,7 +118,7 @@ export interface UniHelperConfig {
      */
     intoProcess?: boolean
     /**
-     * 是否生成类型声明文件，默认为 `unh-env.d.ts`
+     * 是否生成类型声明文件，默认为 `uni-env.d.ts`
      */
     dts?: false | string
   }

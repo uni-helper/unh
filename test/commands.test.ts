@@ -70,20 +70,22 @@ describe('cLI Commands', () => {
   describe('hook Configuration', () => {
     it('应该支持自定义钩子配置', () => {
       const mockHooks = {
-        install: vi.fn(),
+        prepare: vi.fn(),
         dev: vi.fn(),
         build: vi.fn(),
+        onBuildAfter: vi.fn(),
       }
 
       const config: UniHelperConfig = {
         platform: { default: 'h5' },
         autoGenerate: { outDir: 'src' },
-        prepare: mockHooks,
+        hooks: mockHooks,
       }
 
-      expect(config.prepare?.install).toBeDefined()
-      expect(config.prepare?.dev).toBeDefined()
-      expect(config.prepare?.build).toBeDefined()
+      expect(config.hooks?.prepare).toBeDefined()
+      expect(config.hooks?.dev).toBeDefined()
+      expect(config.hooks?.build).toBeDefined()
+      expect(config.hooks?.onBuildAfter).toBeDefined()
     })
   })
 })
