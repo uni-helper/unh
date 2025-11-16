@@ -23,7 +23,7 @@ export function resolveTargetPlatform(
 export async function executeBeforeHooks(
   command: CommandType,
   config: UniHelperConfig,
-  options: Record<string, any>,
+  options?: Record<string, any>,
   platform?: Platform,
   mode?: string,
   envData?: Record<string, string>,
@@ -37,7 +37,7 @@ export async function executeBeforeHooks(
   }
 
   if (command === 'prepare' && config.hooks?.prepare) {
-    await config.hooks.prepare({ cliOptions: options })
+    await config.hooks.prepare()
   }
 }
 

@@ -20,7 +20,7 @@ export interface HookOptions {
   /**
    * 编译命令行参数
    */
-  cliOptions: Record<string, any>
+  cliOptions?: Record<string, any>
   /**
    * 当前编译平台
    */
@@ -58,7 +58,7 @@ export interface UniHelperConfig {
   }
   hooks?: {
     /** 安装依赖时执行 */
-    prepare?: (options: HookOptions) => void | Promise<void>
+    prepare?: () => void | Promise<void>
     /** 开发前执行 */
     dev?: (options: HookOptions) => void | Promise<void>
     /** 构建前执行 */

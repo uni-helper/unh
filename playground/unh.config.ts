@@ -10,9 +10,8 @@ export default defineConfig({
     },
   },
   hooks: {
-    prepare({ cliOptions }) {
+    prepare() {
       console.log('prepare:')
-      console.table(cliOptions)
     },
     dev({ cliOptions, platform, mode, envData }) {
       console.log('dev:', platform, mode)

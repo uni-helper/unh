@@ -30,8 +30,8 @@ async function main(): Promise<void> {
     // prepare 命令
     cli
       .command('prepare', '准备项目环境')
-      .action(async (options) => {
-        await handlePrepareCommand(config, options)
+      .action(async () => {
+        await handlePrepareCommand(config)
       })
 
     // dev 命令
