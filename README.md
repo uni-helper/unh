@@ -49,24 +49,33 @@ export default defineConfig({
   },
   hooks: {
     prepare() {
-      console.log('install')
+      console.log('prepare:')
     },
-    dev(platform: string, options: Record<string, any>) {
-      console.log('dev:', platform, options)
+    dev({ cliOptions, platform, mode, envData }) {
+      console.log('dev:', platform, mode)
+      console.table(cliOptions)
+      console.table(envData)
     },
-    build(platform: string, options: Record<string, any>) {
-      console.log('build:', platform, options)
-      if (options) {
-        // 所有命令行参数，可以做更多事情，也可以修改或追加一些`uni`命令行参数
-        options.outDir = join('dist', options.m || options.mode || 'build', platform)
+    build({ cliOptions, platform, mode, envData }) {
+      console.log('build:', platform, mode)
+      console.table(cliOptions)
+      console.table(envData)
+      // 所有命令行参数，可以做更多事情，也可以修改或追加一些`uni`命令行参数
+      if (cliOptions) {
+        if (!cliOptions.outDir) {
+          cliOptions.outDir = join('dist', mode || 'build', platform ?? '')
+        }
       }
     },
-    onBuildAfter(platform: string, options: Record<string, any>) {
-      console.log('onBuildAfter', platform, options)
-    }
+    onBuildAfter({ cliOptions, platform, mode, envData }) {
+      console.log('onBuildAfter:', platform, mode)
+      console.table(cliOptions)
+      console.table(envData)
+    },
   },
   autoGenerate: {
     pages: true,
-  }
+  },
+  env: true,
 })
 ```

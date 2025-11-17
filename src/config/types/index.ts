@@ -16,6 +16,25 @@ export interface ManifestOptions {
   insertFinalNewline?: boolean
 }
 
+export interface HookOptions {
+  /**
+   * 编译命令行参数
+   */
+  cliOptions?: Record<string, any>
+  /**
+   * 当前编译平台
+   */
+  platform?: Platform
+  /**
+   * 当前编译模式
+   */
+  mode?: string
+  /**
+   * 当前编译环境变量，需要开启`env`配置才有该数据
+   */
+  envData?: Record<string, string>
+}
+
 /**
  * uni 助手配置
  */
@@ -40,12 +59,12 @@ export interface UniHelperConfig {
   hooks?: {
     /** 安装依赖时执行 */
     prepare?: () => void | Promise<void>
-    /** 构建前执行 */
-    build?: (inputPlatform: string, options?: Record<string, any>) => void | Promise<void>
     /** 开发前执行 */
-    dev?: (inputPlatform: string, options?: Record<string, any>) => void | Promise<void>
+    dev?: (options: HookOptions) => void | Promise<void>
+    /** 构建前执行 */
+    build?: (options: HookOptions) => void | Promise<void>
     /** 构建后执行 */
-    onBuildAfter?: (inputPlatform: string, options?: Record<string, any>) => void | Promise<void>
+    onBuildAfter?: (options: HookOptions) => void | Promise<void>
   }
   autoGenerate?: {
     /**
@@ -74,5 +93,33 @@ export interface UniHelperConfig {
      * 用于指定终端UI显示的平台
      */
     platforms?: Platforms
+  }
+  /**
+   * 加载环境变量配置
+   * [旨在根据当前编译平台及模式提前加载对应的环境变量并生成类型声明文件]
+   * 默认不开启
+   */
+  env?: true | {
+    /**
+     * 环境变量文件根目录，默认项目根目录
+     */
+    root?: string
+    /**
+     * 是否使用平台名称当作子目录，默认为 `false`
+     * 假设`root`为`envs`，开启该参数后，则环境变量文件路径：`envs/mp-weixin/.env` 、`envs/h5/.env`...
+     */
+    usePlatformDir?: boolean
+    /**
+     * 筛选需加载的环境变量名前缀，默认为 `['VITE_', 'UNI_']`
+     */
+    prefixes?: string[]
+    /**
+     * 是否将加载的环境变量合并至`process.env`中，默认为 `true`
+     */
+    intoProcess?: boolean
+    /**
+     * 是否生成类型声明文件，默认为 `uni-env.d.ts`
+     */
+    dts?: false | string
   }
 }

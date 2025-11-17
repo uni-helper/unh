@@ -6,5 +6,5 @@ import { executeBeforeHooks } from '@/utils'
  */
 export async function handlePrepareCommand(config: UniHelperConfig): Promise<void> {
   // 执行自定义安装钩子
-  await executeBeforeHooks(config, 'prepare', '')
+  await executeBeforeHooks('prepare', config)
 }

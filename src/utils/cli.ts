@@ -1,6 +1,6 @@
 import type { CommandType } from '@/cli/types'
 import type { UniHelperConfig } from '@/config/types'
-import type { Platforms } from '@/constant'
+import type { Platform, Platforms } from '@/constant'
 import process from 'node:process'
 import { sync } from 'cross-spawn'
 import { PLATFORM } from '@/constant'
@@ -12,26 +12,28 @@ import { resolvePlatformAlias } from './platform'
 export function resolveTargetPlatform(
   argument: string | undefined,
   config: UniHelperConfig,
-): string {
+) {
   const inputPlatform = argument || config.platform?.default || 'h5'
-  return resolvePlatformAlias(inputPlatform, config.platform?.alias || {})
+  return resolvePlatformAlias(inputPlatform, config.platform?.alias || {}) as Platform
 }
 
 /**
  * 执行自定义前置钩子
  */
 export async function executeBeforeHooks(
-  config: UniHelperConfig,
   command: CommandType,
-  platform: string,
+  config: UniHelperConfig,
   options?: Record<string, any>,
+  platform?: Platform,
+  mode?: string,
+  envData?: Record<string, string>,
 ): Promise<void> {
   if (command === 'dev' && config.hooks?.dev) {
-    await config.hooks.dev(platform, options)
+    await config.hooks.dev({ cliOptions: options, platform, mode, envData })
   }
 
   if (command === 'build' && config.hooks?.build) {
-    await config.hooks.build(platform, options)
+    await config.hooks.build({ cliOptions: options, platform, mode, envData })
   }
 
   if (command === 'prepare' && config.hooks?.prepare) {
@@ -43,12 +45,15 @@ export async function executeBeforeHooks(
  * 执行自定义后置钩子
  */
 export async function executeAfterHooks(
+  command: CommandType,
   config: UniHelperConfig,
-  platform: string,
-  options?: Record<string, any>,
+  options: Record<string, any>,
+  platform?: Platform,
+  mode?: string,
+  envData?: Record<string, string>,
 ): Promise<void> {
-  if (config.hooks?.onBuildAfter) {
-    await config.hooks.onBuildAfter(platform, options)
+  if (command === 'build' && config.hooks?.onBuildAfter) {
+    await config.hooks.onBuildAfter({ cliOptions: options, platform, mode, envData })
   }
 }
 

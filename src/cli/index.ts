@@ -3,7 +3,8 @@
 import process from 'node:process'
 import { cac } from 'cac'
 import { version } from '../../package.json'
-import { customHelp,
+import {
+  customHelp,
   handleBuildCommand,
   handleDevCommand,
   handleInfoCommand,
