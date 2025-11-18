@@ -1,3 +1,4 @@
+import type { CAC } from 'cac'
 import type { CommandType } from '@/cli/types'
 import type { UniHelperConfig } from '@/config/types'
 import type { Platform, Platforms } from '@/constant'
@@ -60,21 +61,10 @@ export async function executeAfterHooks(
 /**
  * 执行uni命令
  */
-export async function executeUniCommand(
-  command: 'dev' | 'build',
-  platform: string,
-  options: Record<string, any>,
-): Promise<void> {
-  // 过滤掉 -- 属性（命令行解析器添加的特殊属性）
-  const filteredOptions = Object.entries(options)
-    .filter(([key]) => key !== '--')
-    .map(([key, value]) => `--${key} ${value}`)
-    .join(' ')
+export async function executeUniCommand(uniCommand: string): Promise<void> {
+  const [command, ..._args] = uniCommand.split(' ')
 
-  const fullCustomCommand = `uni ${command} -p ${platform} ${filteredOptions}`.trim()
-  const [uniCommand, ..._args] = fullCustomCommand.split(' ')
-
-  const { error } = sync(uniCommand, [..._args], {
+  const { error } = sync(command, [..._args], {
     stdio: 'inherit',
     cwd: process.cwd(),
   })
@@ -93,4 +83,17 @@ export function assemblePlatforms(config: UniHelperConfig): Platforms {
   const defaultPlatform = config.platform?.default || 'h5'
   const uiPlatforms = config.ui?.platforms || PLATFORM
   return [...new Set([defaultPlatform, ...uiPlatforms])] as Platforms
+}
+
+/**
+ * 获取原始的命令行参数
+ */
+export function getRawOptions(cli: CAC, platform: string): string[] {
+  // 解析命令行参数，移除前两个元素（node 可执行文件路径和脚本文件路径）
+  const rawArgs = cli.rawArgs.slice(2)
+
+  // 获取原始属性，如果包含平台参数则从索引2开始，否则从索引1开始
+  const rawOptions = rawArgs.slice(rawArgs[1] === platform ? 2 : 1)
+
+  return rawOptions
 }

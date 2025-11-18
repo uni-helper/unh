@@ -40,3 +40,17 @@ export function runPkg(name: string) {
   if (error)
     throw new Error(`Error executing command: ${error.message}`)
 }
+/**
+ * 组合uni命令
+ * @param command uni命令
+ * @param platform 平台
+ * @param options 选项
+ * @returns uni命令
+ */
+export function composeUniCommand(
+  command: 'dev' | 'build',
+  platform: string,
+  options: string[],
+) {
+  return `uni ${command} -p ${platform} ${options.join(' ')}`.trim()
+}

@@ -2,6 +2,7 @@
 
 import process from 'node:process'
 import { cac } from 'cac'
+import { getRawOptions } from '@/utils'
 import { version } from '../../package.json'
 import {
   customHelp,
@@ -40,7 +41,9 @@ async function main(): Promise<void> {
       .allowUnknownOptions()
       .action(async (platform, options) => {
         const targetPlatform = platform || defaultPlatform
-        await handleDevCommand(targetPlatform, config, options)
+        const rawOptions = getRawOptions(cli, targetPlatform)
+
+        await handleDevCommand(targetPlatform, config, options, rawOptions)
       })
 
     // build 命令
@@ -49,7 +52,9 @@ async function main(): Promise<void> {
       .allowUnknownOptions()
       .action(async (platform, options) => {
         const targetPlatform = platform || defaultPlatform
-        await handleBuildCommand(targetPlatform, config, options)
+        const rawOptions = getRawOptions(cli, targetPlatform)
+
+        await handleBuildCommand(targetPlatform, config, options, rawOptions)
       })
 
     // 信息

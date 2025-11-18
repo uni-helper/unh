@@ -1,5 +1,5 @@
 import type { UniHelperConfig } from '@/config/types'
-import { executeAfterHooks, executeBeforeHooks, executeUniCommand, generateConfigFiles, loadEnv, resolveTargetPlatform } from '@/utils'
+import { composeUniCommand, executeAfterHooks, executeBeforeHooks, executeUniCommand, generateConfigFiles, loadEnv, resolveTargetPlatform } from '@/utils'
 
 /**
  * 处理构建/开发命令
@@ -8,10 +8,13 @@ export async function handleBuildCommand(
   argument: string | undefined,
   config: UniHelperConfig,
   options: Record<string, any>,
+  rawArgs: string[],
 ): Promise<void> {
   const platform = resolveTargetPlatform(argument, config)
   const mode = options.m || options.mode || 'production'
   const envData = config.env ? await loadEnv(platform, mode, config.env) : undefined
+  const uniCommand = composeUniCommand('build', platform, rawArgs)
+  console.log(`> ${uniCommand} \n`)
 
   // 生成配置文件
   await generateConfigFiles(config, 'build')
@@ -20,7 +23,7 @@ export async function handleBuildCommand(
   await executeBeforeHooks('build', config, options, platform, mode, envData)
 
   // 执行uni命令
-  await executeUniCommand('build', platform, options)
+  await executeUniCommand(uniCommand)
 
   // 执行自定义后置钩子
   await executeAfterHooks('build', config, options, platform, mode, envData)
