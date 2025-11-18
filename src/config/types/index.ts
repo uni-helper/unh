@@ -18,17 +18,13 @@ export interface ManifestOptions {
 
 export interface HookOptions {
   /**
-   * 编译命令行参数
-   */
-  cliOptions?: Record<string, any>
-  /**
    * 当前编译平台
    */
   platform?: Platform
   /**
-   * 当前编译模式
+   * 编译命令行参数
    */
-  mode?: string
+  options?: Record<string, any>
   /**
    * 当前编译环境变量，需要开启`env`配置才有该数据
    */

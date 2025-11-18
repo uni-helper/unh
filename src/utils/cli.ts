@@ -26,15 +26,14 @@ export async function executeBeforeHooks(
   config: UniHelperConfig,
   options?: Record<string, any>,
   platform?: Platform,
-  mode?: string,
   envData?: Record<string, string>,
 ): Promise<void> {
   if (command === 'dev' && config.hooks?.dev) {
-    await config.hooks.dev({ cliOptions: options, platform, mode, envData })
+    await config.hooks.dev({ platform, options, envData })
   }
 
   if (command === 'build' && config.hooks?.build) {
-    await config.hooks.build({ cliOptions: options, platform, mode, envData })
+    await config.hooks.build({ platform, options, envData })
   }
 
   if (command === 'prepare' && config.hooks?.prepare) {
@@ -50,11 +49,10 @@ export async function executeAfterHooks(
   config: UniHelperConfig,
   options: Record<string, any>,
   platform?: Platform,
-  mode?: string,
   envData?: Record<string, string>,
 ): Promise<void> {
   if (command === 'build' && config.hooks?.onBuildAfter) {
-    await config.hooks.onBuildAfter({ cliOptions: options, platform, mode, envData })
+    await config.hooks.onBuildAfter({ platform, options, envData })
   }
 }
 
