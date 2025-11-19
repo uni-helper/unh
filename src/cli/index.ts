@@ -11,7 +11,6 @@ import {
   handleInfoCommand,
   handlePlatformCommand,
   handlePrepareCommand,
-  handleTuiCommand,
 } from './commands'
 import { loadCliConfig } from './config'
 
@@ -69,13 +68,6 @@ async function main(): Promise<void> {
       .command('platform', '显示可编译平台')
       .action(async () => {
         handlePlatformCommand()
-      })
-
-    // tui 命令
-    cli
-      .command('tui', '启动终端UI')
-      .action(async () => {
-        handleTuiCommand(config.ui?.platforms)
       })
 
     // 全局帮助选项 - 使用独立的中文帮助模块

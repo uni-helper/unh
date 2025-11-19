@@ -1,5 +1,5 @@
-import type { Platform, Platforms } from '../../constant'
 import type { BuildPhase } from '@/cli/types'
+import type { Platform, Platforms } from '@/constants'
 
 export type PlatformAlias = Partial<Record<Platform, string[] | string>>
 

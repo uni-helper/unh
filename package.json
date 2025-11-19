@@ -47,15 +47,14 @@
     "prepare": "simple-git-hooks"
   },
   "dependencies": {
-    "@types/react": "catalog:",
+    "@uni-helper/uni-env": "catalog:",
     "cac": "catalog:",
     "cross-spawn": "catalog:",
     "dotenv": "catalog:",
     "dotenv-expand": "catalog:",
-    "ink": "catalog:",
     "kolorist": "catalog:",
     "local-pkg": "catalog:",
-    "react": "catalog:",
+    "moment": "catalog:",
     "unconfig": "catalog:"
   },
   "devDependencies": {

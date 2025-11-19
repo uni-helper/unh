@@ -1,4 +1,4 @@
-import { PLATFORM_DESCRIPTIONS } from '@/constant'
+import { PLATFORM_DESCRIPTIONS } from '@/constants'
 
 export function handlePlatformCommand() {
   // 使用对象数组方式，可以自定义列标题

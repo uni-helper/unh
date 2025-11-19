@@ -1,10 +1,11 @@
 import type { CAC } from 'cac'
 import type { CommandType } from '@/cli/types'
 import type { UniHelperConfig } from '@/config/types'
-import type { Platform, Platforms } from '@/constant'
+import type { Platform, Platforms } from '@/constants'
 import process from 'node:process'
-import { sync } from 'cross-spawn'
-import { PLATFORM } from '@/constant'
+import { spawn } from 'cross-spawn'
+import { PLATFORM } from '@/constants'
+import { TERMINAL_REPLACE_OUTPUTS, TERMINAL_SKIP_OUTPUTS } from '@/constants/terminal'
 import { resolvePlatformAlias } from './platform'
 
 /**
@@ -57,18 +58,59 @@ export async function executeAfterHooks(
 }
 
 /**
+ * 应用输出替换规则
+ */
+function applyOutputReplaceRules(output: string): string {
+  let processedOutput = output
+
+  for (const replaceRule of TERMINAL_REPLACE_OUTPUTS) {
+    const { from, to } = replaceRule
+
+    // 处理正则表达式规则
+    if (from instanceof RegExp) {
+      const match = processedOutput.match(from)
+      if (match) {
+        processedOutput = typeof to === 'function' ? to(match) : to
+      }
+    }
+    // 处理字符串规则
+    else if (typeof from === 'string' && processedOutput.includes(from)) {
+      processedOutput = typeof to === 'function' ? to() : to
+    }
+  }
+
+  return processedOutput
+}
+
+/**
  * 执行uni命令
  */
 export async function executeUniCommand(uniCommand: string): Promise<void> {
-  const [command, ..._args] = uniCommand.split(' ')
+  const [command, ...args] = uniCommand.split(' ')
 
-  const { error } = sync(command, [..._args], {
-    stdio: 'inherit',
+  const { stdout, stderr } = spawn(command, args, {
+    stdio: 'pipe',
     cwd: process.cwd(),
+    env: Object.assign({}, process.env, { FORCE_COLOR: true, UNI_HBUILDERX_LANGID: 'zh-CN' }),
   })
 
-  if (error)
-    throw new Error(`Error executing command: ${error.message}`)
+  stdout.on('data', (data) => {
+    let output = data.toString()
+
+    // 过滤掉不需要显示的内容
+    const shouldFilter = TERMINAL_SKIP_OUTPUTS.some(skipOutput => output.includes(skipOutput))
+
+    if (!shouldFilter) {
+      // 应用输出替换规则
+      output = applyOutputReplaceRules(output)
+
+      process.stdout.write(output)
+    }
+  })
+
+  stderr.on('data', (data) => {
+    process.stderr.write(data.toString())
+  })
 }
 
 /**
