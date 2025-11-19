@@ -1,5 +1,5 @@
 import type { BuildPhase } from '@/cli/types'
-import type { Platform, Platforms } from '@/constants'
+import type { Platform } from '@/constants'
 
 export type PlatformAlias = Partial<Record<Platform, string[] | string>>
 
@@ -80,15 +80,6 @@ export interface UniHelperConfig {
     manifest?: boolean | ManifestOptions & {
       commands?: BuildPhase[]
     }
-  }
-  /**
-   * 终端UI配置, 测试功能，谨慎使用
-   */
-  ui?: {
-    /**
-     * 用于指定终端UI显示的平台
-     */
-    platforms?: Platforms
   }
   /**
    * 加载环境变量配置
