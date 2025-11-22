@@ -1,6 +1,6 @@
 import { execSync } from 'node:child_process'
 import os from 'node:os'
-import { dirname, join, parse } from 'node:path'
+import { basename, dirname, join, parse } from 'node:path'
 import fs from 'fs-extra'
 
 export function isMac() {
@@ -73,8 +73,23 @@ export function findSoftwareInstallLocation(executableName: string, displayName?
       const result = decodeGbk(resultBuffer)
 
       // match: "C:\Folder\app.exe" REG_BINARY
-      // eslint-disable-next-line regexp/no-super-linear-backtracking, regexp/no-useless-flag
+      // eslint-disable-next-line regexp/no-super-linear-backtracking
       const regex = /^.*?(\w:\\.*?)\s*REG_BINARY/gm
+
+      let match
+      // 遍历所有匹配结果，防止只取到第一个错误的包含匹配
+      // eslint-disable-next-line no-cond-assign
+      while ((match = regex.exec(result)) !== null) {
+        if (match && match[1]) {
+          const fullExePath = match[1].trim()
+          const fileName = basename(fullExePath)
+
+          if (fileName.toLowerCase() === exeFullName.toLowerCase()) {
+            return dirname(fullExePath)
+          }
+        }
+      }
+
       const matches = regex.exec(result)
 
       if (matches && matches[1]) {
