@@ -107,7 +107,7 @@ export function findSoftwareInstallLocation(executableName: string, displayName?
  * @platform Only `windows`
  */
 function findInUninstallRegistry(appName: string): [string, 'INSTALL_LOCATION' | 'DISPLAY_ICON'] | null {
-  const psCommand = `
+  const psScript = `
     $paths = @(
       "HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\*",
       "HKLM:\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\*"
@@ -118,33 +118,36 @@ function findInUninstallRegistry(appName: string): [string, 'INSTALL_LOCATION' |
       Get-ItemProperty $path -ErrorAction SilentlyContinue | Where-Object { $_.DisplayName -like $target } | ForEach-Object {
         if ($_.InstallLocation) {
           # 使用 INSTALL_LOCATION| 标识前缀
-          Write-Output "INSTALL_LOCATION|" + $_.InstallLocation
+          Write-Output "INSTALL_LOCATION|$($_.InstallLocation)"
           exit
         }
         if ($_.DisplayIcon) {
           # 使用 DISPLAY_ICON| 标识前缀
           # 如果没有 InstallLocation，尝试从 DisplayIcon (通常是 exe 路径) 获取目录
-          Write-Output "DISPLAY_ICON|" + $_.DisplayIcon
+          Write-Output "DISPLAY_ICON|$($_.DisplayIcon)"
           exit
         }
       }
     }
   `
 
+  // 编码，防止转义、乱码问题
+  // eslint-disable-next-line node/prefer-global/buffer
+  const encodedCommand = Buffer.from(psScript, 'utf16le').toString('base64')
+
   try {
-    // exec PowerShell, use UTF8
-    const output = execSync(`powershell -NoProfile -ExecutionPolicy Bypass -Command "${psCommand}"`, {
-      encoding: 'utf8',
+    const resultBuffer = execSync(`powershell -NoProfile -ExecutionPolicy Bypass -EncodedCommand "${encodedCommand}"`, {
       stdio: ['ignore', 'pipe', 'ignore'], // ignore error
-    }).toString().trim()
+      windowsHide: true,
+    })
+    const output = decodeGbk(resultBuffer)
 
     if (!output)
       return null
 
     const parts = output.split('|', 2)
-    if (parts.length !== 2) {
+    if (parts.length !== 2)
       return null
-    }
 
     const [sourceType, rawPath] = parts
     const cleanPath = rawPath.replace(/"/g, '').trim() // 去掉可能的引号并修剪空格
