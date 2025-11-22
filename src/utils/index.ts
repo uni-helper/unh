@@ -89,12 +89,6 @@ export function findSoftwareInstallLocation(executableName: string, displayName?
           }
         }
       }
-
-      const matches = regex.exec(result)
-
-      if (matches && matches[1]) {
-        return dirname(matches[1])
-      }
     }
     catch { /** nothing  */ }
   }
