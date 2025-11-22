@@ -1,12 +1,12 @@
 import type { CAC } from 'cac'
 import type { CommandType } from '@/cli/types'
 import type { UniHelperConfig } from '@/config/types'
-import type { Platform, Platforms } from '@/constants'
+import type { Platform } from '@/constants'
 import process from 'node:process'
 import { spawn } from 'cross-spawn'
-import { PLATFORM } from '@/constants'
-import { TERMINAL_REPLACE_OUTPUTS, TERMINAL_SKIP_OUTPUTS } from '@/constants/terminal'
+import { TERMINAL_SKIP_OUTPUTS } from '@/constants/terminal'
 import { resolvePlatformAlias } from './platform'
+import { applyOutputProcessors } from './terminal'
 
 /**
  * 解析目标平台
@@ -58,31 +58,6 @@ export async function executeAfterHooks(
 }
 
 /**
- * 应用输出替换规则
- */
-function applyOutputReplaceRules(output: string): string {
-  let processedOutput = output
-
-  for (const replaceRule of TERMINAL_REPLACE_OUTPUTS) {
-    const { from, to } = replaceRule
-
-    // 处理正则表达式规则
-    if (from instanceof RegExp) {
-      const match = processedOutput.match(from)
-      if (match) {
-        processedOutput = typeof to === 'function' ? to(match) : to
-      }
-    }
-    // 处理字符串规则
-    else if (typeof from === 'string' && processedOutput.includes(from)) {
-      processedOutput = typeof to === 'function' ? to() : to
-    }
-  }
-
-  return processedOutput
-}
-
-/**
  * 执行uni命令
  */
 export async function executeUniCommand(uniCommand: string): Promise<void> {
@@ -102,7 +77,7 @@ export async function executeUniCommand(uniCommand: string): Promise<void> {
 
     if (!shouldFilter) {
       // 应用输出替换规则
-      output = applyOutputReplaceRules(output)
+      output = applyOutputProcessors(output)
 
       process.stdout.write(output)
     }
@@ -111,18 +86,6 @@ export async function executeUniCommand(uniCommand: string): Promise<void> {
   stderr.on('data', (data) => {
     process.stderr.write(data.toString())
   })
-}
-
-/**
- * 组装终端UI平台列表
- * 1. 从配置文件中获取默认平台，默认值为'h5'
- * 2. 从配置文件中获取UI平台列表，默认值为所有平台
- * 3. 合并默认平台和UI平台列表，去重
- */
-export function assemblePlatforms(config: UniHelperConfig): Platforms {
-  const defaultPlatform = config.platform?.default || 'h5'
-  const uiPlatforms = config.ui?.platforms || PLATFORM
-  return [...new Set([defaultPlatform, ...uiPlatforms])] as Platforms
 }
 
 /**

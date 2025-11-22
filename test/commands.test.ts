@@ -1,8 +1,8 @@
 import type { UniHelperConfig } from '../src/config/types'
 import { describe, expect, it, vi } from 'vitest'
 
-// Mock utils
-vi.mock('../src/utils/files', () => ({
+// Mock logics
+vi.mock('../src/logics/files', () => ({
   generateJsonFile: vi.fn(),
 }))
 

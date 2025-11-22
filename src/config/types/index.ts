@@ -1,5 +1,6 @@
 import type { BuildPhase } from '@/cli/types'
 import type { Platform } from '@/constants'
+import type { MPPlatform } from '@/constants/platform'
 
 export type PlatformAlias = Partial<Record<Platform, string[] | string>>
 
@@ -108,5 +109,23 @@ export interface UniHelperConfig {
      * 是否生成类型声明文件，默认为 `uni-env.d.ts`
      */
     dts?: false | string
+  }
+  /**
+   * 小程序开发者工具配置
+   */
+  devtools?: {
+    /**
+     * 是否自动打开小程序开发者工具
+     * @default false
+     */
+    open?: boolean
+    /**
+     * 小程序开发者工具路径配置
+     */
+    cliPath?: {
+      [K in MPPlatform]?: string
+    } & {
+      [key: string]: string | undefined
+    }
   }
 }

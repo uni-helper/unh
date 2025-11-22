@@ -2,7 +2,7 @@
 
 import process from 'node:process'
 import { cac } from 'cac'
-import { getRawOptions } from '@/utils'
+import { getRawOptions } from '@/logics'
 import { version } from '../../package.json'
 import {
   customHelp,
@@ -12,7 +12,7 @@ import {
   handlePlatformCommand,
   handlePrepareCommand,
 } from './commands'
-import { loadCliConfig } from './config'
+import { getCliConfig, loadCliConfig } from './config'
 
 /**
  * CLI入口函数
@@ -20,8 +20,8 @@ import { loadCliConfig } from './config'
  */
 async function main(): Promise<void> {
   try {
-    const config = await loadCliConfig()
-    const defaultPlatform = config.platform?.default || 'h5'
+    await loadCliConfig()
+    const defaultPlatform = getCliConfig()?.platform?.default || 'h5'
     const cli = cac('unh')
 
     // 版本信息
@@ -31,7 +31,7 @@ async function main(): Promise<void> {
     cli
       .command('prepare', '准备项目环境')
       .action(async () => {
-        await handlePrepareCommand(config)
+        await handlePrepareCommand()
       })
 
     // dev 命令
@@ -42,7 +42,7 @@ async function main(): Promise<void> {
         const targetPlatform = platform || defaultPlatform
         const rawOptions = getRawOptions(cli, targetPlatform)
 
-        await handleDevCommand(targetPlatform, config, options, rawOptions)
+        await handleDevCommand(targetPlatform, options, rawOptions)
       })
 
     // build 命令
@@ -53,7 +53,7 @@ async function main(): Promise<void> {
         const targetPlatform = platform || defaultPlatform
         const rawOptions = getRawOptions(cli, targetPlatform)
 
-        await handleBuildCommand(targetPlatform, config, options, rawOptions)
+        await handleBuildCommand(targetPlatform, options, rawOptions)
       })
 
     // 信息

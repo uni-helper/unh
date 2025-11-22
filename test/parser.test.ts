@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { resolvePlatformAlias } from '../src/utils/platform'
+import { resolvePlatformAlias } from '../src/logics/platform'
 
 describe('cLI Core Functions', () => {
   describe('resolvePlatformAlias', () => {

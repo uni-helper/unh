@@ -1,16 +1,25 @@
-import type { UniHelperConfig } from '@/config/types'
-import { composeUniCommand, executeAfterHooks, executeBeforeHooks, executeUniCommand, generateConfigFiles, loadEnv, resolveTargetPlatform } from '@/utils'
+import {
+  composeUniCommand,
+  executeAfterHooks,
+  executeBeforeHooks,
+  executeUniCommand,
+  generateConfigFiles,
+  loadEnv,
+  resolveTargetPlatform,
+} from '@/logics'
+import { getCliConfig, setGlobalConfig } from '../config'
 
 /**
  * 处理构建/开发命令
  */
 export async function handleBuildCommand(
   argument: string | undefined,
-  config: UniHelperConfig,
   options: Record<string, any>,
   rawArgs: string[],
 ): Promise<void> {
+  const config = getCliConfig()
   const platform = resolveTargetPlatform(argument, config)
+  setGlobalConfig({ type: 'build', platform })
 
   const mode = options.m || options.mode || 'production'
   const envData = config.env ? await loadEnv(platform, mode, config.env) : undefined

@@ -49,9 +49,11 @@
   "dependencies": {
     "@uni-helper/uni-env": "catalog:",
     "cac": "catalog:",
+    "consola": "catalog:",
     "cross-spawn": "catalog:",
     "dotenv": "catalog:",
     "dotenv-expand": "catalog:",
+    "fs-extra": "catalog:",
     "kolorist": "catalog:",
     "local-pkg": "catalog:",
     "moment": "catalog:",
@@ -60,6 +62,7 @@
   "devDependencies": {
     "@antfu/eslint-config": "catalog:cli",
     "@types/cross-spawn": "catalog:types",
+    "@types/fs-extra": "catalog:types",
     "@types/node": "catalog:types",
     "bumpp": "catalog:cli",
     "eslint": "catalog:cli",

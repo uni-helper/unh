@@ -1,10 +1,11 @@
-import type { UniHelperConfig } from '@/config/types'
-import { executeBeforeHooks } from '@/utils'
+import { executeBeforeHooks } from '@/logics'
+import { getCliConfig } from '../config'
 
 /**
  * 处理prepare命令
  */
-export async function handlePrepareCommand(config: UniHelperConfig): Promise<void> {
+export async function handlePrepareCommand(): Promise<void> {
+  const config = getCliConfig()
   // 执行自定义安装钩子
   await executeBeforeHooks('prepare', config)
 }
