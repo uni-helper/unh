@@ -6,7 +6,7 @@ import spawn from 'cross-spawn'
 import { bold, gray, white } from 'kolorist'
 import { getCliConfig, getGlobalConfig } from '@/cli/config'
 import { MP_PLATFORMS } from '@/constants'
-import { ensureJsonSync, isMac, isWindows, stripAnsiColors } from '@/utils'
+import { ensureJsonSync, findSoftwareInstallLocation, isMac, isWindows, stripAnsiColors } from '@/utils'
 import { logger } from '@/utils/log'
 
 const DEVTOOLS_BUNDLE_ID = {
@@ -14,7 +14,7 @@ const DEVTOOLS_BUNDLE_ID = {
     'mp-weixin': 'com.tencent.webplusdevtools',
   },
   windows: {
-    'mp-weixin': 'webplusdevtools.exe',
+    'mp-weixin': '微信开发者工具',
   },
 }
 
@@ -52,7 +52,16 @@ function getDevtoolsPath() {
     }
   }
   if (isWindows()) {
-    // Windows 平台的实现
+    const devtoolsBundleId = DEVTOOLS_BUNDLE_ID.windows[platform as keyof typeof DEVTOOLS_BUNDLE_ID.windows]
+    if (!devtoolsBundleId) {
+      return ''
+    }
+
+    const installLocation = findSoftwareInstallLocation(devtoolsBundleId, devtoolsBundleId)
+
+    if (installLocation) {
+      cliPath = path.join(installLocation, 'cli.bat')
+    }
   }
 
   return cliPath
