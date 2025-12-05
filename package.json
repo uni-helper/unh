@@ -57,6 +57,8 @@
     "kolorist": "catalog:",
     "local-pkg": "catalog:",
     "moment": "catalog:",
+    "pathe": "catalog:",
+    "std-env": "catalog:",
     "unconfig": "catalog:"
   },
   "devDependencies": {

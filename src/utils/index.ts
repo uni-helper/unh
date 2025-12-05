@@ -1,15 +1,5 @@
-import os from 'node:os'
-
-import { parse } from 'node:path'
 import fs from 'fs-extra'
-
-export function isMac() {
-  return os.platform() === 'darwin'
-}
-
-export function isWindows() {
-  return os.platform() === 'win32'
-}
+import { parse } from 'pathe'
 
 /**
  * 去除字符串中的 ANSI 颜色代码
@@ -37,4 +27,9 @@ export async function ensureJson(path: string, object: any = {}) {
     await fs.ensureDir(parse(path).dir)
     await fs.writeJSON(path, object)
   }
+}
+
+export function decodeGbk(input?: NonSharedBuffer) {
+  const decoder = new TextDecoder('gbk')
+  return decoder.decode(input)
 }
