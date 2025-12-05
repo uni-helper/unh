@@ -1,68 +1,22 @@
 import type { MPPlatform } from '@/constants'
-import { execFileSync } from 'node:child_process'
-import path from 'node:path'
 import process from 'node:process'
 import spawn from 'cross-spawn'
 import { bold, gray, white } from 'kolorist'
+import { join, resolve } from 'pathe'
 import { getCliConfig, getGlobalConfig } from '@/cli/config'
 import { MP_PLATFORMS } from '@/constants'
-import { ensureJsonSync, findSoftwareInstallLocation, isMac, isWindows, stripAnsiColors } from '@/utils'
+import { ensureJsonSync, stripAnsiColors } from '@/utils'
+import { getDevtoolsCliPath } from '@/utils/findSoftware'
 import { logger } from '@/utils/log'
 
-const DEVTOOLS_BUNDLE_ID = {
-  mac: {
-    'mp-weixin': 'com.tencent.webplusdevtools',
-  },
-  windows: {
-    'mp-weixin': '微信开发者工具',
-  },
-}
-
 function getDevtoolsPath() {
-  const platform = getGlobalConfig().platform!
+  const platform = getGlobalConfig().platform! as MPPlatform
   const userCliPath = getCliConfig().devtools?.cliPath?.[platform]
   if (userCliPath) {
     return userCliPath
   }
 
-  let cliPath = ''
-  if (isMac()) {
-    const devtoolsBundleId = DEVTOOLS_BUNDLE_ID.mac[platform as keyof typeof DEVTOOLS_BUNDLE_ID.mac]
-    if (!devtoolsBundleId) {
-      return ''
-    }
-
-    try {
-      // 添加超时控制，避免长时间等待
-      const searchResult = execFileSync(
-        'mdfind',
-        [
-          `kMDItemCFBundleIdentifier == "${devtoolsBundleId}"`,
-        ],
-        { timeout: 5000 }, // 设置超时时间，避免长时间等待
-      ).toString().trim()
-
-      if (searchResult) {
-        cliPath = path.join(searchResult, 'Contents/MacOS/cli')
-      }
-    }
-    catch (error) {
-      logger.warn(`搜索开发者工具路径失败: ${error instanceof Error ? error.message : String(error)}`)
-      return ''
-    }
-  }
-  if (isWindows()) {
-    const devtoolsBundleId = DEVTOOLS_BUNDLE_ID.windows[platform as keyof typeof DEVTOOLS_BUNDLE_ID.windows]
-    if (!devtoolsBundleId) {
-      return ''
-    }
-
-    const installLocation = findSoftwareInstallLocation(devtoolsBundleId, devtoolsBundleId)
-
-    if (installLocation) {
-      cliPath = path.join(installLocation, 'cli.bat')
-    }
-  }
+  const cliPath = getDevtoolsCliPath(platform)
 
   return cliPath
 }
@@ -80,9 +34,9 @@ export function openDevtools(outputDir: string) {
     logger.info(`   devtools.cliPath.${platform} = "开发者工具路径"`)
     return
   }
-  const finalOutputDir = path.resolve(process.cwd(), stripAnsiColors(outputDir))
+  const finalOutputDir = resolve(process.cwd(), stripAnsiColors(outputDir))
 
-  ensureJsonSync(path.join(finalOutputDir, 'project.config.json'), {
+  ensureJsonSync(join(finalOutputDir, 'project.config.json'), {
     appid: 'touristappid',
     projectname: 'empty',
   })

@@ -1,10 +1,10 @@
 import type { BuildPhase } from '@/cli/types'
 import type { ManifestOptions, UniHelperConfig } from '@/config/types'
 import fs from 'node:fs'
-import path from 'node:path'
 import process from 'node:process'
 import { yellow } from 'kolorist'
 import { isPackageExists } from 'local-pkg'
+import path from 'pathe'
 import { loadConfig } from 'unconfig'
 
 export function writeFileSync(path: string, content: string) {

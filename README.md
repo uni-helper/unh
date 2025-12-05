@@ -33,7 +33,6 @@ pnpm dev wx
 ```
 
 ```ts
-import { join } from 'node:path'
 // unh.config.ts
 import { defineConfig } from '@uni-helper/unh'
 

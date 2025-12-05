@@ -1,9 +1,9 @@
 import type { UniHelperConfig } from '@/config/types'
 import fs from 'node:fs'
-import path from 'node:path'
 import { config } from 'dotenv'
 import { expand } from 'dotenv-expand'
 import { bold, red } from 'kolorist'
+import path from 'pathe'
 /** 配置类型 */
 type EnvConfig = Exclude<UniHelperConfig['env'], undefined>
 /**
