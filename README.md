@@ -56,5 +56,8 @@ export default defineConfig({
     pages: true,
   },
   env: true,
+  devtools: {
+    open: true,
+  },
 })
 ```
