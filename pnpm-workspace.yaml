@@ -13,9 +13,11 @@ catalog:
   fs-extra: ^11.3.2
   kolorist: ^1.8.0
   local-pkg: ^1.1.2
+  minidev: ^2.2.5
   moment: ^2.30.1
   pathe: ^2.0.3
   std-env: ^3.10.0
+  strip-ansi: ^7.1.2
   unconfig: ^7.3.3
 catalogs:
   cli:

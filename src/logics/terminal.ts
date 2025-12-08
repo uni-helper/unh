@@ -1,7 +1,8 @@
 import { bold, cyan, gray, green } from 'kolorist'
 import { getPackageInfoSync } from 'local-pkg'
 import moment from 'moment'
-import { openDevtools, shouldOpenDevtools } from './devtools'
+import stripAnsi from 'strip-ansi'
+import { openMPDevtools } from './devtools'
 
 export const TERMINAL_OUTPUT_PROCESSORS = [
   // {
@@ -22,7 +23,7 @@ export const TERMINAL_OUTPUT_PROCESSORS = [
       const readyTime = match[3]
 
       // 打开开发者工具
-      shouldOpenDevtools() && openDevtools(outputDir)
+      openMPDevtools(stripAnsi(outputDir))
 
       return `
   ${cyan(`uni v${compilerVersion}`)} ${green('dev output directory:')}

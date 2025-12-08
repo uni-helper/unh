@@ -56,9 +56,11 @@
     "fs-extra": "catalog:",
     "kolorist": "catalog:",
     "local-pkg": "catalog:",
+    "minidev": "catalog:",
     "moment": "catalog:",
     "pathe": "catalog:",
     "std-env": "catalog:",
+    "strip-ansi": "catalog:",
     "unconfig": "catalog:"
   },
   "devDependencies": {

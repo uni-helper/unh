@@ -6,6 +6,7 @@ export default defineConfig({
     alias: {
       h5: ['h5', 'html'],
       'mp-weixin': ['wx'],
+			'mp-alipay': ['ali'],
     },
   },
   hooks: {

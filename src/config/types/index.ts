@@ -1,6 +1,7 @@
 import type { BuildPhase } from '@/cli/types'
 import type { Platform } from '@/constants'
 import type { MPPlatform } from '@/constants/platform'
+import type { PlatformSpecificString } from '@/libs/devtools/types'
 
 export type PlatformAlias = Partial<Record<Platform, string[] | string>>
 
@@ -31,6 +32,12 @@ export interface HookOptions {
    */
   envData?: Record<string, string>
 }
+
+/**
+ * CLI 路径配置类型
+ * 支持字符串或平台特定对象
+ */
+export type CliPathConfig = string | PlatformSpecificString
 
 /**
  * uni 助手配置
@@ -122,10 +129,6 @@ export interface UniHelperConfig {
     /**
      * 小程序开发者工具路径配置
      */
-    cliPath?: {
-      [K in MPPlatform]?: string
-    } & {
-      [key: string]: string | undefined
-    }
+    cliPath?: Record<MPPlatform, CliPathConfig>
   }
 }
