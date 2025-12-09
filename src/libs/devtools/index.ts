@@ -31,7 +31,7 @@ export class MPDevtoolsLauncher {
   registerHandler(handler: DevtoolsHandler): void {
     // 如果处理器有config属性，则传递当前配置
     if ('config' in handler && typeof handler.config === 'object') {
-      (handler as any).config = this.config
+      handler.config = this.config
     }
 
     this.handlers.set(handler.platform, handler)

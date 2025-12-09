@@ -36,13 +36,7 @@ export class WechatDevtoolsHandler implements DevtoolsHandler {
    */
   private installPath: string | null = null
 
-  /**
-   * 构造函数
-   * @param config 配置选项
-   */
-  constructor(config?: DevtoolsConfig) {
-    this.config = config || {}
-  }
+  constructor() {}
 
   /**
    * 检测微信开发者工具是否安装
