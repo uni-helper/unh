@@ -4,15 +4,14 @@ import { MPDevtoolsLauncher } from '@/libs/devtools'
 import { WechatDevtoolsHandler } from '@/libs/devtools/handlers'
 
 export function openMPDevtools(outputDir: string) {
-  if (!shouldOpenDevtools())
-    return
-
-  const platform = getGlobalConfig().platform as MPPlatform
-  const mpDevtoolsLauncher = new MPDevtoolsLauncher(getCliConfig().devtools)
-  mpDevtoolsLauncher.registerHandlers([
-    new WechatDevtoolsHandler(),
-  ])
-  mpDevtoolsLauncher.open(platform, outputDir)
+  if (shouldOpenDevtools()) {
+    const platform = getGlobalConfig().platform as MPPlatform
+    const mpDevtoolsLauncher = new MPDevtoolsLauncher(getCliConfig().devtools)
+    mpDevtoolsLauncher.registerHandlers([
+      new WechatDevtoolsHandler(),
+    ])
+    mpDevtoolsLauncher.open(platform, outputDir)
+  }
 }
 
 /**
@@ -20,10 +19,6 @@ export function openMPDevtools(outputDir: string) {
  */
 export function shouldOpenDevtools() {
   const open = getCliConfig().devtools?.open
-  if (open === false) {
-    return false
-  }
-
   const isMP = getGlobalConfig().platform?.startsWith('mp')
-  return isMP
+  return open && isMP
 }

@@ -15,6 +15,9 @@ const DEFAULT_CONFIG: UniHelperConfig = {
     pages: false,
     manifest: false,
   },
+  devtools: {
+    open: false,
+  },
 }
 
 /**
