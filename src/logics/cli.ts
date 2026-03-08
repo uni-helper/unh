@@ -57,7 +57,7 @@ export async function executeAfterHooks(
   }
 }
 
-function buildCommandOptions(uniCommand: string, stdio: 'pipe' | 'inherit') {
+function buildCommandOptions<T extends 'pipe' | 'inherit'>(uniCommand: string, stdio: T) {
   const [command, ...args] = uniCommand.split(' ')
   return {
     command,
@@ -78,7 +78,7 @@ export function executeUniCommand(uniCommand: string) {
 
   const { stdout, stderr } = spawn(command, args, options)
 
-  stdout?.on('data', (data) => {
+  stdout.on('data', (data) => {
     let output = data.toString()
 
     const shouldFilter = TERMINAL_SKIP_OUTPUTS.some(skipOutput => output.includes(skipOutput))
@@ -90,7 +90,7 @@ export function executeUniCommand(uniCommand: string) {
     }
   })
 
-  stderr?.on('data', (data) => {
+  stderr.on('data', (data) => {
     process.stderr.write(data.toString())
   })
 }
