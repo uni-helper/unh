@@ -3,7 +3,7 @@ import type { CommandType } from '@/cli/types'
 import type { UniHelperConfig } from '@/config/types'
 import type { Platform } from '@/constants'
 import process from 'node:process'
-import { spawn } from 'cross-spawn'
+import { spawn, sync } from 'cross-spawn'
 import { TERMINAL_SKIP_OUTPUTS } from '@/constants/terminal'
 import { resolvePlatformAlias } from './platform'
 import { applyOutputProcessors } from './terminal'
@@ -57,35 +57,51 @@ export async function executeAfterHooks(
   }
 }
 
+function buildCommandOptions(uniCommand: string, stdio: 'pipe' | 'inherit') {
+  const [command, ...args] = uniCommand.split(' ')
+  return {
+    command,
+    args,
+    options: {
+      stdio,
+      cwd: process.cwd(),
+      env: Object.assign({}, process.env, { FORCE_COLOR: true, UNI_HBUILDERX_LANGID: 'zh-CN' }),
+    },
+  }
+}
+
 /**
  * 执行uni命令
  */
-export async function executeUniCommand(uniCommand: string): Promise<void> {
-  const [command, ...args] = uniCommand.split(' ')
+export function executeUniCommand(uniCommand: string) {
+  const { command, args, options } = buildCommandOptions(uniCommand, 'pipe')
 
-  const { stdout, stderr } = spawn(command, args, {
-    stdio: 'pipe',
-    cwd: process.cwd(),
-    env: Object.assign({}, process.env, { FORCE_COLOR: true, UNI_HBUILDERX_LANGID: 'zh-CN' }),
-  })
+  const { stdout, stderr } = spawn(command, args, options)
 
-  stdout.on('data', (data) => {
+  stdout?.on('data', (data) => {
     let output = data.toString()
 
-    // 过滤掉不需要显示的内容
     const shouldFilter = TERMINAL_SKIP_OUTPUTS.some(skipOutput => output.includes(skipOutput))
 
     if (!shouldFilter) {
-      // 应用输出替换规则
       output = applyOutputProcessors(output)
 
       process.stdout.write(output)
     }
   })
 
-  stderr.on('data', (data) => {
+  stderr?.on('data', (data) => {
     process.stderr.write(data.toString())
   })
+}
+
+/**
+ * 同步执行uni命令
+ */
+export function executeUniCommandSync(uniCommand: string) {
+  const { command, args, options } = buildCommandOptions(uniCommand, 'inherit')
+
+  sync(command, args, options)
 }
 
 /**

@@ -2,7 +2,7 @@ import {
   composeUniCommand,
   executeAfterHooks,
   executeBeforeHooks,
-  executeUniCommand,
+  executeUniCommandSync,
   generateConfigFiles,
   loadEnv,
   resolveTargetPlatform,
@@ -34,7 +34,7 @@ export async function handleBuildCommand(
   await executeBeforeHooks('build', config, options, platform, envData)
 
   // 执行uni命令
-  await executeUniCommand(uniCommand)
+  executeUniCommandSync(uniCommand)
 
   // 执行自定义后置钩子
   await executeAfterHooks('build', config, options, platform, envData)

@@ -26,5 +26,5 @@ export async function handleDevCommand(
   await executeBeforeHooks('dev', config, options, platform, envData)
 
   // 执行uni命令
-  await executeUniCommand(uniCommand)
+  executeUniCommand(uniCommand)
 }

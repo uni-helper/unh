@@ -13,7 +13,9 @@ export default defineConfig({
     prepare() {},
     dev({ platform, options, envData }) {},
     build({ platform, options, envData }) {},
-    onBuildAfter({ platform, options, envData }) {},
+    onBuildAfter({ platform, options, envData }) {
+      console.log('onBuildAfter', platform, options, envData)
+    },
   },
   autoGenerate: {
     pages: true,
