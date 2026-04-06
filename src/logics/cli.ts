@@ -84,7 +84,7 @@ export function executeUniCommandOnDev(uniCommand: string): Promise<void> {
     const { stdout, stderr } = spawn(command, args, options)
 
     stdout.on('data', (data) => {
-      let output = data.toString()
+      let output: string = data.toString()
 
       const shouldFilter = TERMINAL_SKIP_OUTPUTS.some(skipOutput => output.includes(skipOutput))
 
