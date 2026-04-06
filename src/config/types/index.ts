@@ -65,6 +65,8 @@ export interface UniHelperConfig {
     prepare?: () => void | Promise<void>
     /** 开发前执行 */
     dev?: (options: HookOptions) => void | Promise<void>
+    /** 开发后执行, 只会执行一次 */
+    onDevAfter?: (options: HookOptions) => void | Promise<void>
     /** 构建前执行 */
     build?: (options: HookOptions) => void | Promise<void>
     /** 构建后执行 */

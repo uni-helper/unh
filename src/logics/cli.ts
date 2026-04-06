@@ -4,7 +4,7 @@ import type { UniHelperConfig } from '@/config/types'
 import type { Platform } from '@/constants'
 import process from 'node:process'
 import { spawn, sync } from 'cross-spawn'
-import { TERMINAL_SKIP_OUTPUTS } from '@/constants/terminal'
+import { TERMINAL_DEV_FLAG, TERMINAL_SKIP_OUTPUTS } from '@/constants/terminal'
 import { resolvePlatformAlias } from './platform'
 import { applyOutputProcessors } from './terminal'
 
@@ -55,6 +55,10 @@ export async function executeAfterHooks(
   if (command === 'build' && config.hooks?.onBuildAfter) {
     await config.hooks.onBuildAfter({ platform, options, envData })
   }
+
+  if (command === 'dev' && config.hooks?.onDevAfter) {
+    await config.hooks.onDevAfter({ platform, options, envData })
+  }
 }
 
 function buildCommandOptions<T extends 'pipe' | 'inherit'>(uniCommand: string, stdio: T) {
@@ -73,32 +77,41 @@ function buildCommandOptions<T extends 'pipe' | 'inherit'>(uniCommand: string, s
 /**
  * 执行uni命令
  */
-export function executeUniCommand(uniCommand: string) {
-  const { command, args, options } = buildCommandOptions(uniCommand, 'pipe')
+export function executeUniCommandOnDev(uniCommand: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const { command, args, options } = buildCommandOptions(uniCommand, 'pipe')
 
-  const { stdout, stderr } = spawn(command, args, options)
+    const { stdout, stderr } = spawn(command, args, options)
 
-  stdout.on('data', (data) => {
-    let output = data.toString()
+    stdout.on('data', (data) => {
+      let output = data.toString()
 
-    const shouldFilter = TERMINAL_SKIP_OUTPUTS.some(skipOutput => output.includes(skipOutput))
+      const shouldFilter = TERMINAL_SKIP_OUTPUTS.some(skipOutput => output.includes(skipOutput))
 
-    if (!shouldFilter) {
-      output = applyOutputProcessors(output)
+      if (output.match(TERMINAL_DEV_FLAG)) {
+        resolve()
+      }
 
-      process.stdout.write(output)
-    }
-  })
+      if (!shouldFilter) {
+        output = applyOutputProcessors(output)
 
-  stderr.on('data', (data) => {
-    process.stderr.write(data.toString())
+        process.stdout.write(output)
+      }
+    })
+
+    stderr.on('data', (data) => {
+      process.stderr.write(data.toString())
+    })
+
+    stdout.on('error', reject)
+    stderr.on('error', reject)
   })
 }
 
 /**
  * 同步执行uni命令
  */
-export function executeUniCommandSync(uniCommand: string) {
+export function executeUniCommandOnBuild(uniCommand: string) {
   const { command, args, options } = buildCommandOptions(uniCommand, 'inherit')
 
   sync(command, args, options)

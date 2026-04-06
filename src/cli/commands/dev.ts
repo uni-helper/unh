@@ -1,4 +1,4 @@
-import { composeUniCommand, executeBeforeHooks, executeUniCommand, generateConfigFiles, loadEnv, resolveTargetPlatform } from '@/logics'
+import { composeUniCommand, executeAfterHooks, executeBeforeHooks, executeUniCommandOnDev, generateConfigFiles, loadEnv, resolveTargetPlatform } from '@/logics'
 import { getCliConfig, setGlobalConfig } from '../config'
 
 /**
@@ -26,5 +26,8 @@ export async function handleDevCommand(
   await executeBeforeHooks('dev', config, options, platform, envData)
 
   // 执行uni命令
-  executeUniCommand(uniCommand)
+  await executeUniCommandOnDev(uniCommand)
+
+  // 执行自定义后置钩子
+  await executeAfterHooks('dev', config, options, platform, envData)
 }

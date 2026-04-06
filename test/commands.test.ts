@@ -72,6 +72,7 @@ describe('cLI Commands', () => {
       const mockHooks = {
         prepare: vi.fn(),
         dev: vi.fn(),
+        onDevAfter: vi.fn(),
         build: vi.fn(),
         onBuildAfter: vi.fn(),
       }
@@ -84,6 +85,7 @@ describe('cLI Commands', () => {
 
       expect(config.hooks?.prepare).toBeDefined()
       expect(config.hooks?.dev).toBeDefined()
+      expect(config.hooks?.onDevAfter).toBeDefined()
       expect(config.hooks?.build).toBeDefined()
       expect(config.hooks?.onBuildAfter).toBeDefined()
     })

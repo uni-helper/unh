@@ -49,6 +49,7 @@ export default defineConfig({
   hooks: {
     prepare() {},
     dev({ platform, options, envData }) {},
+    onDevAfter({ platform, options, envData }) {},
     build({ platform, options, envData }) {},
     onBuildAfter({ platform, options, envData }) {},
   },

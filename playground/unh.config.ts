@@ -16,6 +16,9 @@ export default defineConfig({
     onBuildAfter({ platform, options, envData }) {
       console.log('onBuildAfter', platform, options, envData)
     },
+    onDevAfter({ platform, options, envData }) {
+      console.log('onDevAfter', platform, options, envData)
+    },
   },
   autoGenerate: {
     pages: true,
