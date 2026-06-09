@@ -35,24 +35,24 @@
     "vue-i18n": "9.6.2"
   },
   "devDependencies": {
-    "@dcloudio/types": "^3.4.19",
+    "@dcloudio/types": "^3.4.31",
     "@dcloudio/uni-automator": "3.0.0-4070620250821001",
     "@dcloudio/uni-cli-shared": "3.0.0-4070620250821001",
     "@dcloudio/uni-stacktracey": "3.0.0-4070620250821001",
     "@dcloudio/vite-plugin-uni": "3.0.0-4070620250821001",
     "@mini-types/alipay": "^3.0.14",
-    "@types/node": "^24.3.0",
+    "@types/node": "^24.13.1",
     "@uni-helper/plugin-uni": "0.1.0",
     "@uni-helper/unh": "workspace:*",
-    "@uni-helper/uni-types": "^1.0.0-alpha.6",
-    "@uni-helper/vite-plugin-uni-manifest": "^0.2.9",
-    "@uni-helper/vite-plugin-uni-pages": "^0.3.19",
+    "@uni-helper/uni-types": "^1.0.1",
+    "@uni-helper/vite-plugin-uni-manifest": "^0.3.1",
+    "@uni-helper/vite-plugin-uni-pages": "^0.3.24",
     "@vue/runtime-core": "3.4.21",
-    "@vue/tsconfig": "^0.8.1",
-    "miniprogram-api-typings": "^4.1.0",
+    "@vue/tsconfig": "^0.9.1",
+    "miniprogram-api-typings": "^5.2.1",
     "sass": "1.64.2",
-    "typescript": "^5.9.2",
+    "typescript": "^6.0.3",
     "vite": "5.2.8",
-    "vue-tsc": "^3.0.6"
+    "vue-tsc": "^3.3.4"
   }
 }
