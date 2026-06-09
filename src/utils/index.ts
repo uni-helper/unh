@@ -1,17 +1,18 @@
-import fs from 'fs-extra'
+import { existsSync, mkdirSync, writeFileSync } from 'node:fs'
+import { mkdir, writeFile } from 'node:fs/promises'
 import { parse } from 'pathe'
 
 export function ensureJsonSync(path: string, object: any = {}) {
-  if (!fs.existsSync(path)) {
-    fs.ensureDirSync(parse(path).dir)
-    fs.writeJSONSync(path, object)
+  if (!existsSync(path)) {
+    mkdirSync(parse(path).dir, { recursive: true })
+    writeFileSync(path, JSON.stringify(object, null, 2))
   }
 }
 
 export async function ensureJson(path: string, object: any = {}) {
-  if (!fs.existsSync(path)) {
-    await fs.ensureDir(parse(path).dir)
-    await fs.writeJSON(path, object)
+  if (!existsSync(path)) {
+    await mkdir(parse(path).dir, { recursive: true })
+    await writeFile(path, JSON.stringify(object, null, 2))
   }
 }
 

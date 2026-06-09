@@ -1,7 +1,7 @@
 import type { PlatformSpecificString } from '../types'
 import { execSync } from 'node:child_process'
+import { existsSync } from 'node:fs'
 import os from 'node:os'
-import fs from 'fs-extra'
 import { basename, dirname, join } from 'pathe'
 import { isMacOS, isWindows } from 'std-env'
 import { decodeGbk } from '@/utils'
@@ -132,7 +132,7 @@ function findMacOSSoftware(appName: string): string | null {
   // 检查每个候选路径
   for (const candidate of candidates) {
     try {
-      if (fs.existsSync(candidate)) {
+      if (existsSync(candidate)) {
         return candidate
       }
     }
