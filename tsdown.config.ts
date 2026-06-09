@@ -8,5 +8,7 @@ export default defineConfig({
   dts: true,
   fixedExtension: true,
   clean: true,
-  external: ['@antfu/utils'],
+  deps: {
+    neverBundle: ['@antfu/utils'],
+  },
 })
