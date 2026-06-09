@@ -1,7 +1,7 @@
 import { bold, cyan, gray, green } from 'kolorist'
 import { getPackageInfoSync } from 'local-pkg'
-import moment from 'moment'
 import stripAnsi from 'strip-ansi'
+import { formatTime12Hour } from '../utils/date'
 import { openMPDevtools } from './devtools'
 
 export const TERMINAL_OUTPUT_PROCESSORS = [
@@ -11,7 +11,7 @@ export const TERMINAL_OUTPUT_PROCESSORS = [
   // },
   {
     from: 'Watching for changes',
-    to: () => `${gray(moment().format('hh:mm:ss A'))} ${cyan(bold('[vite]'))} ${green('hmr update')}\n`,
+    to: () => `${gray(formatTime12Hour())} ${cyan(bold('[vite]'))} ${green('hmr update')}\n`,
   },
   {
     from: /运行方式：打开 (.+), 导入 (.+) 运行。\n.*ready in (.+)\n/,
