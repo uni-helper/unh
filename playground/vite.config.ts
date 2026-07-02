@@ -1,8 +1,6 @@
 import { fileURLToPath, URL } from 'node:url'
-
 import { defineConfig } from 'vite'
-import Uni from '@uni-helper/plugin-uni'
-import { UnhVitePlugin } from '@uni-helper/unh'
+import Unh from '@uni-helper/unh/vite'
 
 export default defineConfig({
   resolve: {
@@ -11,13 +9,6 @@ export default defineConfig({
     },
   },
   plugins: [
-    // Unh 统一插件（pages + manifest + platform 等）
-    ...UnhVitePlugin({
-      pages: {},
-      manifest: {},
-      platform: {},
-    }),
-    // https://uni-helper.js.org/plugin-uni
-    Uni(),
+    Unh()
   ],
 })

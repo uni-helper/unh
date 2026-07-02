@@ -34,6 +34,9 @@ catalogs:
     '@babel/types':
       specifier: ^7.29.7
       version: 7.29.7
+    '@dcloudio/vite-plugin-uni':
+      specifier: 3.0.0-4070620250821001
+      version: 3.0.0-4070620250821001
     '@rollup/pluginutils':
       specifier: ^5.1.0
       version: 5.3.0
@@ -58,9 +61,6 @@ catalogs:
     ast-kit:
       specifier: ^1.3.0
       version: 1.4.3
-    c12:
-      specifier: ^1.5.1
-      version: 1.11.2
     cac:
       specifier: ^7.0.0
       version: 7.0.0
@@ -169,25 +169,40 @@ catalogs:
 importers:
 
   .:
+    devDependencies:
+      '@antfu/eslint-config':
+        specifier: catalog:cli
+        version: 9.0.0(@typescript-eslint/rule-tester@8.61.0(eslint@10.4.1(jiti@2.7.0))(typescript@6.0.3))(@typescript-eslint/typescript-estree@8.61.0(typescript@6.0.3))(@typescript-eslint/utils@8.61.0(eslint@10.4.1(jiti@2.7.0))(typescript@6.0.3))(@vue/compiler-sfc@3.5.35)(eslint@10.4.1(jiti@2.7.0))(typescript@6.0.3)(vitest@3.2.6(@types/debug@4.1.13)(@types/node@24.13.1)(jsdom@16.7.0)(sass@1.64.2)(terser@5.48.0))
+      '@types/node':
+        specifier: catalog:types
+        version: 24.13.1
+      bumpp:
+        specifier: catalog:cli
+        version: 11.1.0
+      eslint:
+        specifier: catalog:cli
+        version: 10.4.1(jiti@2.7.0)
+      lint-staged:
+        specifier: catalog:cli
+        version: 17.0.7
+      simple-git-hooks:
+        specifier: catalog:cli
+        version: 2.13.1
+      tsdown:
+        specifier: catalog:cli
+        version: 0.22.2(typescript@6.0.3)
+      typescript:
+        specifier: catalog:cli
+        version: 6.0.3
+      vitest:
+        specifier: catalog:testing
+        version: 3.2.6(@types/debug@4.1.13)(@types/node@24.13.1)(jsdom@16.7.0)(sass@1.64.2)(terser@5.48.0)
+      vitest-package-exports:
+        specifier: catalog:testing
+        version: 1.2.0
+
+  packages/cli:
     dependencies:
-      '@uni-helper/unh-components':
-        specifier: workspace:*
-        version: link:packages/components
-      '@uni-helper/unh-core':
-        specifier: workspace:*
-        version: link:packages/core
-      '@uni-helper/unh-layouts':
-        specifier: workspace:*
-        version: link:packages/layouts
-      '@uni-helper/unh-manifest':
-        specifier: workspace:*
-        version: link:packages/manifest
-      '@uni-helper/unh-pages':
-        specifier: workspace:*
-        version: link:packages/pages
-      '@uni-helper/unh-platform':
-        specifier: workspace:*
-        version: link:packages/platform
       cac:
         specifier: 'catalog:'
         version: 7.0.0
@@ -222,27 +237,12 @@ importers:
         specifier: 'catalog:'
         version: 7.5.0
     devDependencies:
-      '@antfu/eslint-config':
-        specifier: catalog:cli
-        version: 9.0.0(@typescript-eslint/rule-tester@8.61.0(eslint@10.4.1(jiti@2.7.0))(typescript@6.0.3))(@typescript-eslint/typescript-estree@8.61.0(typescript@6.0.3))(@typescript-eslint/utils@8.61.0(eslint@10.4.1(jiti@2.7.0))(typescript@6.0.3))(@vue/compiler-sfc@3.5.35)(eslint@10.4.1(jiti@2.7.0))(typescript@6.0.3)(vitest@3.2.6(@types/debug@4.1.13)(@types/node@24.13.1)(jsdom@16.7.0)(sass@1.64.2)(terser@5.48.0))
       '@types/cross-spawn':
         specifier: catalog:types
         version: 6.0.6
       '@types/node':
         specifier: catalog:types
         version: 24.13.1
-      bumpp:
-        specifier: catalog:cli
-        version: 11.1.0
-      eslint:
-        specifier: catalog:cli
-        version: 10.4.1(jiti@2.7.0)
-      lint-staged:
-        specifier: catalog:cli
-        version: 17.0.7
-      simple-git-hooks:
-        specifier: catalog:cli
-        version: 2.13.1
       tsdown:
         specifier: catalog:cli
         version: 0.22.2(typescript@6.0.3)
@@ -252,9 +252,6 @@ importers:
       vitest:
         specifier: catalog:testing
         version: 3.2.6(@types/debug@4.1.13)(@types/node@24.13.1)(jsdom@16.7.0)(sass@1.64.2)(terser@5.48.0)
-      vitest-package-exports:
-        specifier: catalog:testing
-        version: 1.2.0
 
   packages/components:
     dependencies:
@@ -402,9 +399,9 @@ importers:
       '@uni-helper/uni-manifest-types':
         specifier: 'catalog:'
         version: 0.4.1
-      c12:
+      unconfig:
         specifier: 'catalog:'
-        version: 1.11.2
+        version: 7.5.0
     devDependencies:
       '@types/node':
         specifier: catalog:types
@@ -541,6 +538,46 @@ importers:
         specifier: catalog:testing
         version: 3.2.6(@types/debug@4.1.13)(@types/node@24.13.1)(jsdom@16.7.0)(sass@1.64.2)(terser@5.48.0)
 
+  packages/unh:
+    dependencies:
+      '@uni-helper/unh-cli':
+        specifier: workspace:*
+        version: link:../cli
+      '@uni-helper/unh-components':
+        specifier: workspace:*
+        version: link:../components
+      '@uni-helper/unh-core':
+        specifier: workspace:*
+        version: link:../core
+      '@uni-helper/unh-layouts':
+        specifier: workspace:*
+        version: link:../layouts
+      '@uni-helper/unh-manifest':
+        specifier: workspace:*
+        version: link:../manifest
+      '@uni-helper/unh-pages':
+        specifier: workspace:*
+        version: link:../pages
+      '@uni-helper/unh-platform':
+        specifier: workspace:*
+        version: link:../platform
+    devDependencies:
+      '@dcloudio/vite-plugin-uni':
+        specifier: 'catalog:'
+        version: 3.0.0-4070620250821001(postcss@8.5.15)(rollup@4.61.1)(vite@5.2.8(@types/node@24.13.1)(sass@1.64.2)(terser@5.48.0))(vue@3.4.21(typescript@6.0.3))
+      '@types/node':
+        specifier: catalog:types
+        version: 24.13.1
+      tsdown:
+        specifier: catalog:cli
+        version: 0.22.2(typescript@6.0.3)
+      typescript:
+        specifier: catalog:cli
+        version: 6.0.3
+      vitest:
+        specifier: catalog:testing
+        version: 3.2.6(@types/debug@4.1.13)(@types/node@24.13.1)(jsdom@16.7.0)(sass@1.64.2)(terser@5.48.0)
+
   playground:
     dependencies:
       '@dcloudio/uni-app':
@@ -611,7 +648,7 @@ importers:
         specifier: 3.0.0-4070620250821001
         version: 3.0.0-4070620250821001
       '@dcloudio/vite-plugin-uni':
-        specifier: 3.0.0-4070620250821001
+        specifier: 'catalog:'
         version: 3.0.0-4070620250821001(postcss@8.5.15)(rollup@4.61.1)(vite@5.2.8(@types/node@24.13.1)(sass@1.64.2)(terser@5.48.0))(vue@3.4.21(typescript@6.0.3))
       '@mini-types/alipay':
         specifier: ^3.0.14
@@ -619,12 +656,9 @@ importers:
       '@types/node':
         specifier: ^24.13.1
         version: 24.13.1
-      '@uni-helper/plugin-uni':
-        specifier: 0.1.0
-        version: 0.1.0(@dcloudio/vite-plugin-uni@3.0.0-4070620250821001(postcss@8.5.15)(rollup@4.61.1)(vite@5.2.8(@types/node@24.13.1)(sass@1.64.2)(terser@5.48.0))(vue@3.4.21(typescript@6.0.3)))
       '@uni-helper/unh':
         specifier: workspace:*
-        version: link:..
+        version: link:../packages/unh
       '@uni-helper/uni-types':
         specifier: ^1.0.1
         version: 1.0.1(@uni-helper/uni-app-types@1.0.1(typescript@6.0.3)(vue@3.4.21(typescript@6.0.3)))(@uni-helper/uni-cloud-types@1.0.1(typescript@6.0.3)(vue@3.4.21(typescript@6.0.3)))(@uni-helper/uni-ui-types@1.0.1(@uni-helper/uni-app-types@1.0.1(typescript@6.0.3)(vue@3.4.21(typescript@6.0.3)))(typescript@6.0.3)(vue@3.4.21(typescript@6.0.3)))(typescript@6.0.3)(vue@3.4.21(typescript@6.0.3))
@@ -726,10 +760,6 @@ packages:
   '@antfu/install-pkg@1.1.0':
     resolution: {integrity: sha512-MGQsmw10ZyI+EJo45CdSER4zEb+p31LpDAFp2Z3gkSd1yqVZGi0Ebx++YTEMonJy4oChEMLsxZ64j8FH6sSqtQ==}
 
-  '@babel/code-frame@7.29.0':
-    resolution: {integrity: sha512-9NhCeYjq9+3uxgdtp20LSiJXJvN0FeCtNGpJxuMFZ1Kv3cWUNb6DOhJwUvcVCzKGR66cw4njwM6hrJLqgOwbcw==}
-    engines: {node: '>=6.9.0'}
-
   '@babel/code-frame@7.29.7':
     resolution: {integrity: sha512-Aup7aUOfpbAUg2ROOJN6Iw5f9DMBlzu0mIkm/malLQFN/YQgO48wCj0Kxa3sEHJvPVFg7siR+qRInwXd2qhQKw==}
     engines: {node: '>=6.9.0'}
@@ -775,10 +805,6 @@ packages:
     peerDependencies:
       '@babel/core': ^7.4.0 || ^8.0.0-0 <8.0.0
 
-  '@babel/helper-globals@7.28.0':
-    resolution: {integrity: sha512-+W6cISkXFa1jXsDEdYA8HeevQT/FULhxzR99pxphltZcVaugps53THCeiWA8SguxxpSp3gKPiuYfSWopkLQ4hw==}
-    engines: {node: '>=6.9.0'}
-
   '@babel/helper-globals@7.29.7':
     resolution: {integrity: sha512-3nQVUAtvkKH9zahfWgw96Jc/uFOmjACE1kQz82E2lqWmHBgjzbNlsC22nuQTfahmWeQtTq5nQ/4Nnd2A1wj4zA==}
     engines: {node: '>=6.9.0'}
@@ -799,10 +825,6 @@ packages:
 
   '@babel/helper-optimise-call-expression@7.29.7':
     resolution: {integrity: sha512-+kmGVjcT9RGYzoDwdwEqEvGgKe3BYq+O1iGzjFubaNgZHwYHP6lsF2Yghf4kEuv9BV7tYDZ913aBW9am6YKong==}
-    engines: {node: '>=6.9.0'}
-
-  '@babel/helper-plugin-utils@7.28.6':
-    resolution: {integrity: sha512-S9gzZ/bz83GRysI7gAD4wPT/AI3uCnY+9xn+Mx/KPs2JwHJIz1W8PZkg2cqyt3RNOBM8ejcXhV6y8Og7ly/Dug==}
     engines: {node: '>=6.9.0'}
 
   '@babel/helper-plugin-utils@7.29.7':
@@ -932,12 +954,6 @@ packages:
     peerDependencies:
       '@babel/core': ^7.0.0-0
 
-  '@babel/plugin-syntax-import-attributes@7.28.6':
-    resolution: {integrity: sha512-jiLC0ma9XkQT3TKJ9uYvlakm66Pamywo+qwL+oL8HJOvc6TWdZXVfhqJr8CCzbSGUAbDOzlGHJC1U+vRfLQDvw==}
-    engines: {node: '>=6.9.0'}
-    peerDependencies:
-      '@babel/core': ^7.0.0-0
-
   '@babel/plugin-syntax-import-attributes@7.29.7':
     resolution: {integrity: sha512-zGYcYfq/WmZ4V+kBIXQon9dSSc8ircGZqw9ZaNhhGj9nZkeBu1jHLBDQqYYi5WA9uawvA2sIMbry2nCFhf5Djg==}
     engines: {node: '>=6.9.0'}
@@ -998,12 +1014,6 @@ packages:
 
   '@babel/plugin-syntax-top-level-await@7.14.5':
     resolution: {integrity: sha512-hx++upLv5U1rgYfwe1xBQUhRmU41NEvpUvrp8jkrSCdvGSnM5/qdRMtylJ6PG5OFkBaHkbTAKTnd3/YyESRHFw==}
-    engines: {node: '>=6.9.0'}
-    peerDependencies:
-      '@babel/core': ^7.0.0-0
-
-  '@babel/plugin-syntax-typescript@7.28.6':
-    resolution: {integrity: sha512-+nDNmQye7nlnuuHDboPbGm00Vqg3oO8niRRL27/4LYHUsHYh0zJ1xWOz0uRwNFmM1Avzk8wZbc6rdiYhomzv/A==}
     engines: {node: '>=6.9.0'}
     peerDependencies:
       '@babel/core': ^7.0.0-0
@@ -1347,16 +1357,8 @@ packages:
     resolution: {integrity: sha512-Nq8OhGWiZIZGV6hLHoyAKLLcJihP/xFeBMGJoUrxTX2psI8dCifzLhZISFb+VWS3wFMRDmCGw5R+dOySCqPLhw==}
     engines: {node: '>=6.9.0'}
 
-  '@babel/template@7.28.6':
-    resolution: {integrity: sha512-YA6Ma2KsCdGb+WC6UpBVFJGXL58MDA6oyONbjyF/+5sBgxY/dwkhLogbMT2GXXyU84/IhRw/2D1Os1B/giz+BQ==}
-    engines: {node: '>=6.9.0'}
-
   '@babel/template@7.29.7':
     resolution: {integrity: sha512-puq+Gf35oI24FeN11LkoUQFqv9uwNeWpxXZi/Ji3rRIoKAzKnxRaZ+Gkj0vKS9ZCiTESfng1N9LyOyXvo+m+Gg==}
-    engines: {node: '>=6.9.0'}
-
-  '@babel/traverse@7.29.0':
-    resolution: {integrity: sha512-4HPiQr0X7+waHfyXPZpWPfWL/J7dcN1mx9gL6WdQVMbPnF3+ZhSMs8tCxN7oHddJE9fhNE7+lxdnlyemKfJRuA==}
     engines: {node: '>=6.9.0'}
 
   '@babel/traverse@7.29.7':
@@ -2638,11 +2640,6 @@ packages:
     resolution: {integrity: sha512-QVLZu3ZPQEE+HICQyAMZ2yLQhxf0meY/wx6Hx14YcTNj13JB3qHlX3lJ02L3fLGHgERRH71kvYDwiXIguT3AjQ==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@uni-helper/plugin-uni@0.1.0':
-    resolution: {integrity: sha512-hBPUjoQc/SgqKsyGUl0fJiL+dDwLPhf2es1PJdsXcxHyOujoBP2+D4z5ie+Q72wVwKtTsQSP3tSjww/63JRmbA==}
-    peerDependencies:
-      '@dcloudio/vite-plugin-uni': '*'
-
   '@uni-helper/uni-app-types@1.0.1':
     resolution: {integrity: sha512-UJimp1feTaBl0VTs3QrM46vaeuMo/dXdOThH4ek0cz71ZHZHAJsqnf8cy8Ze/V5J3B6M477OCMM5EYen8EzkRA==}
     engines: {node: '>=14.18'}
@@ -2898,9 +2895,6 @@ packages:
     resolution: {integrity: sha512-RZNwNclF7+MS/8bDg70amg32dyeZGZxiDuQmZxKLAlQjr3jGyLx+4Kkk58UO7D2QdgFIQCovuSuZESne6RG6XQ==}
     engines: {node: '>= 6.0.0'}
 
-  ajv@6.14.0:
-    resolution: {integrity: sha512-IWrosm/yrn43eiKqkfkHis7QioDleaXQHdDVPKg0FSwwd/DuvyX79TZnFOnYpB7dcsFAMmtFztZuXPDvSePkFw==}
-
   ajv@6.15.0:
     resolution: {integrity: sha512-fgFx7Hfoq60ytK2c7DhnF8jIvzYgOMxfugjLOSMHjLIPgenqa7S7oaagATUq99mV6IYvN2tRmC0wnTYX6iPbMw==}
 
@@ -3111,14 +3105,6 @@ packages:
   bytes@3.1.2:
     resolution: {integrity: sha512-/Nf7TyzTx6S3yRJObOAV7956r8cr2+Oj8AC5dt8wSP3BQAoeX58NoHyCU8P8zGkNXStjTSi6fzO6F0pBdcYbEg==}
     engines: {node: '>= 0.8'}
-
-  c12@1.11.2:
-    resolution: {integrity: sha512-oBs8a4uvSDO9dm8b7OCFW7+dgtVrwmwnrVXYzLm43ta7ep2jCn/0MhoUFygIWtxhyy6+/MG7/agvpY0U1Iemew==}
-    peerDependencies:
-      magicast: ^0.3.4
-    peerDependenciesMeta:
-      magicast:
-        optional: true
 
   c12@2.0.4:
     resolution: {integrity: sha512-3DbbhnFt0fKJHxU4tEUPmD1ahWE4PWPMomqfYsTJdrhpmEnRKJi3qSC4rO5U6E6zN1+pjBY7+z8fUmNRMaVKLw==}
@@ -4032,10 +4018,6 @@ packages:
   hash-sum@2.0.0:
     resolution: {integrity: sha512-WdZTbAByD+pHfl/g9QSsBIIwy8IT+EsPiKDs0KNX+zSHhdDLFKdZu0BQHljvO+0QI/BasbMSUa8wYNCZTvhslg==}
 
-  hasown@2.0.3:
-    resolution: {integrity: sha512-ej4AhfhfL2Q2zpMmLo7U1Uv9+PyhIZpgQLGT1F9miIGmiCJIoCgSmczFdrc97mWT4kVY72KA+WnnhJ5pghSvSg==}
-    engines: {node: '>= 0.4'}
-
   hasown@2.0.4:
     resolution: {integrity: sha512-T2UbfbBEF32wiepXIsMlTW9+dDYC6wMh/t/vYA4tuOMKqWz/n3vr1NFSxQiyP+zk2mXsoMA/i/7qV6LKut1t1A==}
     engines: {node: '>= 0.4'}
@@ -4350,10 +4332,6 @@ packages:
 
   jimp@0.10.3:
     resolution: {integrity: sha512-meVWmDMtyUG5uYjFkmzu0zBgnCvvxwWNi27c4cg55vWNVC9ES4Lcwb+ogx+uBBQE3Q+dLKjXaLl0JVW+nUNwbQ==}
-
-  jiti@1.21.7:
-    resolution: {integrity: sha512-/imKNG4EbWNrVjoNC/1H5/9GFy+tqjGBHCaSsN+P2RnPqjsLmv6UD3Ej+Kj8nBWaRAwyk7kK5ZUc+OEatnTR3A==}
-    hasBin: true
 
   jiti@2.7.0:
     resolution: {integrity: sha512-AC/7JofJvZGrrneWNaEnJeOLUx+JlGt7tNa0wZiRPT4MY1wmfKjt2+6O2p2uz2+skll8OZZmJMNqeke7kKbNgQ==}
@@ -4832,9 +4810,6 @@ packages:
   obug@2.1.1:
     resolution: {integrity: sha512-uTqF9MuPraAQ+IsnPf366RG4cP9RtUi7MLO1N3KEc+wb0a6yKpeL0lmk2IB1jY5KHPAlTc6T/JRdC/YqxHNwkQ==}
 
-  ohash@1.1.6:
-    resolution: {integrity: sha512-TBu7PtV8YkAZn0tSxobKY2n2aAQva936lhRrj6957aDaCf9IEtqsKbgMzXE/F/sjqYOwmrukeORHNLe5glk7Cg==}
-
   ohash@2.0.11:
     resolution: {integrity: sha512-RdR9FQrFwNBNXAr4GixM8YaRZRJ5PUWbKYbE5eOsrwAjJW0q2REGcf79oYPsLyskQCZG1PLN+S/K1V00joZAoQ==}
 
@@ -4946,9 +4921,6 @@ packages:
 
   path-to-regexp@0.1.13:
     resolution: {integrity: sha512-A/AGNMFN3c8bOlvV9RreMdrv7jsmF9XIfDeCd87+I8RNg6s78BhJxMu69NEMHBSJFxKidViTEdruRwEk/WIKqA==}
-
-  pathe@1.1.2:
-    resolution: {integrity: sha512-whLdWMYL2TwI08hn8/ZqAbrVemu0LNaNNJZX73O6qaIdCTfXutsLhMkjdENX0qhsQ9uIimo4/aQOmXkoon2nDQ==}
 
   pathe@2.0.3:
     resolution: {integrity: sha512-WUjGcAqP1gQacoQe+OBJsFA7Ld4DyXuUIjZ5cc75cLHvJ7dtNsTugphxIADwspS+AraAUePCKrSVtPLFj/F88w==}
@@ -6098,12 +6070,6 @@ snapshots:
       package-manager-detector: 1.6.0
       tinyexec: 1.2.4
 
-  '@babel/code-frame@7.29.0':
-    dependencies:
-      '@babel/helper-validator-identifier': 7.29.7
-      js-tokens: 4.0.0
-      picocolors: 1.1.1
-
   '@babel/code-frame@7.29.7':
     dependencies:
       '@babel/helper-validator-identifier': 7.29.7
@@ -6192,8 +6158,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@babel/helper-globals@7.28.0': {}
-
   '@babel/helper-globals@7.29.7': {}
 
   '@babel/helper-member-expression-to-functions@7.29.7':
@@ -6222,8 +6186,6 @@ snapshots:
   '@babel/helper-optimise-call-expression@7.29.7':
     dependencies:
       '@babel/types': 7.29.7
-
-  '@babel/helper-plugin-utils@7.28.6': {}
 
   '@babel/helper-plugin-utils@7.29.7': {}
 
@@ -6333,32 +6295,27 @@ snapshots:
   '@babel/plugin-syntax-async-generators@7.8.4(@babel/core@7.29.7)':
     dependencies:
       '@babel/core': 7.29.7
-      '@babel/helper-plugin-utils': 7.28.6
+      '@babel/helper-plugin-utils': 7.29.7
 
   '@babel/plugin-syntax-bigint@7.8.3(@babel/core@7.29.7)':
     dependencies:
       '@babel/core': 7.29.7
-      '@babel/helper-plugin-utils': 7.28.6
+      '@babel/helper-plugin-utils': 7.29.7
 
   '@babel/plugin-syntax-class-properties@7.12.13(@babel/core@7.29.7)':
     dependencies:
       '@babel/core': 7.29.7
-      '@babel/helper-plugin-utils': 7.28.6
+      '@babel/helper-plugin-utils': 7.29.7
 
   '@babel/plugin-syntax-class-static-block@7.14.5(@babel/core@7.29.7)':
     dependencies:
       '@babel/core': 7.29.7
-      '@babel/helper-plugin-utils': 7.28.6
+      '@babel/helper-plugin-utils': 7.29.7
 
   '@babel/plugin-syntax-import-assertions@7.29.7(@babel/core@7.29.7)':
     dependencies:
       '@babel/core': 7.29.7
       '@babel/helper-plugin-utils': 7.29.7
-
-  '@babel/plugin-syntax-import-attributes@7.28.6(@babel/core@7.29.7)':
-    dependencies:
-      '@babel/core': 7.29.7
-      '@babel/helper-plugin-utils': 7.28.6
 
   '@babel/plugin-syntax-import-attributes@7.29.7(@babel/core@7.29.7)':
     dependencies:
@@ -6373,7 +6330,7 @@ snapshots:
   '@babel/plugin-syntax-json-strings@7.8.3(@babel/core@7.29.7)':
     dependencies:
       '@babel/core': 7.29.7
-      '@babel/helper-plugin-utils': 7.28.6
+      '@babel/helper-plugin-utils': 7.29.7
 
   '@babel/plugin-syntax-jsx@7.29.7(@babel/core@7.29.7)':
     dependencies:
@@ -6383,47 +6340,42 @@ snapshots:
   '@babel/plugin-syntax-logical-assignment-operators@7.10.4(@babel/core@7.29.7)':
     dependencies:
       '@babel/core': 7.29.7
-      '@babel/helper-plugin-utils': 7.28.6
+      '@babel/helper-plugin-utils': 7.29.7
 
   '@babel/plugin-syntax-nullish-coalescing-operator@7.8.3(@babel/core@7.29.7)':
     dependencies:
       '@babel/core': 7.29.7
-      '@babel/helper-plugin-utils': 7.28.6
+      '@babel/helper-plugin-utils': 7.29.7
 
   '@babel/plugin-syntax-numeric-separator@7.10.4(@babel/core@7.29.7)':
     dependencies:
       '@babel/core': 7.29.7
-      '@babel/helper-plugin-utils': 7.28.6
+      '@babel/helper-plugin-utils': 7.29.7
 
   '@babel/plugin-syntax-object-rest-spread@7.8.3(@babel/core@7.29.7)':
     dependencies:
       '@babel/core': 7.29.7
-      '@babel/helper-plugin-utils': 7.28.6
+      '@babel/helper-plugin-utils': 7.29.7
 
   '@babel/plugin-syntax-optional-catch-binding@7.8.3(@babel/core@7.29.7)':
     dependencies:
       '@babel/core': 7.29.7
-      '@babel/helper-plugin-utils': 7.28.6
+      '@babel/helper-plugin-utils': 7.29.7
 
   '@babel/plugin-syntax-optional-chaining@7.8.3(@babel/core@7.29.7)':
     dependencies:
       '@babel/core': 7.29.7
-      '@babel/helper-plugin-utils': 7.28.6
+      '@babel/helper-plugin-utils': 7.29.7
 
   '@babel/plugin-syntax-private-property-in-object@7.14.5(@babel/core@7.29.7)':
     dependencies:
       '@babel/core': 7.29.7
-      '@babel/helper-plugin-utils': 7.28.6
+      '@babel/helper-plugin-utils': 7.29.7
 
   '@babel/plugin-syntax-top-level-await@7.14.5(@babel/core@7.29.7)':
     dependencies:
       '@babel/core': 7.29.7
-      '@babel/helper-plugin-utils': 7.28.6
-
-  '@babel/plugin-syntax-typescript@7.28.6(@babel/core@7.29.7)':
-    dependencies:
-      '@babel/core': 7.29.7
-      '@babel/helper-plugin-utils': 7.28.6
+      '@babel/helper-plugin-utils': 7.29.7
 
   '@babel/plugin-syntax-typescript@7.29.7(@babel/core@7.29.7)':
     dependencies:
@@ -6866,29 +6818,11 @@ snapshots:
 
   '@babel/runtime@7.29.7': {}
 
-  '@babel/template@7.28.6':
-    dependencies:
-      '@babel/code-frame': 7.29.0
-      '@babel/parser': 7.29.7
-      '@babel/types': 7.29.7
-
   '@babel/template@7.29.7':
     dependencies:
       '@babel/code-frame': 7.29.7
       '@babel/parser': 7.29.7
       '@babel/types': 7.29.7
-
-  '@babel/traverse@7.29.0':
-    dependencies:
-      '@babel/code-frame': 7.29.0
-      '@babel/generator': 7.29.7
-      '@babel/helper-globals': 7.28.0
-      '@babel/parser': 7.29.7
-      '@babel/template': 7.28.6
-      '@babel/types': 7.29.7
-      debug: 4.4.3
-    transitivePeerDependencies:
-      - supports-color
 
   '@babel/traverse@7.29.7':
     dependencies:
@@ -8677,7 +8611,7 @@ snapshots:
       '@typescript-eslint/parser': 8.61.0(eslint@10.4.1(jiti@2.7.0))(typescript@6.0.3)
       '@typescript-eslint/typescript-estree': 8.61.0(typescript@6.0.3)
       '@typescript-eslint/utils': 8.61.0(eslint@10.4.1(jiti@2.7.0))(typescript@6.0.3)
-      ajv: 6.14.0
+      ajv: 6.15.0
       eslint: 10.4.1(jiti@2.7.0)
       json-stable-stringify-without-jsonify: 1.0.1
       lodash.merge: 4.6.2
@@ -8739,10 +8673,6 @@ snapshots:
     dependencies:
       '@typescript-eslint/types': 8.61.0
       eslint-visitor-keys: 5.0.1
-
-  '@uni-helper/plugin-uni@0.1.0(@dcloudio/vite-plugin-uni@3.0.0-4070620250821001(postcss@8.5.15)(rollup@4.61.1)(vite@5.2.8(@types/node@24.13.1)(sass@1.64.2)(terser@5.48.0))(vue@3.4.21(typescript@6.0.3)))':
-    dependencies:
-      '@dcloudio/vite-plugin-uni': 3.0.0-4070620250821001(postcss@8.5.15)(rollup@4.61.1)(vite@5.2.8(@types/node@24.13.1)(sass@1.64.2)(terser@5.48.0))(vue@3.4.21(typescript@6.0.3))
 
   '@uni-helper/uni-app-types@1.0.1(typescript@6.0.3)(vue@3.4.21(typescript@6.0.3))':
     dependencies:
@@ -9078,13 +9008,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  ajv@6.14.0:
-    dependencies:
-      fast-deep-equal: 3.1.3
-      fast-json-stable-stringify: 2.1.0
-      json-schema-traverse: 0.4.1
-      uri-js: 4.4.1
-
   ajv@6.15.0:
     dependencies:
       fast-deep-equal: 3.1.3
@@ -9175,7 +9098,7 @@ snapshots:
 
   babel-plugin-istanbul@6.1.1:
     dependencies:
-      '@babel/helper-plugin-utils': 7.28.6
+      '@babel/helper-plugin-utils': 7.29.7
       '@istanbuljs/load-nyc-config': 1.1.0
       '@istanbuljs/schema': 0.1.3
       istanbul-lib-instrument: 5.2.1
@@ -9185,7 +9108,7 @@ snapshots:
 
   babel-plugin-jest-hoist@27.5.1:
     dependencies:
-      '@babel/template': 7.28.6
+      '@babel/template': 7.29.7
       '@babel/types': 7.29.7
       '@types/babel__core': 7.20.5
       '@types/babel__traverse': 7.28.0
@@ -9221,7 +9144,7 @@ snapshots:
       '@babel/plugin-syntax-bigint': 7.8.3(@babel/core@7.29.7)
       '@babel/plugin-syntax-class-properties': 7.12.13(@babel/core@7.29.7)
       '@babel/plugin-syntax-class-static-block': 7.14.5(@babel/core@7.29.7)
-      '@babel/plugin-syntax-import-attributes': 7.28.6(@babel/core@7.29.7)
+      '@babel/plugin-syntax-import-attributes': 7.29.7(@babel/core@7.29.7)
       '@babel/plugin-syntax-import-meta': 7.10.4(@babel/core@7.29.7)
       '@babel/plugin-syntax-json-strings': 7.8.3(@babel/core@7.29.7)
       '@babel/plugin-syntax-logical-assignment-operators': 7.10.4(@babel/core@7.29.7)
@@ -9330,21 +9253,6 @@ snapshots:
       yaml: 2.9.0
 
   bytes@3.1.2: {}
-
-  c12@1.11.2:
-    dependencies:
-      chokidar: 3.6.0
-      confbox: 0.1.8
-      defu: 6.1.7
-      dotenv: 16.6.1
-      giget: 1.2.5
-      jiti: 1.21.7
-      mlly: 1.8.2
-      ohash: 1.1.6
-      pathe: 1.1.2
-      perfect-debounce: 1.0.0
-      pkg-types: 1.3.1
-      rc9: 2.1.2
 
   c12@2.0.4:
     dependencies:
@@ -9676,7 +9584,7 @@ snapshots:
       es-errors: 1.3.0
       get-intrinsic: 1.3.0
       has-tostringtag: 1.0.2
-      hasown: 2.0.3
+      hasown: 2.0.4
 
   esbuild@0.20.2:
     optionalDependencies:
@@ -10158,7 +10066,7 @@ snapshots:
       asynckit: 0.4.0
       combined-stream: 1.0.8
       es-set-tostringtag: 2.1.0
-      hasown: 2.0.3
+      hasown: 2.0.4
       mime-types: 2.1.35
 
   format@0.2.2: {}
@@ -10279,10 +10187,6 @@ snapshots:
       has-symbols: 1.1.0
 
   hash-sum@2.0.0: {}
-
-  hasown@2.0.3:
-    dependencies:
-      function-bind: 1.1.2
 
   hasown@2.0.4:
     dependencies:
@@ -10619,7 +10523,7 @@ snapshots:
 
   jest-message-util@27.5.1:
     dependencies:
-      '@babel/code-frame': 7.29.0
+      '@babel/code-frame': 7.29.7
       '@jest/types': 27.5.1
       '@types/stack-utils': 2.0.3
       chalk: 4.1.2
@@ -10726,8 +10630,8 @@ snapshots:
     dependencies:
       '@babel/core': 7.29.7
       '@babel/generator': 7.29.7
-      '@babel/plugin-syntax-typescript': 7.28.6(@babel/core@7.29.7)
-      '@babel/traverse': 7.29.0
+      '@babel/plugin-syntax-typescript': 7.29.7(@babel/core@7.29.7)
+      '@babel/traverse': 7.29.7
       '@babel/types': 7.29.7
       '@jest/transform': 27.5.1
       '@jest/types': 27.5.1
@@ -10805,8 +10709,6 @@ snapshots:
       regenerator-runtime: 0.13.11
     transitivePeerDependencies:
       - debug
-
-  jiti@1.21.7: {}
 
   jiti@2.7.0: {}
 
@@ -11463,8 +11365,6 @@ snapshots:
 
   obug@2.1.1: {}
 
-  ohash@1.1.6: {}
-
   ohash@2.0.11: {}
 
   omggif@1.0.10: {}
@@ -11549,7 +11449,7 @@ snapshots:
 
   parse-json@5.2.0:
     dependencies:
-      '@babel/code-frame': 7.29.0
+      '@babel/code-frame': 7.29.7
       error-ex: 1.3.4
       json-parse-even-better-errors: 2.3.1
       lines-and-columns: 1.2.4
@@ -11571,8 +11471,6 @@ snapshots:
   path-parse@1.0.7: {}
 
   path-to-regexp@0.1.13: {}
-
-  pathe@1.1.2: {}
 
   pathe@2.0.3: {}
 

@@ -9,6 +9,8 @@ const workspaceRoot = fileURLToPath(new URL('.', import.meta.url))
 export default defineConfig({
   resolve: {
     alias: {
+      '@uni-helper/unh-cli': resolve(workspaceRoot, 'packages/cli/src/index.ts'),
+      '@uni-helper/unh': resolve(workspaceRoot, 'packages/unh/src/index.ts'),
       '@uni-helper/unh-core': resolve(workspaceRoot, 'packages/core/src/index.ts'),
       '@uni-helper/unh-pages': resolve(workspaceRoot, 'packages/pages/src/index.ts'),
       '@uni-helper/unh-layouts': resolve(workspaceRoot, 'packages/layouts/src/index.ts'),

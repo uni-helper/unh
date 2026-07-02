@@ -1,8 +1,8 @@
 {
-  "name": "@uni-helper/unh-manifest",
+  "name": "@uni-helper/unh-cli",
   "type": "module",
   "version": "0.1.0",
-  "description": "TypeScript-based manifest.json generation for uni-app — Unh manifest module (migrated from vite-plugin-uni-manifest)",
+  "description": "CLI tool for Unh — uni-app development & build commands (migrated from unh root src/cli)",
   "author": "FliPPeDround <flippedround@qq.com>",
   "license": "MIT",
   "sideEffects": false,
@@ -11,11 +11,18 @@
       "types": "./dist/index.d.mts",
       "import": "./dist/index.mjs"
     },
+    "./bin": {
+      "types": "./dist/bin.d.mts",
+      "import": "./dist/bin.mjs"
+    },
     "./package.json": "./package.json"
   },
   "main": "./dist/index.mjs",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.mts",
+  "bin": {
+    "unh": "dist/bin.mjs"
+  },
   "files": [
     "dist"
   ],
@@ -24,20 +31,24 @@
     "dev": "tsdown --watch ./src",
     "test": "vitest run"
   },
-  "peerDependencies": {
-    "@uni-helper/unh-core": "workspace:*",
-    "vite": "^4 || ^5 || ^6"
-  },
   "dependencies": {
-    "@uni-helper/unh-core": "workspace:*",
-    "@uni-helper/uni-manifest-types": "catalog:",
+    "cac": "catalog:",
+    "consola": "catalog:",
+    "cross-spawn": "catalog:",
+    "dotenv": "catalog:",
+    "dotenv-expand": "catalog:",
+    "kolorist": "catalog:",
+    "local-pkg": "catalog:",
+    "pathe": "catalog:",
+    "std-env": "catalog:",
+    "strip-ansi": "catalog:",
     "unconfig": "catalog:"
   },
   "devDependencies": {
+    "@types/cross-spawn": "catalog:types",
     "@types/node": "catalog:types",
     "tsdown": "catalog:cli",
     "typescript": "catalog:cli",
-    "vite": "catalog:",
     "vitest": "catalog:testing"
   }
 }

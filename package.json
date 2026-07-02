@@ -1,9 +1,9 @@
 {
-  "name": "@uni-helper/unh",
+  "name": "@uni-helper/unh-monorepo",
   "type": "module",
   "version": "0.3.1",
-  "packageManager": "pnpm@10.34.1",
-  "description": "@uni-helper提供的cli封装工具",
+  "private": true,
+  "description": "Unh monorepo — uni-app 开发与构建工具集（Vite 插件 + CLI）",
   "author": "FliPPeDround <flippedround@qq.com>",
   "license": "MIT",
   "funding": "https://afdian.com/a/flippedround",
@@ -18,56 +18,20 @@
     "uni-app",
     "uni-helper",
     "cli",
-    "miniapp"
-  ],
-  "sideEffects": false,
-  "exports": {
-    ".": {
-      "import": "./dist/index.mjs"
-    },
-    "./package.json": "./package.json"
-  },
-  "main": "./dist/index.mjs",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.mts",
-  "bin": {
-    "unh": "dist/cli.mjs"
-  },
-  "files": [
-    "dist"
+    "miniapp",
+    "vite"
   ],
   "scripts": {
-    "build": "tsdown",
-    "dev": "tsdown --watch ./src",
+    "build": "pnpm -r build",
+    "dev": "pnpm -r --parallel dev",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
-    "prepublishOnly": "pnpm build",
     "release": "bumpp",
     "test": "vitest",
     "prepare": "simple-git-hooks"
   },
-  "dependencies": {
-    "@uni-helper/unh-components": "workspace:*",
-    "@uni-helper/unh-core": "workspace:*",
-    "@uni-helper/unh-layouts": "workspace:*",
-    "@uni-helper/unh-manifest": "workspace:*",
-    "@uni-helper/unh-pages": "workspace:*",
-    "@uni-helper/unh-platform": "workspace:*",
-    "cac": "catalog:",
-    "consola": "catalog:",
-    "cross-spawn": "catalog:",
-    "dotenv": "catalog:",
-    "dotenv-expand": "catalog:",
-    "kolorist": "catalog:",
-    "local-pkg": "catalog:",
-    "pathe": "catalog:",
-    "std-env": "catalog:",
-    "strip-ansi": "catalog:",
-    "unconfig": "catalog:"
-  },
   "devDependencies": {
     "@antfu/eslint-config": "catalog:cli",
-    "@types/cross-spawn": "catalog:types",
     "@types/node": "catalog:types",
     "bumpp": "catalog:cli",
     "eslint": "catalog:cli",

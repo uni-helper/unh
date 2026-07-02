@@ -6,7 +6,7 @@ export default defineConfig({
     alias: {
       h5: ['h5', 'html'],
       'mp-weixin': ['wx'],
-			'mp-alipay': ['ali'],
+      'mp-alipay': ['ali'],
     },
   },
   hooks: {
@@ -28,9 +28,11 @@ export default defineConfig({
     },
   },
   env: {
-    root: 'envs'
+    root: 'envs',
   },
-	devtools: {
-		open: true,
-	}
+  devtools: {
+    open: true,
+  },
+  pages: {},
+  manifest: {},
 })

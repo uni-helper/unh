@@ -5,7 +5,7 @@ export default antfu(
   {
     type: 'lib',
     pnpm: true,
-    ignores: ['playground', 'src/manifest.json', 'src/pages.json', '**/tmp-pages-test/**'],
+    ignores: ['playground', '**/tmp-pages-test/**'],
     rules: {
       'ts/explicit-function-return-type': 'off',
       'antfu/consistent-list-newline': 'off',

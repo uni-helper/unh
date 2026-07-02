@@ -1,0 +1,73 @@
+{
+  "name": "@uni-helper/unh",
+  "type": "module",
+  "version": "0.3.1",
+  "description": "Unh 统一入口包 — 整合 Vite 插件与 CLI 工具，提供 uni-app 开发与构建的完整体验",
+  "author": "FliPPeDround <flippedround@qq.com>",
+  "license": "MIT",
+  "funding": "https://afdian.com/a/flippedround",
+  "homepage": "https://github.com/uni-helper/unh#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/uni-helper/unh.git"
+  },
+  "bugs": "https://github.com/uni-helper/unh/issues",
+  "keywords": [
+    "uni",
+    "uni-app",
+    "uni-helper",
+    "cli",
+    "miniapp",
+    "vite"
+  ],
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    },
+    "./vite": {
+      "types": "./dist/vite.d.mts",
+      "import": "./dist/vite.mjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "bin": {
+    "unh": "dist/bin.mjs"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch ./src",
+    "test": "vitest run"
+  },
+  "peerDependencies": {
+    "@dcloudio/vite-plugin-uni": "*"
+  },
+  "peerDependenciesMeta": {
+    "@dcloudio/vite-plugin-uni": {
+      "optional": false
+    }
+  },
+  "dependencies": {
+    "@uni-helper/unh-cli": "workspace:*",
+    "@uni-helper/unh-components": "workspace:*",
+    "@uni-helper/unh-core": "workspace:*",
+    "@uni-helper/unh-layouts": "workspace:*",
+    "@uni-helper/unh-manifest": "workspace:*",
+    "@uni-helper/unh-pages": "workspace:*",
+    "@uni-helper/unh-platform": "workspace:*"
+  },
+  "devDependencies": {
+    "@dcloudio/vite-plugin-uni": "catalog:",
+    "@types/node": "catalog:types",
+    "tsdown": "catalog:cli",
+    "typescript": "catalog:cli",
+    "vitest": "catalog:testing"
+  }
+}

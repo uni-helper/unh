@@ -9,7 +9,7 @@ export default defineConfig({
     neverBundle: [
       '@uni-helper/unh-core',
       '@uni-helper/uni-manifest-types',
-      'c12',
+      'unconfig',
       'hookable',
     ],
   },
