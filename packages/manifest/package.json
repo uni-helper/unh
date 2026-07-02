@@ -1,0 +1,43 @@
+{
+  "name": "@uni-helper/unh-manifest",
+  "type": "module",
+  "version": "0.1.0",
+  "description": "TypeScript-based manifest.json generation for uni-app — Unh manifest module (migrated from vite-plugin-uni-manifest)",
+  "author": "FliPPeDround <flippedround@qq.com>",
+  "license": "MIT",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch ./src",
+    "test": "vitest run"
+  },
+  "peerDependencies": {
+    "@uni-helper/unh-core": "workspace:*",
+    "vite": "^4 || ^5 || ^6"
+  },
+  "dependencies": {
+    "@uni-helper/unh-core": "workspace:*",
+    "@uni-helper/uni-manifest-types": "catalog:",
+    "c12": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:types",
+    "tsdown": "catalog:cli",
+    "typescript": "catalog:cli",
+    "vite": "catalog:",
+    "vitest": "catalog:testing"
+  }
+}

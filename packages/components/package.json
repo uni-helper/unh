@@ -1,0 +1,54 @@
+{
+  "name": "@uni-helper/unh-components",
+  "type": "module",
+  "version": "0.1.0",
+  "description": "On-demand components auto import for uni-app — Unh components module (migrated from vite-plugin-uni-components)",
+  "author": "FliPPeDround <flippedround@qq.com>",
+  "license": "MIT",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    },
+    "./resolvers": {
+      "types": "./dist/resolvers.d.mts",
+      "import": "./dist/resolvers.mjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch ./src",
+    "test": "vitest run"
+  },
+  "peerDependencies": {
+    "@uni-helper/unh-core": "workspace:*",
+    "vite": "^4 || ^5 || ^6"
+  },
+  "dependencies": {
+    "@rollup/pluginutils": "catalog:",
+    "@uni-helper/unh-core": "workspace:*",
+    "chokidar": "catalog:",
+    "debug": "catalog:",
+    "local-pkg": "catalog:",
+    "magic-string": "catalog:",
+    "picomatch": "catalog:",
+    "tinyglobby": "catalog:"
+  },
+  "devDependencies": {
+    "@types/debug": "catalog:types",
+    "@types/node": "catalog:types",
+    "@types/picomatch": "catalog:types",
+    "tsdown": "catalog:cli",
+    "typescript": "catalog:cli",
+    "vite": "catalog:",
+    "vitest": "catalog:testing"
+  }
+}

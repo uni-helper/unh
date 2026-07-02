@@ -1,0 +1,68 @@
+{
+  "name": "@uni-helper/unh-pages",
+  "type": "module",
+  "version": "0.1.0",
+  "description": "File system based routing for uni-app — Unh pages module (migrated from vite-plugin-uni-pages)",
+  "author": "FliPPeDround <flippedround@qq.com>",
+  "license": "MIT",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    },
+    "./client": {
+      "types": "./client.d.ts"
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "files": [
+    "client.d.ts",
+    "dist",
+    "global.d.ts"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch ./src",
+    "test": "vitest run"
+  },
+  "peerDependencies": {
+    "@uni-helper/unh-core": "workspace:*",
+    "vite": "^4 || ^5 || ^6"
+  },
+  "dependencies": {
+    "@babel/generator": "catalog:",
+    "@babel/types": "catalog:",
+    "@uni-helper/unh-core": "workspace:*",
+    "@uni-helper/uni-env": "catalog:",
+    "@uni-helper/uni-pages-types": "catalog:",
+    "@vue/compiler-sfc": "catalog:",
+    "ast-kit": "catalog:",
+    "chokidar": "catalog:",
+    "comment-json": "catalog:",
+    "debug": "catalog:",
+    "detect-indent": "catalog:",
+    "detect-newline": "catalog:",
+    "lodash.groupby": "catalog:",
+    "magic-string": "catalog:",
+    "pathe": "catalog:",
+    "proper-lockfile": "catalog:",
+    "tinyglobby": "catalog:",
+    "typescript": "catalog:cli",
+    "unconfig": "catalog:",
+    "write-file-atomic": "catalog:",
+    "yaml": "catalog:"
+  },
+  "devDependencies": {
+    "@types/lodash.groupby": "catalog:types",
+    "@types/node": "catalog:types",
+    "@types/proper-lockfile": "catalog:types",
+    "tsdown": "catalog:cli",
+    "typescript": "catalog:cli",
+    "vite": "catalog:",
+    "vitest": "catalog:testing"
+  }
+}

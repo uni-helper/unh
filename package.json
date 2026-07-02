@@ -47,6 +47,12 @@
     "prepare": "simple-git-hooks"
   },
   "dependencies": {
+    "@uni-helper/unh-components": "workspace:*",
+    "@uni-helper/unh-core": "workspace:*",
+    "@uni-helper/unh-layouts": "workspace:*",
+    "@uni-helper/unh-manifest": "workspace:*",
+    "@uni-helper/unh-pages": "workspace:*",
+    "@uni-helper/unh-platform": "workspace:*",
     "cac": "catalog:",
     "consola": "catalog:",
     "cross-spawn": "catalog:",

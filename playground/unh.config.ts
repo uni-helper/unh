@@ -2,7 +2,7 @@ import { defineConfig } from '@uni-helper/unh'
 
 export default defineConfig({
   platform: {
-    default: 'mp-weixin',
+    default: 'h5',
     alias: {
       h5: ['h5', 'html'],
       'mp-weixin': ['wx'],

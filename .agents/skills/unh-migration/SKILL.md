@@ -330,30 +330,7 @@ export function parseSFC(ctx: UnhContext, filePath: string, code: string): SFCPa
 - Vite `transform` 钩子中，先调用 `parseSFC`，再从返回结果中提取所需信息
 - 文件变更时，缓存自动失效（通过 code 对比）
 
-### 3.5 文件扫描规范
-
-统一使用 `tinyglobby` 作为 glob 引擎，通过 UnhContext 共享扫描结果：
-
-```ts
-// packages/core/src/scan.ts
-export interface ScanOptions {
-  patterns: string[]
-  cwd: string
-  ignore?: string[]
-}
-
-export async function scanFiles(ctx: UnhContext, key: string, options: ScanOptions): Promise<string[]> {
-  const cacheKey = `scan:${key}`
-  const cached = ctx.state.get(cacheKey) as string[] | undefined
-  if (cached) return cached
-
-  const files = await glob(options.patterns, { cwd: options.cwd, ignore: options.ignore })
-  ctx.state.set(cacheKey, files)
-  return files
-}
-```
-
-### 3.6 Vite 插件注册规范
+### 3.5 Vite 插件注册规范
 
 所有模块的 Vite 插件通过统一注册机制注入：
 
@@ -421,8 +398,7 @@ export function createUnhVitePlugin(ctx: UnhContext): Plugin[] {
    - 实现缓存失效机制
 
 4. **实现文件扫描工具**
-   - 统一使用 `tinyglobby`
-   - 实现扫描结果缓存
+   - 统一使用 `tinyglobby` 作为 glob 引擎
    - 实现 chokidar watcher 工厂
 
 5. **实现通用工具**
@@ -439,7 +415,6 @@ export function createUnhVitePlugin(ctx: UnhContext): Plugin[] {
 **验证标准**：
 - [ ] `UnhContext` 可创建并注册模块
 - [ ] `parseSFC()` 缓存命中率 > 0
-- [ ] 文件扫描结果可跨模块共享
 - [ ] 所有工具函数有单元测试
 
 ### Phase 2: 迁移 pages 模块
@@ -464,7 +439,7 @@ git clone --depth 1 https://github.com/uni-helper/vite-plugin-uni-pages.git /tmp
 2. **迁移核心逻辑**
    - 将 `PageContext` 改为基于 `UnhContext`
    - 将 `parseSFC()` 调用替换为 `ctx.parseSFC()`
-   - 将文件扫描替换为 `ctx.scanFiles()`
+   - 文件扫描统一使用 `tinyglobby`
    - 将 `setupViteServer()` 替换为 `ctx.setupViteServer()`
 
 3. **注册 hooks**
@@ -546,7 +521,7 @@ git clone --depth 1 https://github.com/uni-helper/vite-plugin-uni-components.git
 
 2. **迁移核心逻辑**
    - 将 `Context` 改为基于 `UnhContext`
-   - 将文件扫描替换为 `ctx.scanFiles()`
+   - 文件扫描统一使用 `tinyglobby`
    - 将 `setupViteServer()` 替换为 `ctx.setupViteServer()`
 
 3. **注册 hooks**
@@ -724,7 +699,7 @@ export { default } from './module'                       // 模块实例
 - [ ] 所有 `@vue/compiler-sfc.parse()` 替换为 `parseSFC(ctx, ...)`
 - [ ] 所有 `ast-kit.babelParse()` 通过 `ctx` 共享
 - [ ] 所有 `chokidar.watch()` 替换为 `ctx.setupWatcher()`
-- [ ] 所有 `fast-glob`/`tinyglobby` 直接调用替换为 `ctx.scanFiles()`
+- [ ] 所有 `fast-glob` 直接调用替换为统一的 `tinyglobby`
 - [ ] 所有 `setupViteServer()` 替换为 `ctx.setupViteServer()`
 - [ ] Context 类改为基于 `UnhContext`
 - [ ] 模块间通信改为 hooks，禁止直接 import 其他模块
@@ -765,7 +740,6 @@ export { default } from './module'                       // 模块实例
 ### 7.3 性能目标
 
 - SFC 解析次数：每个文件 ≤ 1 次（当前 4 次）
-- 文件扫描：每种模式 ≤ 1 次（当前 3 次）
 - chokidar watcher：全局 ≤ 1 个（当前 3 个）
 - 开发服务器启动时间：减少 30%+
 

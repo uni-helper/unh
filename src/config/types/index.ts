@@ -40,6 +40,27 @@ export interface HookOptions {
 export type CliPathConfig = string | PlatformSpecificString
 
 /**
+ * Unh Vite 插件配置（Phase 7 新增）。
+ *
+ * 用于 `UnhVitePlugin()` 函数，按需启用各功能模块。
+ * 未配置的模块不会加载。
+ */
+export interface UnhViteConfig {
+  /** 项目根目录 */
+  root?: string
+  /** pages 模块配置（文件路由） */
+  pages?: Record<string, any>
+  /** layouts 模块配置（布局系统） */
+  layouts?: Record<string, any>
+  /** components 模块配置（组件自动导入） */
+  components?: Record<string, any>
+  /** manifest 模块配置（manifest.json 生成） */
+  manifest?: Record<string, any>
+  /** platform 模块配置（平台编译） */
+  platform?: Record<string, any>
+}
+
+/**
  * uni 助手配置
  */
 export interface UniHelperConfig {

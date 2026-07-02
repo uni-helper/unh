@@ -1,0 +1,336 @@
+import type { UnhContext } from '@uni-helper/unh-core'
+import type { FSWatcher } from 'chokidar'
+import type fs from 'node:fs'
+import type { UpdatePayload, ViteDevServer } from 'vite'
+import type { ComponentInfo, Options, ResolvedOptions, Transformer } from './types'
+import { relative } from 'node:path'
+import process from 'node:process'
+import Debug from 'debug'
+import { DIRECTIVE_IMPORT_PREFIX } from './constants'
+import { writeComponentsJson, writeDeclaration } from './declaration'
+import { searchComponents } from './fs/glob'
+import { resolveOptions } from './options'
+import transformer from './transformer'
+import { getNameFromFilePath, isExclude, matchGlobs, normalizeComponentInfo, parseId, pascalCase, resolveAlias, slash, throttle, toArray } from './utils'
+
+const debug = {
+  components: Debug('unh-components:context:components'),
+  search: Debug('unh-components:context:search'),
+  hmr: Debug('unh-components:context:hmr'),
+  declaration: Debug('unh-components:declaration'),
+  env: Debug('unh-components:env'),
+}
+
+/**
+ * Components 插件上下文。
+ *
+ * **Unh 改造点**：
+ * 1. 接受可选的 `UnhContext`，通过共享扫描缓存复用文件扫描结果。
+ * 2. `searchGlob()` 改为异步，内部使用 `scanFiles` 共享缓存。
+ * 3. 扫描完成后触发 `components:extend` hook，通知其他模块组件列表。
+ * 4. `setupWatcher` 使用 Vite DevServer 的共享 watcher，不再创建独立 chokidar。
+ * 5. debug 命名空间从 `vite-plugin-uni-components:*` 改为 `unh-components:*`。
+ */
+export class Context {
+  options: ResolvedOptions
+  transformer: Transformer
+  /** Unh 共享上下文（用于 hooks 通信和扫描缓存共享） */
+  unhCtx?: UnhContext
+
+  private _componentPaths = new Set<string>()
+  private _componentNameMap: Record<string, ComponentInfo> = {}
+  private _componentUsageMap: Record<string, Set<string>> = {}
+  private _componentCustomMap: Record<string, ComponentInfo> = {}
+  private _directiveCustomMap: Record<string, ComponentInfo> = {}
+  private _removeUnused = false
+  private _server: ViteDevServer | undefined
+
+  root = process.cwd()
+  sourcemap: string | boolean = true
+  alias: Record<string, string> = {}
+  dumpComponentsInfoPath: string | undefined
+
+  constructor(
+    private rawOptions: Options,
+    unhCtx?: UnhContext,
+  ) {
+    this.unhCtx = unhCtx
+    this.options = resolveOptions(rawOptions, this.root)
+    this.sourcemap = rawOptions.sourcemap ?? true
+    this.generateDeclaration = throttle(500, this._generateDeclaration.bind(this), { noLeading: false })
+    this._removeUnused = this.options.syncMode !== 'append'
+
+    if (this.options.dumpComponentsInfo) {
+      const dumpComponentsInfo = this.options.dumpComponentsInfo === true
+        ? './.components-info.json'
+        : this.options.dumpComponentsInfo ?? false
+
+      this.dumpComponentsInfoPath = dumpComponentsInfo
+      this.generateComponentsJson = throttle(500, this._generateComponentsJson.bind(this), { noLeading: false })
+    }
+
+    this.transformer = transformer(this)
+  }
+
+  setRoot(root: string) {
+    if (this.root === root)
+      return
+    debug.env('root', root)
+    this.root = root
+    this.options = resolveOptions(this.rawOptions, this.root)
+  }
+
+  transform(code: string, id: string) {
+    const { path, query } = parseId(id)
+    return this.transformer(code, id, path, query)
+  }
+
+  setupViteServer(server: ViteDevServer) {
+    if (this._server === server)
+      return
+
+    this._server = server
+    this._removeUnused = this.options.syncMode === 'overwrite'
+    this.setupWatcher(server.watcher)
+  }
+
+  /**
+   * 设置文件监听。
+   *
+   * **Unh 改造点**：使用传入的 watcher（来自 Vite DevServer 的共享 watcher），
+   * 不再创建独立 chokidar 实例。
+   */
+  setupWatcher(watcher: FSWatcher | fs.FSWatcher) {
+    const { globs } = this.options
+    this._removeUnused = this.options.syncMode === 'overwrite'
+    // @ts-expect-error fs.FSWatcher
+    watcher.on('unlink', (path) => {
+      if (!matchGlobs(path, globs))
+        return
+
+      path = slash(path)
+      this.removeComponents(path)
+      this.onUpdate(path)
+    })
+    // @ts-expect-error fs.FSWatcher
+    watcher.on('add', (path) => {
+      if (!matchGlobs(path, globs))
+        return
+
+      path = slash(path)
+      this.addComponents(path)
+      this.onUpdate(path)
+    })
+  }
+
+  /**
+   * Record the usage of components
+   * @param path
+   * @param paths paths of used components
+   */
+  updateUsageMap(path: string, paths: string[]) {
+    if (!this._componentUsageMap[path])
+      this._componentUsageMap[path] = new Set()
+
+    paths.forEach((p) => {
+      this._componentUsageMap[path].add(p)
+    })
+  }
+
+  addComponents(paths: string | string[]) {
+    debug.components('add', paths)
+
+    const size = this._componentPaths.size
+    toArray(paths).forEach(p => this._componentPaths.add(p))
+    if (this._componentPaths.size !== size) {
+      this.updateComponentNameMap()
+      return true
+    }
+    return false
+  }
+
+  addCustomComponents(info: ComponentInfo) {
+    if (info.as)
+      this._componentCustomMap[info.as] = info
+  }
+
+  addCustomDirectives(info: ComponentInfo) {
+    if (info.as)
+      this._directiveCustomMap[info.as] = info
+  }
+
+  removeComponents(paths: string | string[]) {
+    debug.components('remove', paths)
+
+    const size = this._componentPaths.size
+    toArray(paths).forEach(p => this._componentPaths.delete(p))
+    if (this._componentPaths.size !== size) {
+      this.updateComponentNameMap()
+      return true
+    }
+    return false
+  }
+
+  onUpdate(path: string) {
+    this.generateDeclaration()
+    this.generateComponentsJson()
+
+    if (!this._server)
+      return
+
+    const payload: UpdatePayload = {
+      type: 'update',
+      updates: [],
+    }
+    const timestamp = Date.now()
+    const name = pascalCase(getNameFromFilePath(path, this.options))
+
+    Object.entries(this._componentUsageMap)
+      .forEach(([key, values]) => {
+        if (values.has(name)) {
+          const r = `/${slash(relative(this.root, key))}`
+          payload.updates.push({
+            acceptedPath: r,
+            path: r,
+            timestamp,
+            type: 'js-update',
+          })
+        }
+      })
+
+    if (payload.updates.length)
+      this._server.ws.send(payload)
+  }
+
+  private updateComponentNameMap() {
+    this._componentNameMap = {}
+
+    Array
+      .from(this._componentPaths)
+      .forEach((path) => {
+        const fileName = getNameFromFilePath(path, this.options)
+        const name = this.options.prefix
+          ? `${pascalCase(this.options.prefix)}${pascalCase(fileName)}`
+          : pascalCase(fileName)
+        if (isExclude(name, this.options.excludeNames)) {
+          debug.components('exclude', name)
+          return
+        }
+        if (this._componentNameMap[name] && !this.options.allowOverrides) {
+          console.warn(`[unh-components] component "${name}"(${path}) has naming conflicts with other components, ignored.`)
+          return
+        }
+
+        this._componentNameMap[name] = {
+          as: name,
+          from: path,
+        }
+      })
+  }
+
+  async findComponent(name: string, type: 'component' | 'directive', excludePaths: string[] = []): Promise<ComponentInfo | undefined> {
+    // resolve from fs
+    let info = this._componentNameMap[name]
+    if (info && !excludePaths.includes(info.from) && !excludePaths.includes(info.from.slice(1)))
+      return info
+
+    // custom resolvers
+    for (const resolver of this.options.resolvers) {
+      if (resolver.type !== type)
+        continue
+
+      const result = await resolver.resolve(type === 'directive' ? name.slice(DIRECTIVE_IMPORT_PREFIX.length) : name)
+      if (!result)
+        continue
+
+      if (typeof result === 'string') {
+        info = {
+          as: name,
+          from: result,
+        }
+      }
+      else {
+        info = {
+          as: name,
+          ...normalizeComponentInfo(result),
+        }
+      }
+      if (type === 'component')
+        this.addCustomComponents(info)
+      else if (type === 'directive')
+        this.addCustomDirectives(info)
+      return info
+    }
+
+    return undefined
+  }
+
+  normalizePath(path: string) {
+    // @ts-expect-error backward compatibility
+    return resolveAlias(path, this.viteConfig?.resolve?.alias || this.viteConfig?.alias || [])
+  }
+
+  relative(path: string) {
+    if (path.startsWith('/') && !path.startsWith(this.root))
+      return slash(path.slice(1))
+    return slash(relative(this.root, path))
+  }
+
+  _searched = false
+
+  /**
+   * 搜索组件文件。
+   *
+   * **Unh 改造点**：改为异步，内部使用 `searchComponents`（共享扫描缓存）。
+   * 扫描完成后触发 `components:extend` hook，通知其他模块组件列表变化。
+   *
+   * 会被多次调用以确保文件加载，但正常情况下只执行一次（由 `_searched` 标记保护）。
+   */
+  async searchGlob() {
+    if (this._searched)
+      return
+
+    await searchComponents(this)
+    debug.search(this._componentNameMap)
+    this._searched = true
+
+    // 通知其他模块当前组件列表
+    await this.unhCtx?.hooks.callHook('components:extend', Object.values(this._componentNameMap) as any)
+  }
+
+  _generateDeclaration(removeUnused = this._removeUnused) {
+    if (!this.options.dts)
+      return
+
+    debug.declaration('generating dts')
+    return writeDeclaration(this, this.options.dts, removeUnused)
+  }
+
+  generateDeclaration(removeUnused = this._removeUnused): void {
+    this._generateDeclaration(removeUnused)
+  }
+
+  _generateComponentsJson(removeUnused = this._removeUnused) {
+    if (!Object.keys(this._componentNameMap).length)
+      return
+
+    debug.components('generating components-info')
+    return writeComponentsJson(this, removeUnused)
+  }
+
+  generateComponentsJson(removeUnused = this._removeUnused): void {
+    this._generateComponentsJson(removeUnused)
+  }
+
+  get componentNameMap() {
+    return this._componentNameMap
+  }
+
+  get componentCustomMap() {
+    return this._componentCustomMap
+  }
+
+  get directiveCustomMap() {
+    return this._directiveCustomMap
+  }
+}

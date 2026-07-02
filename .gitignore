@@ -10,3 +10,5 @@ logs
 node_modules
 temp
 .trae
+# 测试产物：pages 模块测试生成的临时类型声明文件
+packages/pages/__tests__/tmp-pages-test/
