@@ -1,9 +1,14 @@
 <a href="https://uni-helper.js.org/unh"><img src="./banner.svg" alt="banner" width="100%"/></a>
 
-<a href="https://github.com/uni-helper/unh/stargazers"><img src="https://img.shields.io/github/stars/uni-helper/unh?colorA=005947&colorB=eee&style=for-the-badge" alt="stars"></a>
-<a href="https://www.npmjs.com/package/@uni-helper/unh"><img src="https://img.shields.io/npm/dm/@uni-helper/unh?colorA=005947&colorB=eee&style=for-the-badge" alt="downloads"></a>
-<a href="https://www.npmjs.com/package/@uni-helper/unh"><img src="https://img.shields.io/npm/v/@uni-helper/unh?colorA=005947&colorB=eee&style=for-the-badge" alt="npm"></a>
-<br/>
+<div style="display: flex; justify-content: center; align-items: center; gap: 8px;">
+  <a href="https://github.com/uni-helper/unh/stargazers"><img src="https://img.shields.io/github/stars/uni-helper/unh?colorA=005947&colorB=eee&style=for-the-badge" alt="stars"></a>
+  <a href="https://www.npmjs.com/package/@uni-helper/unh"><img src="https://img.shields.io/npm/dm/@uni-helper/unh?colorA=005947&colorB=eee&style=for-the-badge" alt="downloads"></a>
+  <a href="https://www.npmjs.com/package/@uni-helper/unh"><img src="https://img.shields.io/npm/v/@uni-helper/unh?colorA=005947&colorB=eee&style=for-the-badge" alt="npm"></a>
+</div>
+
+<div style="display: flex; justify-content: center; align-items: center; gap: 8px;">
+  <a href="https://deepwiki.com/uni-helper/unh"><img src="https://deepwiki.com/badge.svg" alt="Ask DeepWiki"></a>
+</div>
 
 # 由 [uni-helper](https://uni-helper.js.org) 封装的uni命令
 
