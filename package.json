@@ -1,7 +1,7 @@
 {
   "name": "@uni-helper/unh",
   "type": "module",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "packageManager": "pnpm@10.34.1",
   "description": "@uni-helper提供的cli封装工具",
   "author": "FliPPeDround <flippedround@qq.com>",
