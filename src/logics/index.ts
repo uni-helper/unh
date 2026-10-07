@@ -1,5 +1,5 @@
 export * from './cli'
 export * from './composeCommand'
 export * from './env'
-export * from './files'
 export * from './platform'
+export * from './pregen'

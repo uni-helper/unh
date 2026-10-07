@@ -1,5 +1,6 @@
 import type { UniHelperConfig } from '../config/types'
 import type { GlobalConfig } from './types'
+import { yellow } from 'kolorist'
 import { loadConfig } from 'unconfig'
 
 /**
@@ -9,11 +10,6 @@ const DEFAULT_CONFIG: UniHelperConfig = {
   platform: {
     default: 'h5',
     alias: {},
-  },
-  autoGenerate: {
-    outDir: 'src',
-    pages: false,
-    manifest: false,
   },
   devtools: {
     open: false,
@@ -57,6 +53,12 @@ class ConfigManager {
       defaults: DEFAULT_CONFIG,
     })
     this.cliConfig = config
+
+    if (config.autoGenerate) {
+      const keys = Object.keys(config.autoGenerate)
+      const scope = keys.length ? keys.map(key => `autoGenerate.${key}`).join('、') : 'autoGenerate'
+      console.warn(`${yellow('警告')}: 检测到已废弃的配置项 ${scope}，配置文件会在 dev/build 前自动生成，该项已无任何效果，可以从 unh.config.ts 中删除`)
+    }
   }
 
   /**

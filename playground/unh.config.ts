@@ -20,13 +20,6 @@ export default defineConfig({
       console.log('onDevAfter', platform, options, envData)
     },
   },
-  autoGenerate: {
-    pages: true,
-    manifest: {
-      commands: ['build'],
-      minify: true,
-    },
-  },
   env: {
     root: 'envs'
   },

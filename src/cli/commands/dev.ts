@@ -1,4 +1,4 @@
-import { composeUniCommand, executeAfterHooks, executeBeforeHooks, executeUniCommandOnDev, generateConfigFiles, loadEnv, resolveTargetPlatform } from '@/logics'
+import { composeUniCommand, executeAfterHooks, executeBeforeHooks, executeUniCommandOnDev, loadEnv, preGenerateConfigFiles, resolveTargetPlatform } from '@/logics'
 import { getCliConfig, setGlobalConfig } from '../config'
 
 /**
@@ -19,8 +19,8 @@ export async function handleDevCommand(
   const uniCommand = composeUniCommand('dev', platform, rawArgs)
   console.log(`> ${uniCommand} \n`)
 
-  // 生成配置文件
-  await generateConfigFiles(config, 'dev')
+  // 预生成配置文件（pages.json、manifest.json 等），避免 uni 基于占位内容误判编译开关
+  preGenerateConfigFiles(platform)
 
   // 执行自定义钩子
   await executeBeforeHooks('dev', config, options, platform, envData)

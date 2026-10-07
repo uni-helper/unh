@@ -5,6 +5,10 @@ import type { PlatformSpecificString } from '@/libs/devtools/types'
 
 export type PlatformAlias = Partial<Record<Platform, string[] | string>>
 
+/**
+ * manifest.json 生成配置
+ * @deprecated 配置文件已改为在 dev/build 前由 vite-plugin-uni-manifest 自动生成，此类型不再生效
+ */
 export interface ManifestOptions {
   /**
    * minify the `manifest.json`
@@ -72,19 +76,28 @@ export interface UniHelperConfig {
     /** 构建后执行 */
     onBuildAfter?: (options: HookOptions) => void | Promise<void>
   }
+  /**
+   * 自动生成配置文件
+   * @deprecated 已废弃，无需配置。pages.json、manifest.json 等配置文件
+   * 会在 dev/build 前由对应插件（vite-plugin-uni-pages、vite-plugin-uni-manifest）
+   * 自动生成，unh 会预先触发插件完成生成，保证配置内容真实有效
+   */
   autoGenerate?: {
     /**
      * 自动生成的文件输出目录
+     * @deprecated 已废弃，无需配置
      * @default 'src'
      */
     outDir?: string
     /**
      * 是否自动生成pages.json
+     * @deprecated 已废弃，无需配置，pages.json 会自动生成
      * @default false
      */
     pages?: boolean | BuildPhase[]
     /**
      * 是否自动生成manifest.json
+     * @deprecated 已废弃，无需配置，manifest.json 会自动生成
      * @default false
      */
     manifest?: boolean | ManifestOptions & {
