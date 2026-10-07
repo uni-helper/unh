@@ -68,4 +68,4 @@ export default defineConfig({
 > [!NOTE]
 > `pages.json`、`manifest.json`、`uni-pages.d.ts` 等配置文件无需手动创建或提交，unh 会在 `dev`/`build` 前自动触发 `vite-plugin-uni-pages`、`vite-plugin-uni-manifest` 生成真实配置。
 > 原 `autoGenerate` 配置项已废弃，保留时不会产生任何效果，并会输出废弃警告提示删除。
-```
+
