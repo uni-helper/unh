@@ -2,7 +2,7 @@
 
 import process from 'node:process'
 import { cac } from 'cac'
-import { getRawOptions } from '@/logics'
+import { assertEsmProject, getRawOptions } from '@/logics'
 import { version } from '../../package.json'
 import {
   customHelp,
@@ -20,6 +20,8 @@ import { getCliConfig, loadCliConfig } from './config'
  */
 async function main(): Promise<void> {
   try {
+    // 仅支持 ESM 项目，CJS 环境在任何命令执行前直接中断
+    assertEsmProject()
     await loadCliConfig()
     const defaultPlatform = getCliConfig()?.platform?.default || 'h5'
     const cli = cac('unh')
