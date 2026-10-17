@@ -1,3 +1,4 @@
+import type { DeployUserConfig } from '@uni-helper/deploy'
 import type { BuildPhase } from '@/cli/types'
 import type { Platform } from '@/constants'
 import type { MPPlatform } from '@/constants/platform'
@@ -146,4 +147,21 @@ export interface UniHelperConfig {
      */
     cliPath?: Record<MPPlatform, CliPathConfig>
   }
+  /**
+   * 小程序部署配置，由 `@uni-helper/deploy` 提供的 `unh deploy` 命令读取。
+   *
+   * 字段与 `@uni-helper/deploy` 的配置文件完全一致，直接复用其
+   * `DeployUserConfig` 类型，无需重复声明；该字段被 `unh deploy` 之外的
+   * 命令原样忽略。
+   *
+   * @example
+   * ```ts
+   * export default defineConfig({
+   *   deploy: {
+   *     'mp-weixin': { appid: 'wx1234567890' },
+   *   },
+   * })
+   * ```
+   */
+  deploy?: DeployUserConfig
 }

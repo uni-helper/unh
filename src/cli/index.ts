@@ -7,6 +7,7 @@ import { version } from '../../package.json'
 import {
   customHelp,
   handleBuildCommand,
+  handleDeployCommand,
   handleDevCommand,
   handleInfoCommand,
   handlePlatformCommand,
@@ -63,6 +64,20 @@ async function main(): Promise<void> {
       .command('info', '显示项目信息')
       .action(async () => {
         await handleInfoCommand()
+      })
+
+    // deploy 命令
+    cli
+      .command('deploy [...targets]', '部署小程序构建产物')
+      .option('-p, --platform <platform>', '目标平台，多个平台用逗号分隔。可选：mp-weixin/mp-alipay/mp-toutiao/mp-baidu/mp-jd/mp-dingtalk')
+      .option('-a, --action <action>', '部署动作。可选：upload（上传体验版）/preview（生成预览二维码）/open（打开开发者工具）')
+      .option('--cwd <dir>', '工作目录，默认为当前目录')
+      .option('--config <path>', '自定义配置文件路径，传 false 表示不读取配置文件')
+      .option('--app-version <version>', '版本号，覆盖配置文件中的 version')
+      .option('--desc <desc>', '版本描述，覆盖配置文件中的 desc')
+      .option('--project-path <path>', '构建产物目录，覆盖配置文件中的 projectPath')
+      .action(async (targets, options) => {
+        await handleDeployCommand(targets, options)
       })
 
     // platform 命令

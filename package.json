@@ -47,6 +47,7 @@
     "prepare": "simple-git-hooks"
   },
   "dependencies": {
+    "@uni-helper/deploy": "catalog:",
     "cac": "catalog:",
     "consola": "catalog:",
     "cross-spawn": "catalog:",

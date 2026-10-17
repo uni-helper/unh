@@ -65,16 +65,16 @@ describe('cLI Core Functions', () => {
 
   describe('command Validation', () => {
     it('应该验证有效命令', () => {
-      const validCommands = ['dev', 'build', 'prepare']
+      const validCommands = ['dev', 'build', 'prepare', 'deploy']
       validCommands.forEach((cmd) => {
-        expect(['dev', 'build', 'prepare'].includes(cmd)).toBe(true)
+        expect(['dev', 'build', 'prepare', 'deploy'].includes(cmd)).toBe(true)
       })
     })
 
     it('应该识别无效命令', () => {
-      const invalidCommands = ['invalid', 'test', 'deploy']
+      const invalidCommands = ['invalid', 'test', 'publish']
       invalidCommands.forEach((cmd) => {
-        expect(['dev', 'build', 'prepare'].includes(cmd)).toBe(false)
+        expect(['dev', 'build', 'prepare', 'deploy'].includes(cmd)).toBe(false)
       })
     })
   })

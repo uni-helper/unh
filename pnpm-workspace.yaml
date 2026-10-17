@@ -6,6 +6,7 @@ packages:
   - packages/*
   - examples/*
 catalog:
+  '@uni-helper/deploy': ^0.1.0
   cac: ^7.0.0
   consola: ^3.4.2
   cross-spawn: ^7.0.6

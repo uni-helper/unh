@@ -1,4 +1,5 @@
 export * from './build'
+export * from './deploy'
 export * from './dev'
 export * from './help'
 export * from './info'
