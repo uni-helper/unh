@@ -57,7 +57,6 @@
     "local-pkg": "catalog:",
     "pathe": "catalog:",
     "std-env": "catalog:",
-    "strip-ansi": "catalog:",
     "unconfig": "catalog:"
   },
   "devDependencies": {

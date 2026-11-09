@@ -26,7 +26,6 @@ catalog:
   local-pkg: ^2.0.0
   pathe: ^2.0.3
   std-env: ^3.10.0
-  strip-ansi: ^7.2.0
   unconfig: ^7.5.0
 
 catalogs:
