@@ -1,38 +1,81 @@
-shellEmulator: true
+minimumReleaseAgeExclude:
+  - dotenv@18.0.10
+  - '@uni-helper/plugin-uni@0.1.2'
+
 trustPolicy: off
+shellEmulator: true
+
 packages:
   - playground
   - docs
   - packages/*
   - examples/*
+
+allowBuilds:
+  core-js: true
+  esbuild: true
+# 主包依赖，版本统一在这里改
 catalog:
   '@uni-helper/deploy': ^0.1.0
-  cac: ^7.0.0
+  cac: ^7.1.0
   consola: ^3.4.2
   cross-spawn: ^7.0.6
-  dotenv: ^17.4.2
-  dotenv-expand: ^13.0.0
+  dotenv: ^18.0.10
+  dotenv-expand: ^1000.0.0
   kolorist: ^1.8.0
-  local-pkg: ^1.2.1
+  local-pkg: ^2.0.0
   pathe: ^2.0.3
   std-env: ^3.10.0
   strip-ansi: ^7.2.0
   unconfig: ^7.5.0
+
 catalogs:
   cli:
-    '@antfu/eslint-config': ^9.0.0
-    bumpp: ^11.1.0
-    eslint: ^10.4.1
-    lint-staged: ^17.0.7
-    simple-git-hooks: ^2.13.1
-    tsdown: ^0.22.2
+    '@antfu/eslint-config': ^10.0.0
+    bumpp: ^12.3.0
+    eslint: ^10.14.0
+    tsdown: ^0.23.7
     typescript: ^6.0.3
   testing:
-    vitest: ^3.2.6
+    vitest: ^3.2.7
     vitest-package-exports: ^1.2.0
   types:
     '@types/cross-spawn': ^6.0.6
-    '@types/node': ^24.13.1
-onlyBuiltDependencies:
-  - esbuild
-  - simple-git-hooks
+    '@types/node': ^26.6.6
+  # playground 整套 uni-app 依赖：@dcloudio/* 必须用同一份快照，
+  # vue、@vue/runtime-core、vite 也跟着编译器版本走，所以单独放一个 catalog
+  uni-app:
+    '@dcloudio/types': ^3.4.32
+    '@dcloudio/uni-app': 3.0.0-4070620250821001
+    '@dcloudio/uni-app-harmony': 3.0.0-4070620250821001
+    '@dcloudio/uni-app-plus': 3.0.0-4070620250821001
+    '@dcloudio/uni-automator': 3.0.0-4070620250821001
+    '@dcloudio/uni-cli-shared': 3.0.0-4070620250821001
+    '@dcloudio/uni-components': 3.0.0-4070620250821001
+    '@dcloudio/uni-h5': 3.0.0-4070620250821001
+    '@dcloudio/uni-mp-alipay': 3.0.0-4070620250821001
+    '@dcloudio/uni-mp-baidu': 3.0.0-4070620250821001
+    '@dcloudio/uni-mp-harmony': 3.0.0-4070620250821001
+    '@dcloudio/uni-mp-jd': 3.0.0-4070620250821001
+    '@dcloudio/uni-mp-kuaishou': 3.0.0-4070620250821001
+    '@dcloudio/uni-mp-lark': 3.0.0-4070620250821001
+    '@dcloudio/uni-mp-qq': 3.0.0-4070620250821001
+    '@dcloudio/uni-mp-toutiao': 3.0.0-4070620250821001
+    '@dcloudio/uni-mp-weixin': 3.0.0-4070620250821001
+    '@dcloudio/uni-mp-xhs': 3.0.0-4070620250821001
+    '@dcloudio/uni-quickapp-webview': 3.0.0-4070620250821001
+    '@dcloudio/uni-stacktracey': 3.0.0-4070620250821001
+    '@dcloudio/vite-plugin-uni': 3.0.0-4070620250821001
+    '@mini-types/alipay': ^3.0.14
+    '@uni-helper/plugin-uni': ^0.1.2
+    '@uni-helper/uni-types': ^1.5.0
+    '@uni-helper/vite-plugin-uni-manifest': ^0.7.0
+    '@uni-helper/vite-plugin-uni-pages': ^0.6.2
+    '@vue/runtime-core': ~3.4.38
+    '@vue/tsconfig': ^0.9.1
+    miniprogram-api-typings: ^5.3.1
+    sass: 1.64.2
+    vite: ^5.4.21
+    vue: ~3.4.38
+    vue-i18n: ~9.6.2
+    vue-tsc: ^3.3.14

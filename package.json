@@ -44,7 +44,6 @@
     "prepublishOnly": "pnpm build",
     "release": "bumpp",
     "test": "vitest",
-    "prepare": "simple-git-hooks",
     "typecheck": "tsc"
   },
   "dependencies": {
@@ -67,17 +66,9 @@
     "@types/node": "catalog:types",
     "bumpp": "catalog:cli",
     "eslint": "catalog:cli",
-    "lint-staged": "catalog:cli",
-    "simple-git-hooks": "catalog:cli",
     "tsdown": "catalog:cli",
     "typescript": "catalog:cli",
     "vitest": "catalog:testing",
     "vitest-package-exports": "catalog:testing"
-  },
-  "simple-git-hooks": {
-    "pre-commit": "pnpm i --frozen-lockfile --ignore-scripts --offline && npx lint-staged"
-  },
-  "lint-staged": {
-    "*": "eslint --fix"
   }
 }
