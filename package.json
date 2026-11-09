@@ -2,7 +2,7 @@
   "name": "@uni-helper/unh",
   "type": "module",
   "version": "0.5.0",
-  "packageManager": "pnpm@10.34.1",
+  "packageManager": "pnpm@12.18.0",
   "description": "@uni-helper提供的cli封装工具",
   "author": "FliPPeDround <flippedround@qq.com>",
   "license": "MIT",
@@ -44,7 +44,7 @@
     "prepublishOnly": "pnpm build",
     "release": "bumpp",
     "test": "vitest",
-    "prepare": "simple-git-hooks"
+    "typecheck": "tsc"
   },
   "dependencies": {
     "@uni-helper/deploy": "catalog:",
@@ -57,7 +57,6 @@
     "local-pkg": "catalog:",
     "pathe": "catalog:",
     "std-env": "catalog:",
-    "strip-ansi": "catalog:",
     "unconfig": "catalog:"
   },
   "devDependencies": {
@@ -66,17 +65,9 @@
     "@types/node": "catalog:types",
     "bumpp": "catalog:cli",
     "eslint": "catalog:cli",
-    "lint-staged": "catalog:cli",
-    "simple-git-hooks": "catalog:cli",
     "tsdown": "catalog:cli",
     "typescript": "catalog:cli",
     "vitest": "catalog:testing",
     "vitest-package-exports": "catalog:testing"
-  },
-  "simple-git-hooks": {
-    "pre-commit": "pnpm i --frozen-lockfile --ignore-scripts --offline && npx lint-staged"
-  },
-  "lint-staged": {
-    "*": "eslint --fix"
   }
 }

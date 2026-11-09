@@ -1,14 +1,10 @@
+import { stripVTControlCharacters } from 'node:util'
 import { bold, cyan, gray, green } from 'kolorist'
 import { getPackageInfoSync } from 'local-pkg'
-import stripAnsi from 'strip-ansi'
 import { formatTime12Hour } from '../utils/date'
 import { openMPDevtools } from './devtools'
 
 export const TERMINAL_OUTPUT_PROCESSORS = [
-  // {
-  //   from: 'npx @dcloudio/uvm@latest',
-  //   to: '使用 unh update 命令升级到最新版本\n',
-  // },
   {
     from: 'Watching for changes',
     to: () => `${gray(formatTime12Hour())} ${cyan(bold('[vite]'))} ${green('hmr update')}\n`,
@@ -23,7 +19,7 @@ export const TERMINAL_OUTPUT_PROCESSORS = [
       const readyTime = match[3]
 
       // 打开开发者工具
-      openMPDevtools(stripAnsi(outputDir))
+      openMPDevtools(stripVTControlCharacters(outputDir))
 
       return `
   ${cyan(`uni v${compilerVersion}`)} ${green('dev output directory:')}
