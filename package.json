@@ -2,7 +2,7 @@
   "name": "@uni-helper/unh",
   "type": "module",
   "version": "0.5.0",
-  "packageManager": "pnpm@10.34.1",
+  "packageManager": "pnpm@12.18.0",
   "description": "@uni-helper提供的cli封装工具",
   "author": "FliPPeDround <flippedround@qq.com>",
   "license": "MIT",
@@ -44,7 +44,8 @@
     "prepublishOnly": "pnpm build",
     "release": "bumpp",
     "test": "vitest",
-    "prepare": "simple-git-hooks"
+    "prepare": "simple-git-hooks",
+    "typecheck": "tsc"
   },
   "dependencies": {
     "@uni-helper/deploy": "catalog:",

@@ -1,8 +1,9 @@
+import type { DeployResult } from '@uni-helper/deploy'
 import type { UniHelperConfig } from '../src/config/types'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 const { deployMock, loadCliConfigMock } = vi.hoisted(() => ({
-  deployMock: vi.fn(async () => []),
+  deployMock: vi.fn(async (_options?: Record<string, any>): Promise<DeployResult[]> => []),
   loadCliConfigMock: vi.fn(),
 }))
 
