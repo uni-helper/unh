@@ -1,9 +1,15 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { preGenerateConfigFiles } from '../src/logics/pregen'
 
+interface SyncResult {
+  status: number
+  stderr: string | null
+  error?: Error
+}
+
 const { syncMock, isPackageExistsMock } = vi.hoisted(() => ({
-  syncMock: vi.fn(() => ({ status: 0, stderr: null, error: undefined })),
-  isPackageExistsMock: vi.fn(() => true),
+  syncMock: vi.fn((_command: string, _args: string[], _options?: Record<string, any>): SyncResult => ({ status: 0, stderr: null, error: undefined })),
+  isPackageExistsMock: vi.fn((_pkg: string): boolean => true),
 }))
 
 vi.mock('cross-spawn', () => ({
@@ -44,13 +50,13 @@ describe('preGenerateConfigFiles', () => {
     preGenerateConfigFiles('h5')
 
     expect(syncMock).toHaveBeenCalledTimes(1)
-    const [command, args, options] = syncMock.mock.calls[0]
+    const [command, args, options] = syncMock.mock.calls[0]!
     expect(command).toBe(process.execPath)
     expect(args[0]).toBe('--input-type=module')
     expect(args[1]).toBe('-e')
     expect(args[2]).toContain('resolveConfig')
-    expect(options.cwd).toBe(process.cwd())
-    expect(options.env).toMatchObject({ UNI_PLATFORM: 'h5' })
+    expect(options!.cwd).toBe(process.cwd())
+    expect(options!.env).toMatchObject({ UNI_PLATFORM: 'h5' })
   })
 
   it('预生成失败时应警告但不抛错', () => {

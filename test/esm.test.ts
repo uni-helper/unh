@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { assertEsmProject } from '../src/logics/esm'
 
 const { loadPackageJSONSyncMock } = vi.hoisted(() => ({
-  loadPackageJSONSyncMock: vi.fn(() => ({ type: 'module' })),
+  loadPackageJSONSyncMock: vi.fn((): { type?: string, name?: string } | null => ({ type: 'module' })),
 }))
 
 vi.mock('local-pkg', () => ({

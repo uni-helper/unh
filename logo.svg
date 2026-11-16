@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 256 256">
+  <title>uni-helper/unh logo</title>
+  <g fill="none" stroke="#8ACB9B" stroke-width="14" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 40 76 H 92 L 136 128"/>
+    <path d="M 40 180 H 92 L 136 128"/>
+  </g>
+  <g fill="none" stroke="#2B9939" stroke-width="14" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 40 128 H 216"/>
+    <path d="M 188 102 L 216 128 L 188 154"/>
+  </g>
+</svg>
