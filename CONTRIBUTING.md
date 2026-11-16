@@ -88,7 +88,7 @@ CI（`.github/workflows/ci.yml`）只有一个 `test` job，矩阵是 ubuntu、m
 `vitest.config.ts` 把 `@` 别名指向 `src`，测试里可以直接 `import ... from '@/logics'`。用例按被测模块分文件，外部依赖都 mock 掉，不启动真实进程：
 
 - `test/deploy.test.ts`、`test/deploy-command.test.ts`：部署平台/动作解析与命令组装，`@uni-helper/deploy` 的 `deploy` 用 mock 替换。
-- `test/pregen.test.ts`：mock `cross-spawn` 和 `local-pkg`，断言预生成脚本调用参数和失败时的降级行为。
+- `test/pregen.test.ts`：mock `cross-spawn` 和 `local-pkg`，断言预生成脚本调用参数、失败时的降级行为，以及 `manifest.json` 占位的写入与清理。
 - `test/esm.test.ts`：mock `local-pkg` 的 `loadPackageJSONSync`，覆盖 ESM、CJS、缺 `package.json` 三种情况。
 - `test/config.test.ts`：mock `unconfig`，断言 `autoGenerate` 废弃警告。
 - `test/parser.test.ts`：平台别名解析。
