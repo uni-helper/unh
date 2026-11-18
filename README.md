@@ -113,7 +113,7 @@ pnpm dev wx
 | `unh platform` | 用表格列出内置平台和对应说明。 |
 | `unh -h`、`unh --version` | 帮助信息和版本号。 |
 
-`[platform]` 省略时取 `platform.default`；写别名会先解析成完整平台名。其余参数原样透传给 `uni`，所以 `unh build mp-weixin --mode uat` 等于 `uni build -p mp-weixin --mode uat`。
+`[platform]` 省略时取 `platform.default`；写别名会先解析成完整平台名。其余参数原样透传给 `uni`，所以 `unh build mp-weixin --mode uat` 等于 `uni build -p mp-weixin --mode uat`。`h5:ssr` 例外：uni 的 SSR 是 `--ssr` 开关，没有这个平台，所以它会被拼成 `uni build -p h5 --ssr`。
 
 ## 配置
 
