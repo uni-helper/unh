@@ -5,6 +5,7 @@ import { yellow } from 'kolorist'
 import { isPackageExists } from 'local-pkg'
 import path from 'pathe'
 import { ensureJsonSync } from '@/utils'
+import { resolveUniPlatform } from './platform'
 
 /**
  * 预生成配置文件的子进程脚本。
@@ -60,14 +61,16 @@ export function preGenerateConfigFiles(platform: string): void {
     ensureJsonSync(manifestPath)
   }
 
-  // @uni-helper/uni-env 在模块导入时读取 UNI_PLATFORM，必须在子进程加载插件前设置
+  // @uni-helper/uni-env 在模块导入时读取 UNI_PLATFORM，必须在子进程加载插件前设置；
+  // h5:ssr 要按 h5 预生成，否则 pages.json 里会写出非法的 `#ifdef H5:SSR`
+  const { platform: uniPlatform } = resolveUniPlatform(platform)
   const { status, stderr, error } = sync(
     process.execPath,
     ['--input-type=module', '-e', PREGENERATE_SCRIPT],
     {
       cwd: process.cwd(),
       stdio: 'pipe',
-      env: Object.assign({}, process.env, { UNI_PLATFORM: platform }),
+      env: Object.assign({}, process.env, { UNI_PLATFORM: uniPlatform }),
     },
   )
 

@@ -1,5 +1,6 @@
 import process from 'node:process'
 import { sync } from 'cross-spawn'
+import { resolveUniPlatform } from './platform'
 
 function pkgFromUserAgent(userAgent: string | undefined) {
   if (!userAgent)
@@ -52,5 +53,7 @@ export function composeUniCommand(
   platform: string,
   options: string[],
 ) {
-  return `uni ${command} -p ${platform} ${options.join(' ')}`.trim()
+  const { platform: uniPlatform, args: platformArgs } = resolveUniPlatform(platform)
+
+  return `uni ${command} -p ${uniPlatform} ${[...platformArgs, ...options].join(' ')}`.trim()
 }

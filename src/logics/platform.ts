@@ -34,3 +34,25 @@ export function resolvePlatformAlias(
   // 如果不是别名，保留原值
   return input
 }
+
+/** unh 自用的 SSR 平台名，uni 没有这个平台 */
+const SSR_PLATFORM = 'h5:ssr'
+
+/**
+ * 把 unh 的平台名拆成 uni CLI 认识的平台和额外参数。
+ *
+ * uni 的 SSR 用 `--ssr` 开关表示，平台仍是 `h5`；直接传 `-p h5:ssr` 会走
+ * 未知平台的编译流程，h5 的别名和外部化不生效，pages.json 也会被写成非法的
+ * `#ifdef H5:SSR` 条件编译。
+ * @param platform - unh 平台名（已解析别名）
+ * @returns uni 的平台名和需要附带在命令上的参数
+ */
+export function resolveUniPlatform(
+  platform: string,
+): { platform: string, args: string[] } {
+  if (platform === SSR_PLATFORM) {
+    return { platform: 'h5', args: ['--ssr'] }
+  }
+
+  return { platform, args: [] }
+}
