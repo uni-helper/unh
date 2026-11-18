@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { resolvePlatformAlias } from '../src/logics/platform'
+import { composeUniCommand } from '../src/logics/composeCommand'
+import { resolvePlatformAlias, resolveUniPlatform } from '../src/logics/platform'
 
 describe('cLI Core Functions', () => {
   describe('resolvePlatformAlias', () => {
@@ -60,6 +61,29 @@ describe('cLI Core Functions', () => {
       expect(resolvePlatformAlias('wechat', aliasConfig)).toBe('mp-weixin')
       expect(resolvePlatformAlias('mobile', aliasConfig)).toBe('app')
       expect(resolvePlatformAlias('application', aliasConfig)).toBe('app')
+    })
+  })
+
+  describe('resolveUniPlatform', () => {
+    it('h5:ssr 拆成 h5 平台和 --ssr 参数', () => {
+      expect(resolveUniPlatform('h5:ssr')).toEqual({ platform: 'h5', args: ['--ssr'] })
+    })
+
+    it('其他平台原样返回且不带额外参数', () => {
+      expect(resolveUniPlatform('h5')).toEqual({ platform: 'h5', args: [] })
+      expect(resolveUniPlatform('mp-weixin')).toEqual({ platform: 'mp-weixin', args: [] })
+    })
+  })
+
+  describe('composeUniCommand', () => {
+    it('h5:ssr 拼成 -p h5 --ssr', () => {
+      expect(composeUniCommand('build', 'h5:ssr', [])).toBe('uni build -p h5 --ssr')
+      expect(composeUniCommand('dev', 'h5:ssr', [])).toBe('uni dev -p h5 --ssr')
+    })
+
+    it('其余平台照旧拼接并透传参数', () => {
+      expect(composeUniCommand('build', 'mp-weixin', ['--mode', 'uat'])).toBe('uni build -p mp-weixin --mode uat')
+      expect(composeUniCommand('dev', 'h5', [])).toBe('uni dev -p h5')
     })
   })
 

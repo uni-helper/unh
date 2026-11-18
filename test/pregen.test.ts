@@ -78,6 +78,14 @@ describe('preGenerateConfigFiles', () => {
     expect(options!.env).toMatchObject({ UNI_PLATFORM: 'h5' })
   })
 
+  it('h5:ssr 平台应以 h5 预生成，避免写出非法条件编译', () => {
+    preGenerateConfigFiles('h5:ssr')
+
+    expect(syncMock).toHaveBeenCalledTimes(1)
+    const [, , options] = syncMock.mock.calls[0]!
+    expect(options!.env).toMatchObject({ UNI_PLATFORM: 'h5' })
+  })
+
   it('预生成失败时应警告但不抛错', () => {
     syncMock.mockImplementation(() => ({ status: 1, stderr: 'boom', error: undefined }))
 
